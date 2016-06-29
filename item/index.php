@@ -149,12 +149,34 @@ switch($F_md){
 		break;
 
 	case "analysis":
-		$flg_jquery = "1";
-		$flg_analysis = "1";
-		$id_body = "itemlist";
+    $flg_jquery = "1";
+    $flg_analysis = "1";
+    $id_body = "itemlist";
     $inc = "analysis.inc";
-		
-		break;
+
+    /* --Ominext-- */
+
+    //get city
+    $select = 'count(r_item1.item_cd) AS count_item, city_name, cat_city_name, m_city.city_cd';
+    $table = 'm_cat_city, r_city, m_city, r_item1';
+    $where = 'm_city.city_cd = r_item1.city_cd AND '
+        . 'm_cat_city.cat_city_cd = r_city.cat_city_cd AND '
+        . 'r_city.city_cd = m_city.city_cd';
+    $groupBy = 'm_city.city_name, m_cat_city.cat_city_name, m_city.city_cd';
+
+    Omi_get_rs_with_group_by($select, $table, 'city', $where, $groupBy);
+
+    //get seller
+    $select = 'seller_cd, seller_name';
+    $table = 'm_seller';
+    $where = '';
+    $orderBy = '';
+
+    Omi_get_rs($select, $table, 'seller', $where, $orderBy);
+
+    /* --Ominext end-- */
+
+break;
 
 	case "analysis_item":
 		$flg_jquery = "1";
@@ -163,6 +185,253 @@ switch($F_md){
     $inc = "analysis_item.inc";
 		
 		break;
+
+case "get_analysis":
+    /* --Ominext-- */
+    /* --analysis a group item AJAX-- */
+
+    /* validate */
+    if (isset($_POST['from']) && isset($_POST['to'])) {
+        $from = $_POST['from'];
+        $to = $_POST['to'];
+        if ($from > $to) {
+            return 1;
+        }
+    }
+
+    /* search db */
+    $opt = $_POST['select_opt'];
+
+
+    if ($opt == 1) { //count item - soldout
+        $select = 't_item.date_soldout AS date, COUNT(t_item.item_cd) AS count';
+        $table = 't_item, r_item1';
+        $groupBy = 't_item.date_soldout';
+
+        $where = 't_item.item_cd = r_item1.item_cd';
+    } else if ($opt == 2) { //count item - regist
+        $select = 't_item.date_regist AS date, COUNT(t_item.item_cd) AS count';
+        $table = 't_item, r_item1';
+        $groupBy = 't_item.date_regist';
+
+        $where = 't_item.item_cd = r_item1.item_cd';
+    } else if ($opt == 3) { //count item - total
+        $select = 't_item.date_regist AS date, t_item.item_cd';
+        $table = 't_item, r_item1';
+
+        $where = 't_item.item_cd = r_item1.item_cd';
+    } else if ($opt == 4) { //avg price - soldout
+        $select = 't_history.date_regist AS date, SUM(t_history.hist_price) AS sum, COUNT(t_item.item_cd) as count';
+        $table = 't_item, r_item1, r_history, t_history';
+        $groupBy = 't_history.date_regist';
+
+        $where = 't_item.item_cd = r_history.item_cd AND '
+            . 'r_history.hist_cd = t_history.hist_cd AND '
+            . 't_item.item_cd = r_item1.item_cd AND '
+            . 'r_history.stat_cd = \'4\'';
+    } else { //avg price - regist
+        $select = 't_history.date_regist AS date, SUM(t_history.hist_price) AS sum, COUNT(t_item.item_cd) as count';
+        $table = 't_item, r_history, t_history, r_item1';
+        $groupBy = 't_history.date_regist';
+
+        $where = 't_item.item_cd = r_history.item_cd AND '
+            . 'r_history.hist_cd = t_history.hist_cd AND '
+            . 't_item.item_cd = r_item1.item_cd AND '
+            . 'r_history.stat_cd = \'1\'';
+    }
+
+    if (isset($_POST['city'])) {
+        $city = $_POST['city'];
+        $where = $where . ' AND r_item1.city_cd IN (';
+        for ($i = 0; $i < count($city); $i++) {
+            $where = $where . '\'' . $city[$i] . '\', ';
+        }
+        $where = substr($where, 0, -2);
+        $where = $where . ')';
+    }
+
+    if (isset($_POST['cat_item'])) {
+        $cat_item = $_POST['cat_item'];
+        $where = $where . ' AND r_item1.cat_item_cd IN (';
+        for ($i = 0; $i < count($cat_item); $i++) {
+            $where = $where . '\'' . $cat_item[$i] . '\', ';
+        }
+
+        $where = substr($where, 0, -2);
+        $where = $where . ')';
+    }
+
+    if (isset($_POST['condition'])) {
+        $condition = $_POST['condition'];
+        $where = $where . ' AND r_item1.condition_cd IN (';
+        for ($i = 0; $i < count($condition); $i++) {
+            $where = $where . '\'' . $condition[$i] . '\', ';
+        }
+        $where = substr($where, 0, -2);
+        $where = $where . ')';
+    }
+
+    if (isset($_POST['seller'])) {
+        $seller = $_POST['seller'];
+        $where = $where . ' AND r_item1.seller_cd IN (';
+        for ($i = 0; $i < count($seller); $i++) {
+            $where = $where . '\'' . $seller[$i] . '\', ';
+        }
+        $where = substr($where, 0, -2);
+        $where = $where . ')';
+    }
+
+    // count item - soldout
+    if ($opt == 1) {
+        $where = $where . ' AND t_item.date_soldout BETWEEN \'' . $from . '\' AND \'' . $to . '\'';
+        $where = $where . ' AND t_item.flg_soldout = \'1\'';
+        Omi_get_rs_with_group_by($select, $table, 'result', $where, $groupBy);
+    }
+    if ($opt == 2) { //count item - regist
+        $where = $where . ' AND t_item.date_regist BETWEEN \'' . $from . '\' AND \'' . $to . '\'';
+        Omi_get_rs_with_group_by($select, $table, 'result', $where, $groupBy);
+    }
+    if ($opt == 3) { //count item - total
+        //count item from beginning
+        $select1 = 'COUNT (t_item.item_cd) as count';
+        $table1 = 't_item, r_item1';
+        $where1 = $where . ' AND t_item.date_regist < \'' . $from . '\'';
+
+        Omi_get_rs($select1, $table1, 'count', $where1, '');
+
+        //get all item
+        $where = $where . ' AND t_item.date_regist BETWEEN \'' . $from . '\' AND \'' . $to . '\'';
+        $orderBy = 't_item.date_regist ASC';
+        Omi_get_rs($select, $table, 'item', $where, $orderBy);
+    }
+    if ($opt == 4) { //avg price - soldout
+        $where = $where . ' AND t_history.date_regist BETWEEN \'' . $from . '\' AND \'' . $to . '\'';
+        Omi_get_rs_with_group_by($select, $table, 'result', $where, $groupBy);
+    }
+    if ($opt == 5) { //avg price - regist
+        $where = $where . ' AND t_history.date_regist BETWEEN \'' . $from . '\' AND \'' . $to . '\'';
+        Omi_get_rs_with_group_by($select, $table, 'result', $where, $groupBy);
+    }
+
+
+    //get data for google chart
+    //count item - soldout / regist
+    if ($opt <= 2) {
+        $result = array();
+
+        for ($i = 0; $i < count($RS_result); $i++) {
+            $date = date('Y-m-d', strtotime($RS_result[$i]['date']));
+
+            if ($j = array_search($date, array_column($result, 'x_axis'))) {
+                $result[$j]['y_axis'] += $RS_result[$i]['count'];
+            } else {
+                $result[] = array(
+                    'x_axis' => $date,
+                    'y_axis' => $RS_result[$i]['count']
+                );
+            }
+        }
+
+        //sort by date
+        usort($result, function($a, $b) {
+            return $a['x_axis'] > $b['x_axis'];
+        });
+    }
+
+    //count item - total 
+    if ($opt == 3) {
+        //count item from beginning
+        $totalItemFromBegin = (int) $RS_count[0]['count'];
+
+        $result = array();
+
+        //set temp
+        $temp[] = array(
+            'x_axis' => '1970-01-01',
+            'y_axis' => $totalItemFromBegin
+        );
+        $index = 0;
+        //count
+        for ($i = 0; $i < count($RS_item); $i++) {
+            $date = date('Y-m-d', strtotime($RS_item[$i]['date']));
+
+            if ($date > $temp[$index]['x_axis']) {
+                $temp[] = array(
+                    'x_axis' => $date,
+                    'y_axis' => (int) $temp[$index]['y_axis'] + 1,
+                );
+
+                $index++;
+            } else {
+                $temp[$index]['y_axis'] = (int) $temp[$index]['y_axis'] + 1;
+            }
+        }
+
+        //don't get first item			
+        for ($i = 1; $i < count($temp); $i++) {
+            $result[] = array(
+                'x_axis' => $temp[$i]['x_axis'],
+                'y_axis' => $temp[$i]['y_axis'],
+            );
+        }
+
+        $RS_result = array(
+            'temp' => '1'
+        );
+    }
+
+    //avg price - soldout / regist
+    if ($opt >= 4) {
+
+        //dummy data
+        $temp[] = array(
+            'date' => '0000-00-00',
+            'sum' => '0',
+            'count' => '0'
+        );
+
+        //count item and sum price
+        for ($i = 0; $i < count($RS_result); $i++) {
+            $date = date('Y-m-d', strtotime($RS_result[$i]['date']));
+
+            if ($j = array_search($date, array_column($temp, 'date'))) {
+                $temp[$j]['sum'] += $RS_result[$i]['sum'];
+                $temp[$j]['count'] += $RS_result[$i]['count'];
+            } else {
+                $temp[] = array(
+                    'date' => $date,
+                    'sum' => $RS_result[$i]['sum'],
+                    'count' => $RS_result[$i]['count']
+                );
+            }
+        }
+
+        //sort by date
+        usort($temp, function($a, $b) {
+            return $a['date'] > $b['date'];
+        });
+
+        //get avg price per day
+        //dont get dummy data
+        for ($i = 1; $i < count($temp); $i++) {
+            $result[] = array(
+                'x_axis' => $temp[$i]['date'],
+                'y_axis' => $temp[$i]['sum'] / $temp[$i]['count']
+            );
+        }
+    }
+    if (count($RS_result) == 0) {
+        $result = null;
+    }
+
+
+    //convert to json
+    $result_json = json_encode($result);
+    header('Content-type:application/json;charset=utf-8');
+    echo $result_json;
+    return 1;
+    /* --Ominext end-- */
+break;
 
 	default :
 		break;
