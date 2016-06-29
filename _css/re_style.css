@@ -1,0 +1,215 @@
+/*◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆
+                            ページコンテンツ全体
+◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆*/
+.cnt_wrap {
+  width: 100% ;
+  padding-bottom: 20px ;
+}
+.cnt_title {
+  margin: 20px 0 0 20px ;
+  height: 22px ;
+}
+.cnt_title h3 {
+  float: left ;
+  font-size: 20px ;
+  margin-right: 10px ;
+}
+/*◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆
+                                  売上管理
+◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆*/
+/* 売上入力
+----------------------*/
+.select {
+  margin: 20px ;
+}
+.select input,
+.select select {
+  height: 24px ;
+}
+.btn_earning_wrap {
+  height: 30px ;
+  margin-left: 20px ;
+}
+/*◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆
+                                  受注管理
+◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆*/
+/* 受注入力
+----------------------*/
+.order_wrap {
+  background: #fff ;
+  width: 1024px ;
+}
+.order_wrap table {
+  width: 984px ;
+  margin: 20px auto ;
+}
+.oedrt_btn_01 {
+  margin: 20px 0 20px 20px ;
+}
+.oder_tble_title_01,
+.oder_tble_title_02 {
+  background: #d3e1fe ;
+  text-align: center ;
+  font-weight: bold ;
+  color: #000 ;
+}
+.oder_tble_title_01 { width: 100px ; }
+.oder_tble_title_02 { width: 120px ; }
+
+/* 売上確認
+----------------------*/
+
+/*◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆
+                                  業務管理
+◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆*/
+/* 案件管理
+----------------------*/
+.works_add_wrap {
+  width: 98% ;
+  width: 1024px ;
+  padding-bottom: 20px ;
+}
+.works_add_wrap table {
+  width: 95% ;
+  width: 900px ;
+  margin: 0 auto 20px ;
+}
+.cnt_tbl_with01 {
+  text-align: center ;
+}
+.cnt_tbl_with02 {
+  width: 20% ;
+}
+.btn_tbl_with {
+  width: 26px ;
+  text-align: center ;
+}
+.project_title {
+  width: 400px ;
+}
+.cell_cnt textarea {
+  width: 600px ;
+  height: 100px ;
+}
+.tbl_title {
+  text-align: center ;
+  background: #efefef ;
+  font-size: 14px ;
+}
+.cell_title {
+  background: #d3e1fe ;
+  text-align: center ;
+  font-weight: bold ;
+  color: #000 ;
+  width: 150px ;
+}
+.cell_time input[type="text"] {
+  width: 130px ;
+  height: 22px ;
+}
+.cell_time02 input[type="text"] {
+  width: 160px ;
+  height: 22px ;
+}
+.cell_time img {
+  margin-right: 5px ;
+}
+.cell_time02 img {
+  margin-right: 5px ;
+}
+.cell_time select {
+  width: 135px ;
+}
+.cell_time02 select {
+  width: 165px ;
+}
+.cell_date input[type="text"] {
+  width: 95px ;
+}
+.cell_range input[type="range"] {
+  width: 100px ;
+}
+.txt_width textarea {
+  width: 100% ;
+  height: 80px ;
+}
+.tbl_dtail01 {
+  width: 70px ;
+}
+.tbl_dtail02 {
+  width: 170px ;
+}
+.tbl_dtail03 {
+  width: 40px ;
+}
+/* 日報
+----------------------*/
+.w260 {
+  width: 250px ;
+}
+.w260 select {
+  height: 30px ;
+}
+.w170 {
+  width: 170px ;
+}
+.w200 {
+  width: 200px ;
+}
+.repo_calendar {
+  width: 300px ;
+  height: 50px ;
+  margin: 20px 0 0 20px ;
+}
+.repo_calendar input[type="button"].btn_calendar,
+.repo_calendar input[type="button"].btn_today {
+  height: 50px ;
+  border: none ;
+  float: left ;
+  color: #fff ;
+  font-size: 15px ;
+  font-weight: bold ;
+  margin-right: 10px ;
+  padding-top: 10px ;
+  cursor: pointer ;
+}
+.repo_calendar input[type="button"].btn_calendar {
+  width: 110px ;
+  background: url("/_img/common/btn_calendar.png") no-repeat ;
+}
+.repo_calendar input[type="button"].btn_today {
+  width: 50px ;
+  background: url("/_img/common/btn_today.png") no-repeat ;
+}
+.repo_calendar input[type="button"]:hover {
+  opacity: 0.6
+}
+.cell_repo_01 {
+  width: 134px ;
+}
+.cell_repo_02 {
+  width: 67px ;
+}
+.cell_repo_03 {
+  width: 24px ;
+}
+.cell_repo_04 {
+  width: 160px ;
+}
+.wrap_btn_parallel {
+  width: 190px ;
+  margin: 40px auto 0 ;
+}
+.o_r {
+  width: 15px ;
+  display: block ;
+  margin: 0 auto ;
+}
+/*◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆
+                                  マスター管理
+◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆*/
+/* ユーザー管理
+----------------------*/
+.user_tbl_with {
+  width: 20% ;
+}

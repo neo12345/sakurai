@@ -1,0 +1,427 @@
+<!DOCTYPE html>
+<!-- saved from url=(0030)http://www.smile-reforeno.com/ -->
+<html class="" lang="ja">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<meta charset="UTF-8" />
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+
+<title>住まいるホーム Control Panel［物件一覧］</title>
+<link rel="stylesheet" href="/_css/html5reset-1.6.1_kai.css" />
+<link rel="stylesheet" href="/_css/common.css" />
+<link rel="stylesheet" href="/_css/style.css" />
+
+<link rel="shortcut icon" href="http://www.smile-reforeno.com/favicon.ico" />
+
+<!--[if lt IE 9]>
+<script type="text/javascript">document.write(unescape('%3Cscript src="' + ('https:' == document.location.protocol ? 'https://' : 'http://') +   'html5shiv.googlecode.com/svn/trunk/html5.js" %3E%3C/script%3E'));</script>
+<![endif]-->
+
+</head>
+
+<body id="itementry">
+
+	<a id="top" name="top"></a>
+	
+	<div id="wrapper">
+	
+		<header>
+			
+			<h1><a href="./" title="住まいるホーム Control Panel [ホームへ]">住まいるホーム Control Panel</a></h1>
+			<p class="username">ようこそ　武野響応 様</p>
+			<p class="logout"><a href="./" title="ログアウト">ログアウト</a></p>
+			
+			<ul>
+				<li class="menu1_item"><a href="./item/" title="物件管理">物件管理</a></li>
+				<li class="menu1_member"><a href="./member/" title="会員管理">会員管理</a></li>
+				<li class="menu1_contents"><a href="./contents/" title="コンテンツ管理">コンテンツ管理</a></li>
+				<li class="menu1_master"><a href="./master/" title="マスタ管理">マスタ管理</a></li>
+			</ul>
+			
+		</header>
+		
+		<section id="main">
+		
+			<h1>物件管理</h1>
+			
+			<ul>
+				<li class="menu2_item1"><a href="./item/" title="物件一覧">物件一覧</a></li>
+				<li class="menu2_item2"><a href="./item/" title="物件登録">物件登録</a></li>
+				<li class="menu2_item3"><a href="./item/" title="物件●●">物件●●</a></li>
+			</ul>
+			
+			<div>
+			
+				<form method="post" action="">
+					<fieldset>
+						<table>
+							<tbody>
+								<tr>
+									<th>物件名</th>
+									<td><input name="keyword" type="text" style="width:500px;" required /></td>
+								</tr>
+								<tr>
+									<th>販売価格</th>
+									<td><label><input name="price" type="text" required /> 万円</label></td>
+								</tr>
+								<tr>
+									<th>所在地</th>
+									<td>
+										<select name="pref_name" required>
+											<option value="" selected>都道府県</option>
+											<option value="北海道">北海道</option>
+											<option value="青森県">青森県</option>
+											<option value="岩手県">岩手県</option>
+											<option value="宮城県">宮城県</option>
+											<option value="秋田県">秋田県</option>
+											<option value="山形県">山形県</option>
+											<option value="福島県">福島県</option>
+											<option value="茨城県">茨城県</option>
+											<option value="栃木県">栃木県</option>
+											<option value="群馬県">群馬県</option>
+											<option value="埼玉県">埼玉県</option>
+											<option value="千葉県">千葉県</option>
+											<option value="東京都">東京都</option>
+											<option value="神奈川県">神奈川県</option>
+											<option value="新潟県">新潟県</option>
+											<option value="富山県">富山県</option>
+											<option value="石川県">石川県</option>
+											<option value="福井県">福井県</option>
+											<option value="山梨県">山梨県</option>
+											<option value="長野県">長野県</option>
+											<option value="岐阜県">岐阜県</option>
+											<option value="静岡県">静岡県</option>
+											<option value="愛知県">愛知県</option>
+											<option value="三重県">三重県</option>
+											<option value="滋賀県">滋賀県</option>
+											<option value="京都府">京都府</option>
+											<option value="大阪府">大阪府</option>
+											<option value="兵庫県">兵庫県</option>
+											<option value="奈良県">奈良県</option>
+											<option value="和歌山県">和歌山県</option>
+											<option value="鳥取県">鳥取県</option>
+											<option value="島根県">島根県</option>
+											<option value="岡山県">岡山県</option>
+											<option value="広島県">広島県</option>
+											<option value="山口県">山口県</option>
+											<option value="徳島県">徳島県</option>
+											<option value="香川県">香川県</option>
+											<option value="愛媛県">愛媛県</option>
+											<option value="高知県">高知県</option>
+											<option value="福岡県">福岡県</option>
+											<option value="佐賀県">佐賀県</option>
+											<option value="長崎県">長崎県</option>
+											<option value="熊本県">熊本県</option>
+											<option value="大分県">大分県</option>
+											<option value="宮崎県">宮崎県</option>
+											<option value="鹿児島県">鹿児島県</option>
+											<option value="沖縄県">沖縄県</option>
+										</select>
+										<input name="addr1" type="text" required />
+										<input name="addr2" type="text" />
+										<input name="addr3" type="text" />
+									</td>
+								</tr>
+								<tr>
+									<th>沿線・駅</th>
+									<td>
+										<ul class="add">
+											<li>
+												<a>削除</a>
+												<select name="infra_name1">
+													<option value="" selected>インフラ</option>
+													<option value="JR">JR</option>
+													<option value="西鉄電車">西鉄電車</option>
+													<option value="西鉄バス">西鉄バス</option>
+													<option value="福岡市営地下鉄">福岡市営地下鉄</option>
+												</select>
+												<select name="st_name1">
+													<option value="" selected>駅名</option>
+													<option value="●●駅">●●駅</option>
+													<option value="●●バス停">●●バス停</option>
+													<option value="■■駅">■■駅</option>
+													<option value="△△駅">△△駅</option>
+												</select>
+												<select name="by_name1">
+													<option value="" selected>手段</option>
+													<option value="徒歩">徒歩</option>
+													<option value="自転車">自転車</option>
+													<option value="バス">バス</option>
+												</select>
+												<label><input name="time1" type="text" /> 分</label>
+											</li>
+											<li>
+												<a>削除</a>
+												<select name="infra_name2">
+													<option value="" selected>インフラ</option>
+													<option value="JR">JR</option>
+													<option value="西鉄電車">西鉄電車</option>
+													<option value="西鉄バス">西鉄バス</option>
+													<option value="福岡市営地下鉄">福岡市営地下鉄</option>
+												</select>
+												<select name="st_name2">
+													<option value="" selected>駅名</option>
+													<option value="●●駅">●●駅</option>
+													<option value="●●バス停">●●バス停</option>
+													<option value="■■駅">■■駅</option>
+													<option value="△△駅">△△駅</option>
+												</select>
+												<select name="by_name2">
+													<option value="" selected>手段</option>
+													<option value="徒歩">徒歩</option>
+													<option value="自転車">自転車</option>
+													<option value="バス">バス</option>
+												</select>
+												<label><input name="time1" type="text" /> 分</label>
+											</li>
+											<li class="plus"><a>追加</a></li>
+										</ul>
+									</td>
+								</tr>
+								<tr>
+									<th>面積</th>
+									<td><label>土地面積：<input name="square1" type="text" /> m2</label>　・　<label>建物面積：<input name="square2" type="text" /> m2</label></td>
+								</tr>
+								<tr>
+									<th>学区</th>
+									<td>
+										<select name="school1" required>
+											<option value="" selected>小学校</option>
+											<option value="●●小学校">●●小学校</option>
+											<option value="△△小学校">△△小学校</option>
+										</select>
+										<select name="school2" required>
+											<option value="" selected>中学校</option>
+											<option value="●●中学校">●●中学校</option>
+											<option value="△△中学校">△△中学校</option>
+										</select>
+										<select name="school3" required>
+											<option value="" selected>高校</option>
+											<option value="第一学区">第一学区</option>
+											<option value="第二学区">第二学区</option>
+										</select>
+									</td>
+								</tr>
+								<tr>
+									<th>手数料割引</th>
+									<td><label><input name="discount" type="text" /> ％OFF</label></td>
+								</tr>
+								<tr>
+									<th>物件特徴</th>
+									<td>
+										<label><input type="checkbox" name="point1" value="太陽光" />太陽光</label>
+										<label><input type="checkbox" name="point2" value="プライスダウン" />プライスダウン</label>
+										<label><input type="checkbox" name="point3" value="駐車2台以上可" />駐車2台以上可</label>
+									</td>
+								</tr>
+								<tr>
+									<th>キャッチコピー</th>
+									<td><input name="text1" type="text" style="width:500px;" /></td>
+								</tr>
+								<tr>
+									<th>詳細説明文</th>
+									<td><textarea name="text2" rows="10" style="width:500px;"></textarea></td>
+								</tr>
+								<tr>
+									<th>Youtube URL</th>
+									<td><input name="youtube" type="url" style="width:500px;" /></td>
+								</tr>
+								<tr>
+									<th>トップ画像</th>
+									<td>
+										<div id="file-input_top" class="dragbox topimg"></div>
+										<input type="button" value="" class="file_btn fleft" />
+									</td>
+								</tr>
+								<tr>
+									<th>メイン画像</th>
+									<td>
+										<div id="file-input_main" class="dragbox mainimg"></div>
+										<input type="button" value="" class="file_btn fleft" />
+									</td>
+								</tr>
+								<tr>
+									<th>詳細画像</th>
+									<td>
+										<ul class="imglist">
+											<li>
+												<a class="move">ファイル移動</a>
+												<div id="file-input_detail1" class="dragbox detailimg"></div>
+												<input type="button" value="" class="file_btn" />
+												<input type="text" name="img_text1" class="file_title" placeholder="コメント" />
+											</li>
+											<li>
+												<a class="move">ファイル移動</a>
+												<div id="file-input_detail1" class="dragbox detailimg"></div>
+												<input type="button" value="" class="file_btn" />
+												<input type="text" name="img_text1" class="file_title" placeholder="コメント" />
+											</li>
+											<li>
+												<a class="move">ファイル移動</a>
+												<div id="file-input_detail1" class="dragbox detailimg"></div>
+												<input type="button" value="" class="file_btn" />
+												<input type="text" name="img_text1" class="file_title" placeholder="コメント" />
+											</li>
+											<li>
+												<a class="move">ファイル移動</a>
+												<div id="file-input_detail1" class="dragbox detailimg"></div>
+												<input type="button" value="" class="file_btn" />
+												<input type="text" name="img_text1" class="file_title" placeholder="コメント" />
+											</li>
+											<li>
+												<a class="move">ファイル移動</a>
+												<div id="file-input_detail1" class="dragbox detailimg"></div>
+												<input type="button" value="" class="file_btn" />
+												<input type="text" name="img_text1" class="file_title" placeholder="コメント" />
+											</li>
+											<li>
+												<a class="move">ファイル移動</a>
+												<div id="file-input_detail1" class="dragbox detailimg"></div>
+												<input type="button" value="" class="file_btn" />
+												<input type="text" name="img_text1" class="file_title" placeholder="コメント" />
+											</li>
+										</ul>
+									</td>
+								</tr>
+								<tr>
+									<th>間取り</th>
+									<td>
+										<div id="file-input_main" class="dragbox mainimg"></div>
+										<input type="button" value="" class="file_btn fleft" /><br /><br />
+										<input name="room" type="text" class="fleft" placeholder="間取りを入力" />
+									</td>
+								</tr>
+								<tr>
+									<th>戸数</th>
+									<td>
+										<label>販売戸数：<input name="room_num" type="number" style="width:100px;" /> 戸</label>　／　
+										<label>総戸数：<input name="room_all" type="number" style="width:100px;" /> 戸</label>
+									</td>
+								</tr>
+								<tr>
+									<th>私道負担・道路</th>
+									<td><input name="road" type="text" style="width:500px;" /></td>
+								</tr>
+								<tr>
+									<th>完成時期<br />（築年月）</th>
+									<td><input name="years" type="text" style="width:500px;" /></td>
+								</tr>
+								<tr>
+									<th>物件メモ</th>
+									<td><input name="memo" type="text" style="width:500px;" /></td>
+								</tr>
+								<tr>
+									<th>販売スケジュール</th>
+									<td><input name="schedule" type="text" style="width:500px;" /></td>
+								</tr>
+								<tr>
+									<th>イベント情報</th>
+									<td><input name="event" type="text" style="width:500px;" /></td>
+								</tr>
+								<tr>
+									<th>最多価格帯</th>
+									<td><input name="price2" type="text" style="width:500px;" /></td>
+								</tr>
+								<tr>
+									<th>諸費用</th>
+									<td><input name="cost" type="text" style="width:500px;" /></td>
+								</tr>
+								<tr>
+									<th>建ぺい率・容積率</th>
+									<td><input name="capa" type="text" style="width:500px;" /></td>
+								</tr>
+								<tr>
+									<th>入居時期</th>
+									<td><input name="in" type="text" style="width:500px;" /></td>
+								</tr>
+								<tr>
+									<th>土地の権利形態</th>
+									<td><input name="right" type="text" style="width:500px;" /></td>
+								</tr>
+								<tr>
+									<th>構造・工法</th>
+									<td><input name="struc" type="text" style="width:500px;" /></td>
+								</tr>
+								<tr>
+									<th>施工</th>
+									<td><input name="company" type="text" style="width:500px;" /></td>
+								</tr>
+								<tr>
+									<th>リフォーム</th>
+									<td><input name="reform" type="text" style="width:500px;" /></td>
+								</tr>
+								<tr>
+									<th>用途地域</th>
+									<td><input name="area" type="text" style="width:500px;" /></td>
+								</tr>
+								<tr>
+									<th>地目</th>
+									<td><input name="land" type="text" style="width:500px;" /></td>
+								</tr>
+								<tr>
+									<th>その他制限事項</th>
+									<td><input name="rule" type="text" style="width:500px;" /></td>
+								</tr>
+								<tr>
+									<th>その他概要・<br />特記事項</th>
+									<td><textarea name="affairs" rows="10" style="width:500px;"></textarea></td>
+								</tr>
+								<tr>
+									<th>配置図</th>
+									<td>
+										<div id="file-input_main" class="dragbox mainimg"></div>
+										<input type="button" value="" class="file_btn fleft" />
+									</td>
+								</tr>
+								<tr>
+									<th>周辺環境</th>
+									<td>
+										<ul class="imglist neighbor">
+											<li>
+												<div id="file-input_neighbor1" class="dragbox neighborimg"></div>
+												<input type="button" value="" class="file_btn" />
+												<input type="text" name="neighbor_comment1" class="file_title" placeholder="コメント" />
+												<textarea name="neighbor_text1" rows="3" placeholder="詳細入力"></textarea>
+											</li>
+											<li>
+												<div id="file-input_neighbor1" class="dragbox neighborimg"></div>
+												<input type="button" value="" class="file_btn" />
+												<input type="text" name="neighbor_comment1" class="file_title" placeholder="コメント" />
+												<textarea name="neighbor_text1" rows="3" placeholder="詳細入力"></textarea>
+											</li>
+											<li>
+												<div id="file-input_neighbor1" class="dragbox neighborimg"></div>
+												<input type="button" value="" class="file_btn" />
+												<input type="text" name="neighbor_comment1" class="file_title" placeholder="コメント" />
+												<textarea name="neighbor_text1" rows="3" placeholder="詳細入力"></textarea>
+											</li>
+										</ul>
+									</td>
+								</tr>
+								<tr>
+									<th>地図</th>
+									<td>
+										<iframe width="600" height="328" frameborder="0" scrolling="no" marginheight="0" marginwidth="0" src="https://maps.google.co.jp/maps?ie=UTF8&amp;q=%E7%A6%8F%E5%B2%A1%E3%83%89%E3%83%BC%E3%83%A0&amp;fb=1&amp;gl=jp&amp;hq=%E7%A6%8F%E5%B2%A1%E3%83%89%E3%83%BC%E3%83%A0&amp;hnear=%E7%A6%8F%E5%B2%A1%E3%83%89%E3%83%BC%E3%83%A0&amp;cid=0,0,13230688918265746626&amp;t=m&amp;brcurrent=3,0x35419512f529fc99:0x566c201bed3b7dbb,0&amp;ll=33.595711,130.362139&amp;spn=0.005862,0.012853&amp;z=16&amp;iwloc=A&amp;output=embed"></iframe>
+									</td>
+								</tr>
+							</tbody>
+						</table>
+						<input type="submit" value="登録" class="formbtn" />
+					</fieldset>
+				</form>
+				
+			</div>
+				
+		</section><!-- END section#main -->
+		
+		<footer>
+			
+			<p id="copyright">Copyright (C) 2010-2012 copyrights. Smile Home Co.,Ltd. All Rights Reserved.</p>
+			
+		</footer>
+		
+	</div><!-- END div#wrapper -->
+	
+</body>
+
+</html>

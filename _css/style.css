@@ -1,0 +1,635 @@
+@charset "utf-8";
+/* CSS Document */
+
+/*---------------------------------------------*/
+/* 共通項目
+/*---------------------------------------------*/
+body {
+	font-size:12px;
+	line-height:1.8;
+	font-family: "ヒラギノ角ゴ Pro W3","Hiragino Kaku Gothic Pro","メイリオ",Meiryo,"ＭＳ Ｐゴシック",sans-serif;
+	letter-spacing:1px;
+	background:url(../_img/common/back.png) repeat-x top #CAEEFA;
+}
+
+p {
+	margin:0 0 15px 0;
+	overflow:hidden;
+}
+
+a {
+	color:#36F;
+}
+a:hover {
+	filter: alpha(opacity=80);
+	-moz-opacity:0.8;
+	opacity:0.8;
+}
+
+img.fleft {
+	margin:0 10px 10px 0;
+}
+
+img.fright {
+	margin:0 0 10px 10px;
+}
+
+table th,
+table td {
+	vertical-align:middle;
+}
+
+ol {
+	list-style:decimal;
+	margin:8px 0 0 38px;
+}
+ol li ol {
+	list-style:lower-roman;
+}
+ol>li {
+	margin:0 0 10px 0;
+}
+ol>li>span {
+	font-weight:bold;
+}
+
+ul.liststyle {
+	list-style:disc;
+	margin:8px 0 0 38px;
+}
+ul.liststyle>li {
+	margin:0 0 3px 0;
+}
+
+
+
+#wrapper {
+	width:950px;
+	margin:0 auto;
+	background:url(../_img/common/sideback.png) repeat-y left;
+}
+
+section#main {
+	width:930px;
+	margin:0 auto 20px auto;
+	padding:10px;
+	position:relative;
+}
+
+section#main>h1 {
+	display:block;
+	width:300px;
+	height:60px;
+	text-indent:-99999px;
+
+}
+
+
+/* ヘッダー ------------------------------------------------*/
+header {
+	width:950px;
+	padding:10px 0;
+	position:relative;
+}
+
+header h1 a {
+	display:block;
+	width:455px;
+	height:95px;
+	background:url(../_img/common/title.png) no-repeat;
+	text-indent:-99999px;
+	margin:0 0 10px 0;
+}
+
+header p.username {
+	position:absolute;
+	top:71px;
+	right:133px;
+	text-align:right;
+}
+
+header p.logout {
+}
+header p.logout a {
+	position:absolute;
+	position:absolute;
+	display:block;
+	width:116px;
+	height:31px;
+	top:65px;
+	right:0px;
+	background-image:url(../_img/common/btn_logout.png);
+	background-position:top left;
+	background-repeat:no-repeat;
+	text-indent:-99999px;
+}
+
+header>ul {
+	overflow:hidden;
+	margin:0 -10px 0 0;
+}
+header>ul>li {
+	float:left;
+	text-align:center;
+}
+header>ul>li>a {
+	font-size:14px;
+	text-decoration:none;
+	color:#666;
+	font-weight:bold;
+	letter-spacing:3px;
+	display:block;
+	width:230px;
+	height:36px;
+	margin:0 10px 0 0;
+	padding:16px 0 0 0;
+	background-image:url(../_img/common/menu1.png);
+	background-position:top left;
+	background-repeat:no-repeat;
+}
+header>ul>li>a:hover {
+	background-position:bottom left;
+	color:#000;
+	filter: alpha(opacity=100);
+	-moz-opacity:1;
+	opacity:1;
+}
+
+/* フッター ------------------------------------------------*/
+footer {
+	clear:both;
+	color:#69F;
+	text-align:center;
+}
+
+/*---------------------------------------------*/
+/* ログイン
+/*---------------------------------------------*/
+#home #main {
+	overflow:hidden;
+}
+
+#home section#main>h1 {
+	float:left;
+	width:150px;
+	background:url(../_img/common/h1_login.png) no-repeat;
+}
+
+#home section#main>form {
+	float:left;
+	padding:23px;
+}
+
+#home section#main>form label {
+	margin:10px;
+}
+
+
+/*---------------------------------------------*/
+/* エラー画面
+/*---------------------------------------------*/
+
+#error section#main>h1 {
+	background:url(../_img/common/h1_error.png) no-repeat;
+}
+#error section#main>p {
+	color:#F33;
+	font-size:16px;
+	font-weight:bold;
+	text-align:center;
+	padding:50px;
+}
+
+/*---------------------------------------------*/
+/* メインコンテンツ（物件管理）
+/*---------------------------------------------*/
+
+#itemlist section#main>h1 {
+	background:url(../_img/common/h1_item.png) no-repeat;
+}
+#itementry section#main>h1 {
+	background:url(../_img/common/h1_item.png) no-repeat;
+}
+#member section#main>h1 {
+	background:url(../_img/common/h1_member.png) no-repeat;
+}
+#contents section#main>h1 {
+	background:url(../_img/common/h1_contents.png) no-repeat;
+}
+#master section#main>h1 {
+	background:url(../_img/common/h1_master.png) no-repeat;
+}
+
+#main>ul {
+	overflow:hidden;
+	position:absolute;
+	top:81px;
+	left:10px;
+	z-index:1;
+}
+#main>ul>li {
+	float:left;
+	text-align:center;
+}
+#main>ul>li>a {
+	font-size:14px;
+	text-decoration:none;
+	color:#666;
+	font-weight:bold;
+	letter-spacing:3px;
+	display:block;
+	width:120px;
+	height:28px;
+	margin:0 0 0 0;
+	padding:14px 0 0 0;
+	background-image:url(../_img/common/menu2.png);
+	background-position:top right;
+	background-repeat:no-repeat;
+}
+#main>ul>li.menu2.menu_selected>a,
+#main>ul>li>a:hover {
+	padding:10px 0 0 0;
+	background-position:top left;
+	color:#000;
+	filter: alpha(opacity=100);
+	-moz-opacity:1;
+	opacity:1;
+}
+
+#main>div {
+	background:#FFF;
+	padding:25px;
+	border:#BABABA 1px solid;
+	margin:48px 0 0 0;
+}
+
+#itemlist #main>div form.search {
+	background:#FFFFCC;
+	padding:20px;
+	border:#FFD0B0 1px solid;
+	margin:0 0 20px 0;
+}
+
+#itemlist #main>div form.search>p {
+	display:block;
+	width:132px;
+	height:40px;
+	text-indent:-99999px;
+	background-image:url(../_img/common/search.png);
+}
+
+#main table {
+	border-top:1px solid #CCC;
+	border-left:1px solid #CCC;
+	width:100%;
+}
+#main table th,
+#main table td{
+	padding:5px;
+	border-bottom:1px solid #CCC;
+	border-right:1px solid #CCC;
+}
+#itemlist #main table th {
+	background-image:url(../_img/common/th_back.png);
+	background-repeat:repeat-x;
+}
+#main table td.no,
+#main table td.edit,
+#main table td.image,
+#main table td.load,
+#main table td.del {
+	text-align:center;
+}
+
+#main table td.edit input,
+#main table td.image input,
+#main table td.load input,
+#main table td.del p {
+	margin:0 auto;
+	display:block;
+	width:22px;
+	height:22px;
+	text-indent:-99999px;
+}
+#main table td.edit input {
+	border:none;
+	background:url(../_img/common/ico_edit.png) top left no-repeat;
+}
+#main table td.image input {
+	border:none;
+	background:url(../_img/common/ico_image.png) top left no-repeat;
+}
+#main table td.load input {
+	border:none;
+	background:url(../_img/common/icon_loading.gif) top left no-repeat;
+}
+#main table td.del p {
+	background:url(../_img/common/ico_del.png) top left no-repeat;
+}
+
+#main table td div.js_sort {
+	text-indent:-99999px;
+	background:url(../_img/common/ico_drag.png) center center no-repeat;
+}
+
+
+#main table {
+	border-top:1px solid #CCC;
+	border-left:1px solid #CCC;
+	width:100%;
+	margin:0 0 10px 0;
+}
+#main table th,
+#main table td{
+	padding:8px;
+	border-bottom:1px solid #CCC;
+	border-right:1px solid #CCC;
+	overflow:hidden;
+}
+#main table th {
+	background-image:url(../_img/common/th_back_left.png);
+	background-repeat:repeat-x;
+	white-space:nowrap;
+}
+#main table td.no,
+#main table td.edit,
+#main table td.del {
+	text-align:center;
+}
+
+dl.point {
+	margin:-15px 0 0 0;
+}
+dl.point dt {
+	background:url(../_img/common/ico_circle.png) no-repeat 0 2px;
+	padding:0 0 0 20px;
+	font-weight:bold;
+	color:#39F;
+	margin:15px 0 0 0;
+}
+dl.point dd {
+	overflow:hidden;
+	padding:0 0 0 10px;
+}
+
+ul.add {
+}
+ul.add li {
+	overflow:hidden;
+}
+ul.add li a {
+	float:left;
+	display:block;
+	width:16px;
+	height:16px;
+	text-indent:-99999px;
+	background-image:url(../_img/common/ico_minus.png);
+	background-repeat:no-repeat;
+	background-position:bottom left;
+	margin:5px 3px 0 0;
+}
+ul.add li a:hover {
+	background-position:top left;
+	filter: alpha(opacity=100);
+	-moz-opacity:1;
+	opacity:1;
+}
+p.plus {
+	margin:0;
+	height:17px;
+}
+p.plus a {
+	height:16px;
+	padding:0 0 0 20px;
+	background:url(../_img/common/ico_plus.png) no-repeat 0 -16px;
+	margin:0;
+	cursor:pointer;
+}
+p.plus a:hover {
+	cursor:pointer;
+	background-position:0 0;
+	filter: alpha(opacity=100);
+	-moz-opacity:1;
+	opacity:1;
+}
+
+select.select_city {
+	width:170px;
+}
+select.select_st {
+	width:215px;
+}
+input.input_min {
+	width:30px;
+}
+
+ul.imglist {
+	overflow:hidden;
+	margin:0 -7px 0 0;
+}
+ul.imglist>li {
+	float:left;
+	width:116px;
+	margin:0 7px 7px 0;
+	position:relative;
+}
+ul.imglist>li>a {
+	position:absolute;
+	top:5px;
+	right:5px;
+	display:block;
+	width:24px;
+	height:24px;
+	text-indent:-99999px;
+	background:url(../_img/common/ico_drag.png) no-repeat top left;
+}
+ul.imglist.neighbor>li {
+	width:212px;
+}
+
+input.file_btn {
+	color:#FFF;
+	display:block;
+	width:76px;
+	height:22px;
+	background:url(../_img/common/btn_file.png) no-repeat top left;
+	border:none;
+	cursor:pointer;
+	margin:0 3px 3px 0;
+}
+input.file_btn:hover {
+	background-position:bottom left;
+}
+input.del_btn {
+	color:#FFF;
+	display:block;
+	width:37px;
+	height:22px;
+	background:url(../_img/common/btn_del.png) no-repeat 0 -44px;
+	border:none;
+	margin:0 0 3px 0;
+}
+input.del_btn.del_on {
+	background-position:0 0px;
+}
+input.del_btn.del_on:hover {
+	background-position:0 -22px;
+	cursor:pointer;
+}
+
+ul.imglist>li input.file_title {
+	width:112px;
+}
+ul.imglist.neighbor>li input.file_title {
+	width:206px;
+}
+ul.imglist.neighbor>li textarea {
+	width:206px;
+}
+
+.dragbox {
+	border: dotted 3px #CCC;
+	background-image:url(../_img/common/drag_back.png);
+	background-repeat:no-repeat;
+	background-position:center center;
+}
+.dragbox.topimg {
+	float:left;
+	width: 190px;
+	height: 88px;
+	margin:0 10px 0 0;
+}
+.dragbox.mainimg {
+	float:left;
+	width: 154px;
+	height: 120px;
+	margin:0 10px 0 0;
+}
+.dragbox.detailimg {
+	margin:0 0 3px 0;
+	width: 110px;
+	height: 110px;
+}
+.dragbox.neighborimg {
+	margin:0 0 3px 0;
+	width: 206px;
+	height: 135px;
+}
+.dragbox.thetaimg {
+	margin:0 0 3px 0;
+	width: 280px;
+	height: 100px;
+}
+
+input.formbtn {
+	font-size:16px;
+	color:#FFF;
+	font-weight:bold;
+	text-shadow: 1px 1px 4px #600;
+	display:block;
+	width:150px;
+	height:60px;
+	background:url(../_img/common/btn.png) no-repeat top left;
+	margin:10px auto;
+	border:none;
+	cursor:pointer;
+	letter-spacing:2px;
+	position: fixed; bottom: 70px; left: 50%; margin-left: -75px;
+}
+
+/*---------------------------------------------*/
+/* メインコンテンツ（マスタ管理）
+/*---------------------------------------------*/
+div.controldialog {
+	padding:50px 50px 60px 50px;
+	background-color: #fff;
+	position:relative;
+	-webkit-border-radius: 10px;
+	-moz-border-radius: 10px;
+	box-shadow: 0px 0px 8px #000; /*CSS3*/
+	-moz-box-shadow: 0px 0px 8px #000; /* Firefox用*/
+	-webkit-box-shadow: 0px 0px 8px #000; /* Google Chrome, Safari用*/
+	border:#3CF 2px solid;
+	background: -moz-linear-gradient(top, #FFF, #FFF 60%, #3CF);
+	background: -webkit-gradient(linear, left top, left bottom, from(#FFF), color-stop(0.6, #FFF), to(#3CF));
+}
+div.controldialog input.ico_close {
+	position:absolute;
+	top:-7px;
+	right:-7px;
+	text-indent:-99999px;
+	background:url(../_img/common/ico_close.png) no-repeat top left;
+	display:block;
+	width:24px;
+	height:24px;
+}
+div.controldialog input.btn_plus {
+	position:absolute;
+	bottom:30px;
+	right:50px;
+	text-indent:-99999px;
+	background:url(../_img/common/btn_plus.png) no-repeat top left;
+	display:block;
+	width:37px;
+	height:22px;
+}
+
+input.btn_plus {
+	margin:0;
+	height:16px;
+	padding:0 0 0 20px;
+	background:url(../_img/common/ico_plus.png) no-repeat 0 -16px;
+	margin:0;
+	cursor:pointer;
+}
+input.btn_plus:hover {
+	cursor:pointer;
+	background-position:0 0;
+	filter: alpha(opacity=100);
+	-moz-opacity:1;
+	opacity:1;
+}
+
+input.btn_del {
+	float:left;
+	display:block;
+	width:16px;
+	height:16px;
+	text-indent:-99999px;
+	background-image:url(../_img/common/ico_minus.png);
+	background-repeat:no-repeat;
+	background-position:bottom left;
+	margin:2px 3px 0 0;
+}
+input.btn_del:hover {
+	background-position:top left;
+	filter: alpha(opacity=100);
+	-moz-opacity:1;
+	opacity:1;
+}
+
+input.btn_back {
+	margin:0;
+	display:block;
+	width:37px;
+	text-indent:-99999px;
+	height:22px;
+	padding:0 0 0 20px;
+	background:url(../_img/common/btn_back.png) no-repeat 0 0;
+	margin:0;
+	cursor:pointer;
+}
+input.btn_back:hover {
+	cursor:pointer;
+}
+
+.PreviewFrame {
+	width: 220px;
+	height: 220px;
+	margin: 5px auto;
+	background-position: center center;
+	background-size: cover;
+	border: 1px solid #ccc;
+}
+
+

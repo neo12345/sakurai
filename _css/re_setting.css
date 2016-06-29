@@ -1,0 +1,381 @@
+/*◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆
+                                  各種設定
+◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆*/
+/* ボーダーの色
+---------------------------------*/
+.border {
+  border: 1px #999 solid ;
+}
+.cnt_wrap {
+  border: 1px #999 solid ;
+  border-top: 10px #999 solid ;
+}
+/* グラデーション（ヘッダー・タブ）
+---------------------------------*/
+.grade_01 {
+  background-image: -webkit-gradient(
+	linear,
+	left top,
+	left bottom,
+	color-stop(0, #fefede),
+	color-stop(1, #fefede)
+);
+background-image: -o-linear-gradient(bottom, #fefede 0%, #fefede 100%);
+background-image: -moz-linear-gradient(bottom, #fefede 0%, #fefede 100%);
+background-image: -webkit-linear-gradient(bottom, #fefede 0%, #fefede 100%);
+background-image: -ms-linear-gradient(bottom, #fefede 0%, #fefede 100%);
+background-image: linear-gradient(to bottom, #fefede 0%, #fefede 100%);
+}
+/* グラデーション（ナビ:hover）
+---------------------------------*/
+.nav01:hover {
+  background: url("/_re_img/common/icon_01.png"), -moz-linear-gradient(top, #d3e2ff, #fff);
+  background: url("/_re_img/common/icon_01.png"), -webkit-gradient(linear, left top, left bottom, from(#d3e2ff), to(#fff));
+}
+.nav02:hover {
+  background: url("/_re_img/common/icon_02.png"), -moz-linear-gradient(top, #eee, #fff);
+  background: url("/_re_img/common/icon_02.png"), -webkit-gradient(linear, left top, left bottom, from(#eee), to(#fff));
+}
+.nav03:hover {
+  background: url("/_re_img/common/icon_03.png"), -moz-linear-gradient(top, #eee, #fff);
+  background: url("/_re_img/common/icon_03.png"), -webkit-gradient(linear, left top, left bottom, from(#eee), to(#fff));
+}
+.nav04:hover {
+  background: url("/_re_img/common/icon_04.png"), -moz-linear-gradient(top, #eee, #fff);
+  background: url("/_re_img/common/icon_04.png"), -webkit-gradient(linear, left top, left bottom, from(#eee), to(#fff));
+}
+.nav05:hover {
+  background: url("/_re_img/common/icon_05.png"), -moz-linear-gradient(top, #eee, #fff);
+  background: url("/_re_img/common/icon_05.png"), -webkit-gradient(linear, left top, left bottom, from(#eee), to(#fff));
+}
+/* グラデーション（ナビON）
+---------------------------------*/
+.nav01_on {
+  background: url("/_re_img/common/icon_01.png"), -moz-linear-gradient(top, #eee, #fff);
+  background: url("/_re_img/common/icon_01.png"), -webkit-gradient(linear, left top, left bottom, from(#eee), to(#fff));
+}
+.nav02_on {
+  background: url("/_re_img/common/icon_02.png"), -moz-linear-gradient(top, #eee, #fff);
+  background: url("/_re_img/common/icon_02.png"), -webkit-gradient(linear, left top, left bottom, from(#eee), to(#fff));
+}
+.nav03_on {
+  background: url("/_re_img/common/icon_03.png"), -moz-linear-gradient(top, #eee, #fff);
+  background: url("/_re_img/common/icon_03.png"), -webkit-gradient(linear, left top, left bottom, from(#eee), to(#fff));
+}
+.nav04_on {
+  background: url("/_re_img/common/icon_04.png"), -moz-linear-gradient(top, #eee, #fff);
+  background: url("/_re_img/common/icon_04.png"), -webkit-gradient(linear, left top, left bottom, from(#eee), to(#fff));
+}
+.nav05_on {
+  background: url("/_re_img/common/icon_05.png"), -moz-linear-gradient(top, #eee, #fff);
+  background: url("/_re_img/common/icon_05.png"), -webkit-gradient(linear, left top, left bottom, from(#eee), to(#fff));
+}
+/* タブ
+---------------------------------*/
+.tab_wrap {
+  height: 40px ;
+}
+.tab {
+  float: left ;
+}
+.tab li{
+  /*width: 118px ;*/
+  height: 39px ;
+  display: block ; 
+}
+.tab li a {
+  /*width: 118px ;*/
+  height: 29px ;
+  display: block ; 
+}
+.tab li {
+  float: left ;
+  margin-right: 5px ;
+}
+.tab_on a,
+.tab_off a:hover {
+  border: 1px #999 solid ;
+  border-bottom: none ;
+  color: #fff ;
+  font-size: 17px ;
+  font-weight: bold ;
+  background: -moz-linear-gradient(top, #ccc, #999);
+  background: -webkit-gradient(linear, left top, left bottom, from(#ccc), to(#999));
+  text-align: center ;
+  padding: 10px 20px 0 ;
+}
+.tab_off a {
+  border: 1px #ccc solid ;
+  border-bottom: none ;
+  color: #666 ;
+  font-size: 17px ;
+  background: -moz-linear-gradient(top, #eee, #fff);
+  background: -webkit-gradient(linear, left top, left bottom, from(#eee), to(#fff));
+  text-align: center ;
+  padding: 10px 20px 0 ;
+}
+/* 項目背景色
+---------------------------------*/
+
+/* #################################### */
+
+/* 共通
+---------------------------------*/
+/* 全体
+------------------ */
+html,body {
+}
+.wrap {
+}
+.mgn0auto {
+  margin: 0 auto ;
+}
+/* 左カラム
+------------------ */
+.left {
+  background: #efefef ;
+  padding: 30px ;
+}
+/* 右カラム
+------------------ */
+.right {
+  padding: 30px 15px ;
+}
+/* ボタン
+------------------ */
+/* ボタンサイズ */
+.btn_style_01 {
+  width: 90px ;
+  height: 30px ;
+  display: block ;
+  border: none ;
+  text-indent: -9999px ;
+}
+.btn_style_02 {
+  width: 24px ;
+  height: 24px;
+  text-indent: -9999px ;
+  border: none ;
+}
+.btn_style_03 {
+  width: 40px ;
+  height: 40px ;
+  text-indent: -9999px ;
+  border: none ;
+}
+.btn_style_04 {
+  width: 130px ;
+  height: 30px ;
+  text-indent: -9999px ;
+  border: none ;
+}
+/* 登録 */
+.btn_regist {
+  background: url("/_re_img/common/btn_regist.png") no-repeat right top ;
+}
+/* 新規作成 */
+.btn_new {
+  background: url("/_re_img/common/btn_new.png") no-repeat right top ;
+  float: left ;
+  margin-left: 10px ;
+}
+/* 追加 */
+.btn_add {
+  background: url("/_re_img/common/btn_add.png") no-repeat right top ;
+}
+.btn_add_posi {
+  position: absolute ;
+  top: -21px ;
+  left: 24px ;
+}
+/* 提出 */
+.btn_submit {
+  background: url("/_re_img/common/btn_submit.png") no-repeat right top ;
+}
+/* 編集 */
+.btn_edit { background: url("/_re_img/common/btn_edit.png") no-repeat ; }
+/* 詳細 */
+.btn_detail { background: url("/_re_img/common/btn_detail.png") no-repeat ; }
+/* 削除 */
+.btn_delete { background: url("/_re_img/common/btn_delete.png") no-repeat ; }
+/* 処理 */
+.btn_process { background: url("/_re_img/common/btn_process.png") no-repeat ; }
+/* 検索 */
+.btn_search { background: url("/_re_img/common/btn_search.png") no-repeat ; }
+/* 絞り込み検索 */
+.btn_search_02 { background: url("/_re_img/common/btn_search_02.png") no-repeat ; }
+/* 履歴 */
+.btn_history { background: url("/_re_img/common/btn_history.png") no-repeat ; }
+/* 出力 */
+.btn_pdf { background: url("/_re_img/common/btn_pdf.png") no-repeat ; }
+/* 下書き */
+.btn_draft { background: url("/_re_img/common/btn_draft.png") no-repeat ; }
+/* 閉じる */
+.btn_close {
+  display: block ;
+  background: url("/_re_img/common/btn_close.png") no-repeat right top ;
+  margin-bottom: 20px ;
+  float: right ;
+}
+/* ホバー */
+.btn_style_01:hover,
+.btn_style_02:hover,
+.btn_style_03:hover,
+.btn_style_04:hover {
+  opacity: 0.6
+}
+/* テーブル
+------------------ */
+.table_style {
+  border-collapse: collapse;
+  width: 97% ;
+  margin: 20px auto ;
+}
+.table_style tr td,
+.table_style tr th {
+  border: #ccc 1px solid ;
+  padding: 10px ;
+}
+.table_style thead tr td,
+.table_style thead tr th {
+  background: #eee ;
+  text-align: center ;
+  font-weight: bold ;
+  color: #000 ;
+}
+
+/* ヘッダー
+---------------------------------*/
+header {
+  width: 100% ;
+  padding: 15px 0 ;
+}
+.header {
+  width: 100% ;
+}
+.logo {
+  width: 600px ;
+  float: left ;
+  margin-left: 30px ;
+}
+.logo img {
+  float: left ;
+}
+.logo p {
+  color: #333 ;
+  font-weight: bold ;
+  font-size: 43px ;
+  float: left ;
+  margin-left: 20px ;
+}
+.logout {
+  width: 400px ;
+  float: right ;
+  margin-top: 13px;
+}
+.logout p {
+  color: #333 ;
+  font-weight: bold ;
+  font-size: 15px ;
+  float: left ;
+  margin-top: 10px 
+}
+.logout a {
+  margin-left: 20px ;
+  float: left ;
+}
+.logout a:hover {
+  opacity: 0.8 ;
+}
+
+/* サイドナビ
+---------------------------------*/
+nav li {
+  width: 220px ;
+  height: 58px ;
+  margin-right: 10px ;
+  /* 角丸 */
+  border-radius: 5px;        /* CSS3草案 */  
+  -webkit-border-radius: 5px;    /* Safari,Google Chrome用 */  
+  -moz-border-radius: 5px;   /* Firefox用 */  
+  /* シャドウ */
+  -webkit-box-shadow: 2px 2px 3px #777;
+     -moz-box-shadow: 2px 2px 3px #777;
+          box-shadow: 2px 2px 3px #777;
+  float: left ;
+}
+nav li a {
+  width: 151px ;
+  height: 31px ;
+  padding: 17px 0 0 70px ;
+  display: block ;
+  font-size: 20px ;
+  font-weight: bold ;
+  color: #666 ;
+}
+.nav01 {
+  background: url("/_re_img/common/icon_01.png"), -moz-linear-gradient(top, #fff, #eee);
+  background: url("/_re_img/common/icon_01.png"), -webkit-gradient(linear, left top, left bottom, from(#fff), to(#eee));
+}
+.nav02 {
+  background: url("/_re_img/common/icon_02.png"), -moz-linear-gradient(top, #fff, #eee);
+  background: url("/_re_img/common/icon_02.png"), -webkit-gradient(linear, left top, left bottom, from(#fff), to(#eee));
+}
+.nav03 {
+  background: url("/_re_img/common/icon_03.png"), -moz-linear-gradient(top, #fff, #eee);
+  background: url("/_re_img/common/icon_03.png"), -webkit-gradient(linear, left top, left bottom, from(#fff), to(#eee));
+}
+.nav04 {
+  background: url("/_re_img/common/icon_04.png"), -moz-linear-gradient(top, #fff, #eee);
+  background: url("/_re_img/common/icon_04.png"), -webkit-gradient(linear, left top, left bottom, from(#fff), to(#eee));
+}
+.nav05 {
+  background: url("/_re_img/common/icon_05.png"), -moz-linear-gradient(top, #fff, #eee);
+  background: url("/_re_img/common/icon_05.png"), -webkit-gradient(linear, left top, left bottom, from(#fff), to(#eee));
+}
+.nav01,
+.nav01:hover,
+.nav01_on,
+.nav02,
+.nav02:hover,
+.nav02_on,
+.nav03,
+.nav03:hover,
+.nav03_on,
+.nav04,
+.nav04:hover,
+.nav04_on,
+.nav05,
+.nav05:hover,
+.nav05_on {
+  background-repeat: no-repeat ;
+  background-position: 0% 50% ;
+}
+
+/* ページタイトル
+---------------------------------*/
+.PageTitle {
+  height: 48px ;
+  font-size: 30px ;
+  font-weight: bold ;
+  padding-left: 80px ;
+  padding-top: 12px ;
+  margin-bottom: 30px ;
+}
+.page01 { background: url("/_re_img/common/icon_01.png") no-repeat 0  50% ; }
+.page02 { background: url("/_re_img/common/icon_02.png") no-repeat 0  50% ; }
+.page03 { background: url("/_re_img/common/icon_03.png") no-repeat 0  50% ; }
+.page04 { background: url("/_re_img/common/icon_04.png") no-repeat 0  50% ; }
+.page05 { background: url("/_re_img/common/icon_05.png") no-repeat 0  50% ; }
+
+/* フッター
+---------------------------------*/
+.footer {
+  width: 100% ;
+  text-align: right ;
+  color: #333 ;
+  padding: 5px 0 5px 0 ;
+}
+.footer p {
+  margin-right: 20px ;
+}

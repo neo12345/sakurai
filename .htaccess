@@ -1,0 +1,21 @@
+AddHandler cgi-script .cgi .pl
+AddType application/x-httpd-cgi .cgi
+AddType text/html .shtml
+AddType application/x-httpd-php .php .inc
+AddType text/x-component .htc
+DirectoryIndex index.php index.cgi index.html index.shtml index.jsp
+
+Options ExecCGI Includes FollowSymLinks
+php_flag register_globals off
+
+php_value include_path "./:/usr/share/pear:/usr/bin/php:./_common:../_common:../../_common:../../../_common"
+
+php_flag output_buffering Off
+php_value default_charset UTF-8
+php_value mbstring.language Japanese
+php_flag mbstring.encoding_translation On
+php_value mbstring.http_input auto
+php_value mbstring.http_output UTF-8
+php_value mbstring.internal_encoding UTF-8
+php_value mbstring.substitute_character none
+php_value mbstring.script_encoding auto

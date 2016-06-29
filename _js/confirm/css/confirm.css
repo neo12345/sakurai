@@ -1,0 +1,47 @@
+.ConfirmDiv {
+	width: 268px;
+	height: 188px;
+	background-image: url("../img/bk_dialog.png");
+	background-repeat: no-repeat;
+	position: fixed; top: 50%; left: 50%;
+	margin: -94px 0px 0px -134px;
+	z-index: 20;
+}
+.ConfirmTitle {
+	margin: 20px 0px 0px 50px;
+	text-align: left;
+	font-weight: bold;
+	font-size: 120%;
+}
+.ConfirmMessage {
+	width: 240px;
+	margin: 35px 0px 0px 19px;
+	line-height: 1.5;
+}
+.ConfirmButton {
+	width: 200px;
+	margin: 35px 0px 0px 34px;
+	float: left;
+}
+.ConfirmButtonAction {
+	width: 75px;
+	height: 25px;
+	float: left;
+	background-image: url("../img/bt_action.png");
+	background-repeat: no-repeat;
+	cursor: pointer;
+}
+.ConfirmButtonCancel {
+	width: 109px;
+	height: 25px;
+	float: right;
+	background-image: url("../img/bt_cancel.png");
+	background-repeat: no-repeat;
+	cursor: pointer;
+}
+.ConfirmClear {
+	clear: both;
+	color: #FFFFFF;
+	font-size: 0px;
+	*display: inline;
+}
