@@ -1,4 +1,4 @@
-
+﻿
   <div class="right">
     <h2 class="PageTitle page01">物件管理</h2>
     <div class="tab_wrap clear">
@@ -6,7 +6,7 @@
         <li class="tab_on"><a href="/item/?md=list" title="物件一覧">物件一覧</a></li>
         <li class="tab_off"><a href="/item/?md=regist" title="物件登録">物件登録</a></li>
         <li class="tab_off"><a href="/item/?md=analysis" title="集計・解析">集計・解析</a></li>
-        <li class="tab_off"><a href="/item/?md=analysis_item" title="解析(物件)">解析(物件)</a></li>
+        <li class="tab_off"><a>解析(物件)</a></li>
       </ul>
     </div>
     <div class="cnt_wrap">
@@ -135,8 +135,8 @@
 										未登録
 									<? endif; ?>
 								</td>
-								<td><input class="js_detail" style="width: 20px;" type="button" value="詳細" /></td>
-								<td><input class="js_status" style="width: 20px;" type="button" value="<?= $status ?>" /></td>
+								<td><a href="/item?md=analysis_item&item_cd=<?php echo $RS_item[$i]['item_cd']; ?>"><input class="js_detail" style="width: 20px;" type="button" value="詳細" /></a></td>
+								<td><input class="js_status" style="width: 20px;" type="button" value="<?= $status ?>" /></td>								
 								<td class="edit"><input type="submit" name="edit[<?= $RS_item[$i]['item_cd'] ?>]" value="編集" class="btn_edit btn_style_02" /></td>
 								<td class="del"><input type="button" value="削除" class="js_delete btn_delete btn_style_02" /></td>
 							</tr>
