@@ -6,15 +6,13 @@
 $G_is_debug=1;
 //------------------------------------------------------//
 //session_start
-$flg_cron = 0;
 if(!$flg_cron){
 	session_cache_limiter("none");
 	session_start();
 }
 //------------------------------------------------------//
 //DB setting
-//$G_is_pear=1;
-$G_is_pear=0;
+$G_is_pear=1;
 if($G_is_pear){
 	include_once("DB.php");
 }
@@ -39,8 +37,8 @@ set_outer_param();
 $scheme_n="http://";
 $scheme_s="http://";  //<-SSL
 $G_domain="smile-fudosan.com";
-$domain_n  ="localhost/public_html_admin/";
-$domain_s  ="localhost/public_html_admin/";
+$domain_n  ="ominext-admin.".$G_domain;
+$domain_s  ="ominext-admin.".$G_domain;
 $path         ="";
 $dir          =$_SERVER["DOCUMENT_ROOT"];
 
@@ -69,13 +67,14 @@ $G_up_url    =$scheme_n.$domain_n.$G_up_dir;
 $G_up_url_s  =$scheme_s.$domain_s.$G_up_dir;
 $G_up_path   =$dir.$G_up_dir;
 //------------------------------------------------------//
-$G_corp_name ="株�?会社�?�?��?�るホーム";
-$G_site_name ="株�?会社�?�?��?�るホーム コントロールパ�?ル";
+$G_corp_name ="株式会社住まいるホーム";
+$G_site_name ="株式会社住まいるホーム コントロールパネル";
 $G_mail_return="info@".$G_domain;
 $G_mail_info="info@".$G_domain;
 $G_filesize_limit="2000";
 //------------------------------------------------------//
-$G_limit_day_soldout = "14"; //�?約済�?�表示�?�る期間
+G_tax = 8;
+$G_limit_day_soldout = "14"; //成約済み表示する期間
 //------------------------------------------------------//
 //------------------------------------------------------//
 //------------------------------------------------------//

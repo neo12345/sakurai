@@ -1,5 +1,88 @@
 <?php
 //------------------------------------------------------//
+/**
+ * Ominext
+ * execute sql query
+ * 
+ * @global type $db
+ * @global string $RS_name
+ * @param string $select
+ * @param string $table
+ * @param string $name
+ * @param string $where
+ * @param string $group_by
+ * @return query result
+ */
+function Omi_get_rs_with_group_by($select, $table, $name, $where="", $group_by=""){
+	global $db;
+	if($name){
+		$RS_name="RS_".$name;
+	}else{
+		$RS_name="RS";
+	}
+	global $$RS_name;
+
+	if($table){
+		$sql="select ".$select." from ".$table."";
+		if($where){
+			$sql.=" where ".$where."";
+		}
+		if($group_by){
+			$sql.=" group by ".$group_by."";
+		}
+		$rs=exec_sql($db,$sql,$_SERVER["SCRIPT_NAME"]);
+		$RS=convert_rs($rs);
+	}else{
+		print("error");
+	}
+
+	$$RS_name=$RS;
+
+	return($$RS_name);
+}
+
+//------------------------------------------------------//
+/**
+ * Ominext
+ * execute sql query
+ * 
+ * @global type $db
+ * @global string $RS_name
+ * @param string $select
+ * @param string $table
+ * @param string $name
+ * @param string $where
+ * @param string $order_by
+ * @return query result
+ */
+function Omi_get_rs($select, $table, $name, $where="", $order_by=""){
+	global $db;
+	if($name){
+		$RS_name="RS_".$name;
+	}else{
+		$RS_name="RS";
+	}
+	global $$RS_name;
+
+	if($table){
+		$sql="select ".$select." from ".$table."";
+		if($where){
+			$sql.=" where ".$where."";
+		}
+		if($order_by){
+			$sql.=" order by ".$order_by."";
+		}
+		$rs=exec_sql($db,$sql,$_SERVER["SCRIPT_NAME"]);
+		$RS=convert_rs($rs);
+	}else{
+		print("error");
+	}
+
+	$$RS_name=$RS;
+
+	return($$RS_name);
+}
+//------------------------------------------------------//
 function get_rs($table,$name,$where="",$order_by=""){
 	global $db;
 	if($name){
