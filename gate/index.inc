@@ -6,7 +6,7 @@
 <meta charset="UTF-8" />
 <meta http-equiv="X-UA-Compatible" content="IE=edge" />
 
-<title>�?�?��?�るホーム Control Panel［ホーム］</title>
+<title>住まいるホーム Control Panel［ホーム］</title>
 <link rel="stylesheet" href="<?= $G_css_dir ?>/html5reset-1.6.1_kai.css" />
 <link rel="stylesheet" href="<?= $G_css_dir ?>/common.css" />
 <link rel="stylesheet" href="<?= $G_css_dir ?>/style.css" />
@@ -27,7 +27,7 @@
 	
 		<header>
 			
-			<h1><a href="./" title="�?�?��?�るホーム Control Panel [ホーム�?�]">�?�?��?�るホーム Control Panel</a></h1>
+			<h1><a href="./" title="�?�?��?�るホーム Control Panel [ホーム�?�]">�?�?��?�るホーム Control Panel</a></h1>
 			
 		</header>
 		
