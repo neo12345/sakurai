@@ -1,7 +1,6 @@
 <?php
 //-- configインクルード --//
-//include("config.php");
-include ('/../_common/config.php');
+include("config.php");
 //--ステータス--//
 check_login();
 
