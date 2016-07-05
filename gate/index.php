@@ -1,9 +1,9 @@
 <?php
 //-- configインクルード --//
-//include("config.php");
-include ('/../_common/config.php');
+include("config.php");
+
 //--ステータス--//
-//check_login();
+check_login();
 
 switch($F_md){
 	case "in":

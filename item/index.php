@@ -620,7 +620,8 @@ case "get_analysis":
         for ($i = 0; $i < count($RS_result); $i++) {
             $date = date('Y-m-d', strtotime($RS_result[$i]['date']));
 
-            if ($j = array_search($date, array_column($result, 'x_axis'))) {
+            //if ($j = array_search($date, array_column($result, 'x_axis'))) {
+			if ($j = search_in_column($date, $result, 'x_axis')) {
                 $result[$j]['y_axis'] += $RS_result[$i]['count'];
             } else {
                 $result[] = array(
@@ -692,7 +693,8 @@ case "get_analysis":
         for ($i = 0; $i < count($RS_result); $i++) {
             $date = date('Y-m-d', strtotime($RS_result[$i]['date']));
 
-            if ($j = array_search($date, array_column($temp, 'date'))) {
+            //if ($j = array_search($date, array_column($temp, 'date'))) {
+			if ($j = search_in_column($date, $temp, 'date')) {
                 $temp[$j]['sum'] += $RS_result[$i]['sum'];
                 $temp[$j]['count'] += $RS_result[$i]['count'];
             } else {

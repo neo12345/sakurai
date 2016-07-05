@@ -1,4 +1,21 @@
 <?php
+/* Search in array and return index 
+*
+* input string $keyword
+* input array $array
+* input string $column
+*
+* return $index
+*/
+function search_in_column($keyword, $array, $column){
+    foreach ($array as $key => $val) {
+       if ($val[''.$column.''] === $keyword) {
+           return $key;
+       }
+   }
+   return null;
+}
+
 /* Get commission 
 *
 * input param $price
