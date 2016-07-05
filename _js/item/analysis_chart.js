@@ -1,4 +1,4 @@
-$(document).ready(function () {
+﻿$(document).ready(function () {
     $(".btn-aggregate").click(function (e) {
         e.preventDefault();
         
@@ -58,7 +58,7 @@ $(document).ready(function () {
         });
         
         if (!result) {
-            var error = '<div class="alert alert-danger">NOT FOUND</div>';
+            var error = '<div class="alert alert-danger">見付かっていません。</div>';
             $('#error').html(error);
         }
         // create chart

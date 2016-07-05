@@ -147,16 +147,19 @@
 								for($i = 0; $i < count($RS_fuel); $i++) {
 									echo 'ガス	:';
 									echo $RS_fuel[$i]['fuel_name'];
+									echo '<br/>';
 								}
 								
 								for($i = 0; $i < count($RS_water); $i++) {
 									echo '上水道	：';
 									echo $RS_water[$i]['water_name'];
+									echo '<br/>';
 								}
 								
 								for($i = 0; $i < count($RS_sewer); $i++) {
 									echo '下水道	：';
 									echo $RS_sewer[$i]['sewer_name'];
+									echo '<br/>';
 								}
 								?>					
 							</td>
