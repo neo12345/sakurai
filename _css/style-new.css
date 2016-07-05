@@ -163,6 +163,9 @@
 }
 .box-analysis .col-right .form-ccontact td {
 	width:540px;
+	word-wrap: break-word;
+    word-break: break-all;
+    white-space: normal;
 }
 .box-analysis .col-right .form-ccontact .map-company {
 	width:100%;
