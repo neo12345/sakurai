@@ -1,6 +1,10 @@
 $(document).ready(function () {
     //auto draw chart
     google.charts.setOnLoadCallback(drawChart);
+	
+	$(window).resize(function(){
+  		drawChart();
+	});
     
     function drawChart() {
         // Get data.
@@ -37,21 +41,35 @@ $(document).ready(function () {
                             + stat_name + ': </span><b>' + hist_price + '万円</b></div>']]);
         }
         // Set chart options
-        var max = new Date(hist[hist.length - 1].date_regist);
-        max.setDate(max.getDate() + 1);
-        var min = new Date(hist[0].date_regist);
-        min.setDate(min.getDate() - 1);
+        var xAxis_max = new Date(hist[hist.length - 1].date_regist);
+        xAxis_max.setDate(xAxis_max.getDate() + 1);
+        var xAxis_min = new Date(hist[0].date_regist);
+        xAxis_min.setDate(xAxis_min.getDate() - 1);
+		
+		var yAxis_max = parseInt(hist.reduce(function(max, obj) {
+    										return max >= obj.hist_price ? max : obj.hist_price;
+										}, -Infinity)) + 200;
+		var yAxis_min = parseInt(hist.reduce(function(min, obj) {
+    										return min <= obj.hist_price ? min : obj.hist_price;
+										}, Infinity)) - 200;
         
         var options = {
+			height:400,
             tooltip: {
                 isHtml: true
             },
             hAxis: {
                 format: 'M月d日',
                 viewWindow: {
-                    max: max,
-                    min: min
+                    max: xAxis_max,
+                    min: xAxis_min
                 }
+            },
+			vAxis: {
+                viewWindow: {
+                    max: yAxis_max,
+                    min: yAxis_min
+                },				
             },
             pointSize: 10
         };

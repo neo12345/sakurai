@@ -18,7 +18,8 @@
                     <table class="tbl-info">
                     	<tr>
                         	<th>販売価格</th>
-                            <td><?php echo $RS_history[$count_history -1]['hist_price'];?>万円</td>
+                            <!--<td><?php echo $RS_history[$count_history -1]['hist_price'];?>万円</td>-->
+							<td><?php echo $RS_item[0]['item_price'];?> 万円</td>
                         </tr>
                         <tr>
                         	<th>ステータス</th>
@@ -28,12 +29,17 @@
                         	<th>最終価格改定日</th>
                             <td>
 								<?php 
-									echo date('Y-m-d', strtotime($RS_history[$count_history -1]['date_regist']));
-									echo '<br>（';							
-									$today = time();
-									$lastday = strtotime($RS_history[$count_history -1]['date_regist']);
-									echo (floor(($today - $lastday) / 86400));
-									echo '日前）';								
+									if ($count_history == 0) {
+										echo '----';
+									}
+									else {
+										echo date('Y-m-d', strtotime($RS_history[$count_history -1]['date_regist']));
+										echo '<br>（';							
+										$today = time();
+										$lastday = strtotime($RS_history[$count_history -1]['date_regist']);
+										echo (floor(($today - $lastday) / 86400));
+										echo '日前）';
+									}								
 								?>
 							</td>
                         </tr>

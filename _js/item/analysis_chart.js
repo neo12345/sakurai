@@ -7,6 +7,12 @@
         
         google.charts.setOnLoadCallback(drawChart);
     });
+	
+	$(window).resize(function(){
+		if ($('#chart_div').html() != '') {
+  			drawChart();
+		}
+	});
     
     
     function drawChart() {
@@ -95,6 +101,7 @@
         min.setDate(min.getDate() - 1);
         
         var options = {
+			height:400,
             tooltip: {
                 isHtml: true
             },
