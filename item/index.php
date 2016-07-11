@@ -204,13 +204,10 @@ break;
 		}
 		
         //get history price
-        $select = 't_history.date_regist, m_status.stat_name, t_history.hist_price, m_user.user_name';
-        $table = 'r_history, t_history, m_status, m_user';
-        $where = 'r_history.item_cd = \'' . $item_cd . '\' AND '
-            . 'r_history.hist_cd = t_history.hist_cd AND '
-            . 'r_history.stat_cd = m_status.stat_cd AND '
-            . 'r_history.user_cd = m_user.user_cd';
-        $orderBy = 't_history.date_regist ASC';
+        $select = 'v_history.date_regist, v_history.stat_name, v_history.hist_price, v_history.user_name';
+        $table = 'v_history';
+        $where = 'v_history.item_cd = \'' . $item_cd . '\'';
+        $orderBy = 'v_history.date_regist ASC';
 
         Omi_get_rs($select, $table, 'history', $where, $orderBy);
         $count_history = count($RS_history);

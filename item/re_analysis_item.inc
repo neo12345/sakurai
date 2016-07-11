@@ -57,7 +57,15 @@
                                     <td><?php echo date('Y/m/d', strtotime($RS_history[$i]['date_regist'])); ?></td>
                                     <td><?php echo $RS_history[$i]['stat_name']; ?></td>
                                     <td><?php echo $RS_history[$i]['hist_price']; ?> 万円</td>
-                                    <td><?php echo $RS_history[$i]['user_name']; ?></td>
+                                    <td>
+										<?php 
+											if ($RS_history[$i]['user_name'] == '') {
+												echo '空';
+											} else {
+												echo $RS_history[$i]['user_name'];
+											} 
+										?>
+									</td>
                                 </tr>
                             <?php } ?>
                         </table>
@@ -151,19 +159,19 @@
                             <td rowspan="3">
 								<?php 
 								for($i = 0; $i < count($RS_fuel); $i++) {
-									echo 'ガス	:';
+									echo 'ガス	: ';
 									echo $RS_fuel[$i]['fuel_name'];
 									echo '<br/>';
 								}
 								
 								for($i = 0; $i < count($RS_water); $i++) {
-									echo '上水道	：';
+									echo '上水道	： ';
 									echo $RS_water[$i]['water_name'];
 									echo '<br/>';
 								}
 								
 								for($i = 0; $i < count($RS_sewer); $i++) {
-									echo '下水道	：';
+									echo '下水道	： ';
 									echo $RS_sewer[$i]['sewer_name'];
 									echo '<br/>';
 								}
