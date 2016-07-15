@@ -13,7 +13,7 @@ function search_in_column($keyword, $array, $column){
            return $key;
        }
    }
-   return null;
+   return -1;
 }
 
 /* Get commission 

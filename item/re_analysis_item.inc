@@ -19,7 +19,7 @@
                     	<tr>
                         	<th>販売価格</th>
                             <!--<td><?php echo $RS_history[$count_history -1]['hist_price'];?>万円</td>-->
-							<td><?php echo $RS_item[0]['item_price'];?> 万円</td>
+							<td><?php echo $RS_item[0]['item_price'];?>万円</td>
                         </tr>
                         <tr>
                         	<th>ステータス</th>
@@ -34,11 +34,13 @@
 									}
 									else {
 										echo date('Y-m-d', strtotime($RS_history[$count_history -1]['date_regist']));
-										echo '<br>（';							
-										$today = time();
-										$lastday = strtotime($RS_history[$count_history -1]['date_regist']);
-										echo (floor(($today - $lastday) / 86400));
-										echo '日前）';
+										if ($RS_history[$count_history -1]['stat_name'] != '成約') {				
+											$today = time();
+											$lastday = strtotime($RS_history[$count_history -1]['date_regist']);
+											echo '<br>（';
+											echo (floor(($today - $lastday) / 86400));
+											echo '日前）';
+										}
 									}								
 								?>
 							</td>
@@ -52,15 +54,63 @@
                                 <th>価格</th>
                                 <th>担当</th>
                             </tr>
-                           <?php for ($i = 0; $i < $count_history; $i++) { ?>
-                                <tr>
+                            <?php 
+						   		for ($i = 0; $i < $count_history; $i++) { 
+							?>
+								<tr>
                                     <td><?php echo date('Y/m/d', strtotime($RS_history[$i]['date_regist'])); ?></td>
-                                    <td><?php echo $RS_history[$i]['stat_name']; ?></td>
-                                    <td><?php echo $RS_history[$i]['hist_price']; ?> 万円</td>
+                                    <td>
+									<?php
+										if ($RS_history[$i]['stat_name'] == '販売開始') {
+											echo '<div class="fsB">';
+											echo $RS_history[$i]['stat_name'];
+											echo '</div>';
+										}
+										if ($RS_history[$i]['stat_name'] == '価格改定') {
+											echo '<div class="fsRed">';
+											echo $RS_history[$i]['stat_name'];
+											echo '</div>';
+										}
+										if ($RS_history[$i]['stat_name'] == '商談') {
+											echo '<div class="fsBlue">';
+											echo $RS_history[$i]['stat_name'];
+											echo '</div>';
+										}
+										if ($RS_history[$i]['stat_name'] == '再販') {
+											echo '<div class="fsSkyblue">';
+											echo $RS_history[$i]['stat_name'];
+											echo '</div>';
+										}
+										if ($RS_history[$i]['stat_name'] == '問合せ') {
+											echo '<div class="fsGreen">';
+											echo $RS_history[$i]['stat_name'];
+											echo '</div>';
+										}
+										if ($RS_history[$i]['stat_name'] == '成約') {
+											echo '<div class="fsB">';
+											echo $RS_history[$i]['stat_name'];
+											echo '</div>';
+										}
+									?>
+                                    <td>
+									<?php 
+										if ($RS_history[$i]['stat_name'] == '販売開始' || $RS_history[$i]['stat_name'] == '価格改定') {
+											echo '<div class="fsB">';
+											echo $RS_history[$i]['hist_price']; 
+											echo ' 万円';
+											echo '</div>';
+										} else {
+											echo '<div class="fsN">';
+											echo $RS_history[$i]['hist_price']; 
+											echo ' 万円';
+											echo '</div>';
+										}
+									?>
+									</td>
                                     <td>
 										<?php 
 											if ($RS_history[$i]['user_name'] == '') {
-												echo '空';
+												echo '';
 											} else {
 												echo $RS_history[$i]['user_name'];
 											} 
@@ -159,19 +209,19 @@
                             <td rowspan="3">
 								<?php 
 								for($i = 0; $i < count($RS_fuel); $i++) {
-									echo 'ガス	: ';
+									echo 'ガス	:';
 									echo $RS_fuel[$i]['fuel_name'];
 									echo '<br/>';
 								}
 								
 								for($i = 0; $i < count($RS_water); $i++) {
-									echo '上水道	： ';
+									echo '上水道	：';
 									echo $RS_water[$i]['water_name'];
 									echo '<br/>';
 								}
 								
 								for($i = 0; $i < count($RS_sewer); $i++) {
-									echo '下水道	： ';
+									echo '下水道	：';
 									echo $RS_sewer[$i]['sewer_name'];
 									echo '<br/>';
 								}
@@ -346,7 +396,7 @@
                         </tr>
                         <tr>
                         	<th>特記事項</th>
-                            <td><?php echo str_replace(" ", "<br>", $RS_item[0]['item_memo']);?></td>
+                            <td><?php echo nl2br($RS_item[0]['item_memo']);?></td>
                         </tr>
                     </table>
                 </div>
