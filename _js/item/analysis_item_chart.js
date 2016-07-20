@@ -39,8 +39,13 @@ $(document).ready(function () {
         data.addColumn({type: 'string', role: 'tooltip', p: {html: true}}, 'Status1');
 		data.addColumn({'type': 'string', 'role': 'style'});
 		data.addColumn('number', '平均成約価格');
-		data.addColumn({type: 'string', role: 'tooltip', p: {html: true}}, 'Status2');
+		//data.addColumn({type: 'string', role: 'tooltip', p: {html: true}}, 'Status2');	
 		data.addColumn({'type': 'string', 'role': 'style'});
+		data.addColumn('number', '最高成約価格');
+		data.addColumn({'type': 'string', 'role': 'style'});
+		data.addColumn('number', '最安成約価格');
+		data.addColumn({'type': 'string', 'role': 'style'});
+		
         for (var i = 0; i < hist.length; i++) {
             var datetime = new Date(hist[i].date_regist);
             var hist_price = parseInt(hist[i].hist_price);
@@ -78,10 +83,11 @@ $(document).ready(function () {
                 			'<div style = "width: 170px; height: 70px; padding: 15px 20px;">'
                             + '<div style = "font-size: larger;">' + year + '年' + month + '月' + date + '日</div>'
 							+ '<br><div style = "font-size: large;"><span style="color: blue">'
-                            + stat_name + ': </span>' + hist_price + '万円</div></div>', style1, null, null, null]]);	
+                            + stat_name + ': </span>' + hist_price + '万円</div></div>', style1, 
+							null, null, null, null, null, null]]);	
         }
 		
-		for (var i = 0; i < similars.length; i++) {
+		/*for (var i = 0; i < similars.length; i++) {
 			var datetime2 = new Date(similars[i].date_regist);
 			var date2 = datetime2.getDate();
             var month2 = datetime2.getMonth() + 1;
@@ -94,37 +100,49 @@ $(document).ready(function () {
 						   '<div style = "width: 170px; height: 70px; padding: 15px 20px;">'
                             + '<div style = "font-size: larger;">' + year2 + '年' + month2 + '月' + date2 + '日</div>'
 							+ '<br><div style = "font-size: large;">'
-                            + price_avg + '万円</div></div>', style2]]);
-		}
+                            + price_avg + '万円</div></div>', style2, null, null, null, null]]);
+		}*/
+		
+		var now = new Date();
+		var sixMonthsAgo = new Date()
+		sixMonthsAgo.setDate(sixMonthsAgo.getDate() - 6*30);
+		var style1 = 'point {fill-color: transparent;}';
+		var style2 = 'point {fill-color: transparent;}';
+		var style3 = 'point {fill-color: transparent;}';
+		var max_price = parseInt(similars.max_price);
+		var min_price = parseInt(similars.min_price);
+		var avg_price = parseInt(similars.avg_price);
+		
+		data.addRows([[sixMonthsAgo, null, null, null, avg_price, style1, null, null, null, null]]);
+		data.addRows([[now, null, null, null, avg_price, style1, null, null, null, null]]);
+		data.addRows([[sixMonthsAgo, null, null, null, null, null, max_price, style2, null, null]]);
+		data.addRows([[now, null, null, null, null, null, max_price, style2, null, null]]);
+		data.addRows([[sixMonthsAgo, null, null, null, null, null, null, null, min_price, style3]]);
+		data.addRows([[now, null, null, null, null, null, null, null, min_price, style3]]);
 		
         // Set chart options
 		
-			var xAxis_max_1 = new Date(hist[hist.length - 1].date_regist);
-			xAxis_max_1.setDate(xAxis_max_1.getDate() + 5);
+		var xAxis_max_1 = new Date(hist[hist.length - 1].date_regist);
+		xAxis_max_1.setDate(xAxis_max_1.getDate() + 5);
+		
+		var xAxis_min_1 = new Date(hist[0].date_regist);
+		xAxis_min_1.setDate(xAxis_min_1.getDate() - 5);
+		
+		var yAxis_max_1 = parseInt(hist.reduce(function(max, obj) {
+											return max >= obj.hist_price ? max : obj.hist_price;
+										}, -Infinity)) + 200;
+		
+		var yAxis_min_1 = parseInt(hist.reduce(function(min, obj) {
+											return min <= obj.hist_price ? min : obj.hist_price;
+										}, Infinity)) - 200;
+		
+		if (similars != null) {
+			var xAxis_max_2 = new Date();
+			var xAxis_min_2 = new Date();
+			xAxis_min_2.setDate(xAxis_min_2.getDate() - 6*30);
 			
-			var xAxis_min_1 = new Date(hist[0].date_regist);
-			xAxis_min_1.setDate(xAxis_min_1.getDate() - 5);
-			
-			var yAxis_max_1 = parseInt(hist.reduce(function(max, obj) {
-												return max >= obj.hist_price ? max : obj.hist_price;
-											}, -Infinity)) + 200;
-			
-			var yAxis_min_1 = parseInt(hist.reduce(function(min, obj) {
-												return min <= obj.hist_price ? min : obj.hist_price;
-											}, Infinity)) - 200;
-			
-		if (similars.length > 0) {
-			var xAxis_max_2 = new Date(similars[similars.length - 1].date_regist);
-			xAxis_max_2.setDate(xAxis_max_2.getDate() + 5);
-			var xAxis_min_2 = new Date(similars[0].date_regist);
-			xAxis_min_2.setDate(xAxis_min_2.getDate() - 5);
-			
-			var yAxis_max_2 = parseInt(similars.reduce(function(max, obj) {
-												return max >= obj.hist_price ? max : obj.hist_price;
-											}, -Infinity)) + 200;
-			var yAxis_min_2 = parseInt(similars.reduce(function(min, obj) {
-												return min <= obj.hist_price ? min : obj.hist_price;
-											}, Infinity)) - 200;
+			var yAxis_max_2 = max_price + 200;
+			var yAxis_min_2 = min_price - 200;
 			
 			var xAxis_max = (xAxis_max_1 > xAxis_max_2) ? xAxis_max_1 : xAxis_max_2;
 			var xAxis_min = (xAxis_min_1 < xAxis_min_2) ? xAxis_min_1 : xAxis_min_2;
@@ -138,6 +156,12 @@ $(document).ready(function () {
 		}
         
         var options = {
+			series : {      
+			    0: { tooltip : true},
+			    1: { tooltip : false, pointSize: 0},
+			    2: { tooltip : false, pointSize: 0},
+			    3: { tooltip : false, pointSize: 0}
+      		},
 			explorer: { 
 				actions: ['dragToZoom', 'rightClickToReset'],
 				axis: 'horizontal',
@@ -145,7 +169,7 @@ $(document).ready(function () {
 				zoomDelta: 0.5,
 			},
 			height:400,
-			colors: ['blue', '#DFBADD'],
+			colors: ['blue', '#DFBADD', '#BE1D2C', '#283890'],
 			interpolateNulls: true,
             tooltip: {
                 isHtml: true

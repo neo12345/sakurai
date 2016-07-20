@@ -265,9 +265,9 @@
         }
         // Set chart options
         var max_xAxis = new Date($("#to").val());
-        max_xAxis.setDate(max_xAxis.getDate() + 1);
+        max_xAxis.setDate(max_xAxis.getDate() + 3);
         var min_xAxis = new Date($("#from").val());
-        min_xAxis.setDate(min_xAxis.getDate() - 1);
+        min_xAxis.setDate(min_xAxis.getDate() - 3);
         
         var options = {
 			explorer: { 
@@ -277,9 +277,46 @@
 				zoomDelta: 0.5,
 			},
 			height:400,
-			bar: {
+			bar: { 
 				groupWidth: "100%"
 			},
+            tooltip: {
+                isHtml: true
+            },
+            hAxis: {
+				baseline: min_xAxis,
+				baselineColor: '#CCC',
+				textStyle: {
+					fontSize: 13,
+				},
+				slantedText: true,
+                format: 'M月d日',
+				viewWindowMode: 'pretty',
+                viewWindow: {
+                    max: max_xAxis,
+                    min: min_xAxis
+                },
+				gridlines: {
+          			count: 20,
+					units: {
+						years: {format: ["yy/mm"]},
+						months: {format: ["mm/dd"]},
+						days: {format: ["mm/dd"]},
+					  }
+        		}
+            },
+            pointSize: 10
+        };
+
+	var options1 = {
+			explorer: { 
+				actions: ['dragToZoom', 'rightClickToReset'],
+				axis: 'horizontal',
+				keepInBounds: true,
+				zoomDelta: 0.5,
+			},
+			height:400,
+			
             tooltip: {
                 isHtml: true
             },
@@ -314,6 +351,11 @@
         } else {
             var chart = new google.visualization.LineChart(document.getElementById('chart_div'));	
         }
-        chart.draw(data, options);
+	if ( (new Date($("#to").val()) - new Date($("#from").val())) > 60*86400*1000 )
+	{
+        		chart.draw(data, options);
+	} else {
+		chart.draw(data, options1);
+	}
     }
     });

@@ -31,8 +31,7 @@
 								<?php 
 									if ($count_history == 0) {
 										echo '----';
-									}
-									else {
+									} else {
 										echo date('Y-m-d', strtotime($RS_history[$count_history -1]['date_regist']));
 										if ($RS_history[$count_history -1]['stat_name'] != '成約') {				
 											$today = time();
@@ -384,20 +383,33 @@
 							</td>
                         </tr>
                         <tr>
-                        	<th>その他制限等</th>
-                            <td><?php echo $RS_item[0]['item_restrict'];?></td>
-                            <th rowspan="2">地図</th>
-                            <td rowspan="2">
+                        	<th colspan="1">その他制限等</th>
+                            <td colspan="3"><?php echo $RS_item[0]['item_restrict'];?></td>    
+                        </tr>
+						<tr>
+                        	<th colspan="1">特記事項</th>
+							<td colspan="3"><?php echo nl2br($RS_item[0]['item_memo']);?></td>
+                        </tr>
+						<tr>
+							<th>間取り図</th>
+							<td>
+								<img src="<?php echo $link_img_plan1; ?>" width="100%"/>
+							</td>
+							<th>配置図</th>
+							<td>
+								<img src="<?php echo $link_img_plan2; ?>" width="100%"/>
+							</td>
+						</tr>
+						<tr>
+							<th colspan="1">地図</th>
+                            <td colspan="3">
                             	<input type="hidden" id="lat" value="<?php echo $lat_lng[0]; ?>"/>
                                 <input type="hidden" id="lng" value="<?php echo $lat_lng[1]; ?>"/>
                                 <input type="hidden" id="zoom" value="<?php echo $RS_item[0]['item_zoom']; ?>"/>
-                                <div class="map-company" id="googleMap" style="width: 90% ;height: 300px; padding: 20px;"></div>
+                                <div class="map-company" id="googleMap" style="width: 95% ;height: 500px; padding: 20px;"></div>
                             </td>
-                        </tr>
-                        <tr>
-                        	<th>特記事項</th>
-                            <td><?php echo nl2br($RS_item[0]['item_memo']);?></td>
-                        </tr>
+						</tr>
+                        
                     </table>
                 </div>
                 <div class="clear"></div>
@@ -429,25 +441,4 @@
 
 <!--Load google maps api-->
 <script src="http://maps.googleapis.com/maps/api/js"></script>
-<script>
-    function initialize() {
-        var lat = $('#lat').val();
-        var lng = $('#lng').val();
-        var zoom = parseInt($('#zoom').val());
-
-        var mapProp = {
-            center: new google.maps.LatLng(lat, lng),
-            zoom: zoom,
-            mapTypeId: google.maps.MapTypeId.ROADMAP,
-        };
-
-        var map = new google.maps.Map(document.getElementById("googleMap"), mapProp);
-
-        var marker = new google.maps.Marker({
-            position: new google.maps.LatLng(lat, lng),
-        });
-
-        marker.setMap(map);
-    }
-    google.maps.event.addDomListener(window, 'load', initialize);
-</script>
+<script src="/_js/item/analysis_item_map.js" type="text/javascript"></script>
