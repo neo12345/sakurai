@@ -118,7 +118,7 @@
 	width:120px;
 }
 .box-analysis .col-left .tbl-info-02 {
-	height:1000px;
+	height:800px;
 	overflow-y:scroll;
 	border:1px solid #ccc;
 }
@@ -190,12 +190,16 @@
 	width:100%;
 	font-size: 16px;
 }
+
+.right .form-analysis td{
+	vertical-align:top;
+}
+
 .right .form-analysis .checkbox {
-	padding:5px 2px;
+	padding:3px 5px;
 	font-weight:normal;
 	text-align:left;
 	vertical-align:top;
-	width: 1% !important;
 }
 .right .form-analysis .analysis-name {
 	padding:5px 2px;
@@ -238,4 +242,158 @@
 	filter: alpha(opacity=70);
 	-moz-opacity:0.7;
 	opacity:0.7;
+}
+
+.btn-aggregate {
+	background-color:#00A0E9;
+	height:30px;
+	padding:0 12px;
+	cursor:pointer;
+	border:none;
+	color:#fff;
+	font-size:16px;
+	cursor:pointer;
+}
+.map {
+	position: relative;
+}
+.pop_up {
+	position: absolute;
+	width: 300px;
+	top: 5px;
+	right: 20px;
+	z-index: 1000;
+	padding: 20px 20px
+}
+
+.btn-map {
+	cursor:pointer;
+	background-color: #gray;
+	border:none;
+	padding: 5px 20px;
+}
+
+.btn-map {
+	-webkit-gradient(linear, left top, left bottom, from(#eee), to(#fff));
+	-webkit-filter: grayscale(100%);
+	filter: url("data:image/svg+xml;utf8,<svg xmlns=\'http://www.w3.org/2000/svg\'><filter id=\'grayscale\'><feColorMatrix type=\'matrix\' values=\'0.3333 0.3333 0.3333 0 0 0.3333 0.3333 0.3333 0 0 0.3333 0.3333 0.3333 0 0 0 0 0 1 0\'/></filter></svg>#grayscale");
+	filter: gray;
+	cursor:default;
+	filter: alpha(opacity=70);
+	-moz-opacity:0.7;
+	opacity:0.7;
+}
+.btn-map:hover {
+	background-color: silver;
+	filter: gray;
+	cursor:default;
+	filter: alpha(opacity=70);
+	-moz-opacity:0.7;
+	opacity:0.7;
+}
+
+.btn-close {
+	cursor:pointer;
+	background-color: #FFFFFF;
+	border:none;
+	padding: 5px 10px;
+	float:right;
+	cursor:pointer;
+}
+
+
+.btn-ana-item {
+	background-color: #888;
+	color: white;
+	border:none;
+	padding: 7px 20px;
+	cursor:pointer;
+}
+
+.btn-ana-item {
+	-webkit-gradient(linear, left top, left bottom, from(#eee), to(#fff));
+	-webkit-filter: grayscale(100%);
+	filter: url("data:image/svg+xml;utf8,<svg xmlns=\'http://www.w3.org/2000/svg\'><filter id=\'grayscale\'><feColorMatrix type=\'matrix\' values=\'0.3333 0.3333 0.3333 0 0 0.3333 0.3333 0.3333 0 0 0.3333 0.3333 0.3333 0 0 0 0 0 1 0\'/></filter></svg>#grayscale");
+	filter: gray;
+	cursor:default;
+	filter: alpha(opacity=70);
+	-moz-opacity:0.7;
+	opacity:0.7;
+}
+
+.btn-ana-item:hover {
+	background-color: #666;
+	filter: gray;
+	cursor:default;
+	filter: alpha(opacity=70);
+	-moz-opacity:0.7;
+	opacity:0.7;
+}
+
+.overlay {
+    position: fixed;
+    width: 100%;
+    height: 100%;
+    left: 0;
+    top: 0;
+    background: rgba(51,51,51,0.7);
+    z-index: 10;
+	text-align: center;
+	vertical-align: middle;
+}
+
+#img_loading{
+	width:200px;
+	height:200px;
+	margin:auto;
+	position:absolute;
+	top:0;bottom:0;
+	left:0;right:0;
+	max-width:100%;
+	max-height:100%;
+	overflow:auto;
+}
+
+.strike {
+	display: block;
+	text-align: center;
+	overflow: hidden;
+	white-space: nowrap;
+	font-size:24px; 
+}
+
+.strike > span {
+	position: relative;
+	display: inline-block;
+}
+
+.strike > span:before,
+.strike > span:after {
+	content: "";
+	position: absolute;
+	top: 50%;
+	width: 9999px;
+	height: 1px;
+	background: black;
+}
+
+.strike > span:before {
+	right: 100%;
+	margin-right: 15px;
+}
+
+.strike > span:after {
+	left: 100%;
+	margin-left: 15px;
+}
+
+.btn_remove_item {
+	position: absolute;
+	z-index: 1000;
+	padding: 1px 1px;
+	cursor:pointer;
+}
+
+circle {
+	cursor:pointer;
 }

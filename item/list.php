@@ -28,6 +28,10 @@ switch($F_md){
 		$sql.= "delete from r_item8 where item_cd='".$F_item_cd."';";
 		$sql.= "delete from r_item9 where item_cd='".$F_item_cd."';";
 		$sql.= "delete from r_item10 where item_cd='".$F_item_cd."';";
+		
+		$sql.= "delete from t_history where hist_cd in (select hist_cd from r_history where item_cd = ".$F_item_cd.");";
+		$sql.= "delete from r_history where item_cd = ".$F_item_cd.";";
+		
 		$sql.= "delete from t_history_price where hist_price_cd in (select hist_price_cd from r_item11 where item_cd='".$F_item_cd."');";
 		$sql.= "delete from r_item11 where item_cd='".$F_item_cd."';";
 		$sql.= "delete from t_item where item_cd='".$F_item_cd."';";
@@ -58,7 +62,7 @@ switch($F_md){
 		$item_price_prev = $RS_item[0]['item_price'];
 		$item_discount_prev = $RS_item[0]['item_discount'];
 		if($RS_item[0]['flg_new']){
-			if($item_discount_prev != 100 and $item_discount_prev){
+			if($item_discount_prev){
 				if($F_item_price >= 3500){
 					$item_discount = 100;
 				}elseif($F_item_price >= 3000){
@@ -98,6 +102,20 @@ switch($F_md){
 		$sql.=" where item_cd='".$F_item_cd."'";
 		$sql = sql_convert_null($sql);
 		$rs = exec_sql($db, $sql, $_SERVER["SCRIPT_NAME"]);
+		
+		//t_history
+		$hist_cd = $hist_sort = make_cd("t_history", "hist_cd", "");
+		$add_clm_array = array("hist_cd", "hist_sort", "hist_price", "hist_memo", "date_regist");
+		$add_value_array = array($hist_cd, $hist_sort, $F_item_price, "", date("Y-m-d"));
+		insert_db_same_name("", "t_history", $add_clm_array, $add_value_array);
+
+		//r_history
+		$rel_cd = make_cd("r_history", "rel_cd", "");
+		$stat_cd = 2; //価格改定
+		$add_clm_array = array("rel_cd", "item_cd", "hist_cd", "stat_cd", "mem_cd", "user_cd");
+		$add_value_array = array($rel_cd, $F_item_cd, $hist_cd, $stat_cd, "", "");
+		insert_db_same_name("", "r_history", $add_clm_array, $add_value_array);
+		
 		//t_history_price
 		$hist_price_cd = $hist_price_sort = make_cd("t_history_price", "hist_price_cd", "");
 		$add_clm_array = array("hist_price_cd", "hist_price_sort", "hist_price_value", "hist_price_date");
@@ -117,13 +135,40 @@ switch($F_md){
 		switch($F_status_new){
 			case "成":
 				$sql.= "update t_item set flg_soldout = '1', date_soldout = '".date("Y-m-d")."' where item_cd='".$F_item_cd."';";
+        $hist_cd = $hist_sort = make_cd("t_history", "hist_cd", "");
+        $item_price = get_colum_key("t_item", "item_cd", $F_item_cd, "item_price", "");
+        $sql.= "insert into t_history (hist_cd, hist_sort, hist_price, date_regist) values (".$hist_cd.", ".$hist_sort.", '".$item_price."', '".date("Y-m-d")."');";
+        $rel_cd = make_cd("r_history", "rel_cd", "");
+        $stat_cd = 6; //成約
+        $sql.= "insert into r_history (rel_cd, item_cd, hist_cd, stat_cd) values (".$rel_cd.", ".$F_item_cd.", ".$hist_cd.", ".$stat_cd.");";
 				break;
 			case "商":
 				$sql.= "update t_item set flg_nego = '1' where item_cd='".$F_item_cd."';";
-				break;
+        $hist_cd = $hist_sort = make_cd("t_history", "hist_cd", "");
+        $item_price = get_colum_key("t_item", "item_cd", $F_item_cd, "item_price", "");
+        $sql.= "insert into t_history (hist_cd, hist_sort, hist_price, date_regist) values (".$hist_cd.", ".$hist_sort.", '".$item_price."', '".date("Y-m-d")."');";
+        $rel_cd = make_cd("r_history", "rel_cd", "");
+        $stat_cd = 3; //商談
+        $sql.= "insert into r_history (rel_cd, item_cd, hist_cd, stat_cd) values (".$rel_cd.", ".$F_item_cd.", ".$hist_cd.", ".$stat_cd.");";
+        break;
+			case "販":
+        get_rs("v_history", "hist", "item_cd = ".$F_item_cd, "hist_cd desc");
+        if($RS_hist[0]['stat_cd'] == 6){
+          $sql.= "delete from t_history where hist_cd = ".$RS_hist[0]['hist_cd'].";";
+          $sql.= "delete from r_history where hist_cd = ".$RS_hist[0]['hist_cd'].";";
+          $rs = exec_sql($db, $sql, $_SERVER["SCRIPT_NAME"]);
+        }
+        $hist_cd = $hist_sort = make_cd("t_history", "hist_cd", "");
+        $item_price = get_colum_key("t_item", "item_cd", $F_item_cd, "item_price", "");
+        $sql.= "insert into t_history (hist_cd, hist_sort, hist_price, date_regist) values (".$hist_cd.", ".$hist_sort.", '".$item_price."', '".date("Y-m-d")."');";
+        $rel_cd = make_cd("r_history", "rel_cd", "");
+        $stat_cd = 4; //再販
+        $sql.= "insert into r_history (rel_cd, item_cd, hist_cd, stat_cd) values (".$rel_cd.", ".$F_item_cd.", ".$hist_cd.", ".$stat_cd.");";
+        break;
 		}
 		$sql = sql_convert_null($sql);
 		$rs = exec_sql($db, $sql, $_SERVER["SCRIPT_NAME"]);
+
 		echo(true);
 		exit;
 		break;
