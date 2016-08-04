@@ -1,26 +1,30 @@
 $(document).ready(function () {
+	window.rtime;
+	window.timeout = false;
+	
 	//auto draw map + chart
-	var chart_result;
-	var chart;
-	var list_item_compare, list_marker;	
+	window.chart_result;
+	window.list_item_compare;
+	window.list_marker;	
+	
 	var similars = searchItemOnDemand();
 	
-	list_marker = initialize(similars);
+	window.list_marker = initialize(similars);
 	google.charts.setOnLoadCallback(function(){ drawChart(similars) });
 
 	$(".overlay").hide();
 	$("#pop_up").hide();
 	
-	$('.view-chart').hover(function(event) {
-		eventChangeChartLegends();
+	$('#chart_div').bind('DOMNodeInserted', function(event) {
+		if (event.type == 'DOMNodeInserted') {
+			eventChangeChartLegends();
+			/*window.rtime = new Date();
+			if (window.timeout === false) {
+				window.timeout = true;
+				setTimeout(endChange, 20);
+			}*/
+		}
 	});
-	$('.view-chart').mousedown(function(event) {
-		eventChangeChartLegends();
-	});
-	$('.view-chart').mouseup(function(event) {
-		eventChangeChartLegends();
-	});
-	
 	
 	//auto redraw when resize
 	$(window).resize(function(event){
@@ -28,157 +32,73 @@ $(document).ready(function () {
 		$(".overlay").show();			
 		
 		var similars = searchItemOnDemand();
-		list_item_compare = null;
-		list_marker = initialize(similars);
-		chart_result = drawChart(similars);
+		window.list_item_compare = null;
+		window.list_marker = initialize(similars);
+		window.chart_result = drawChart(similars);
 		
-		var chart = chart_result.chart;
+		var chart = window.chart_result.chart;
 		google.visualization.events.addListener(chart, 'select', function() {
 			var point = chart.getSelection();
-			if (point[0].column == 16) {
-				var i = list_marker.list_marker_cd.indexOf(list_item_compare[0]);
-				var marker = list_marker.list_marker[i];
-				new google.maps.event.trigger( marker, 'click' );
-			}
-			if (point[0].column == 19) {
-				var i = list_marker.list_marker_cd.indexOf(list_item_compare[1]);
-				var marker = list_marker.list_marker[i];
-				new google.maps.event.trigger( marker, 'click' );
-			}
-			if (point[0].column == 22) {
-				var i = list_marker.list_marker_cd.indexOf(list_item_compare[2]);
-				var marker = list_marker.list_marker[i];
-				new google.maps.event.trigger( marker, 'click' );
-			}
-			if (point[0].column == 25) {
-				var i = list_marker.list_marker_cd.indexOf(list_item_compare[3]);
-				var marker = list_marker.list_marker[i];
-				new google.maps.event.trigger( marker, 'click' );
-			}
-			if (point[0].column == 28) {
-				var i = list_marker.list_marker_cd.indexOf(list_item_compare[4]);
-				var marker = list_marker.list_marker[i];
-				new google.maps.event.trigger( marker, 'click' );
+			if (point.length > 0) {
+				setChartEvent(point);
 			}
 		});
 		
-		list_item_compare = chart_result.list_item_compare;
-		chart = chart_result.chart;
-		if (chart_result) {
+		window.list_item_compare = window.chart_result.list_item_compare;
+		chart = window.chart_result.chart;
+		if (window.chart_result) {
 			$(".overlay").fadeOut().delay(1500);
 		}	
 	});
-	
-	//display item on map when click icon on chart
-	//---
-	$(document).on('click','#chart_div rect',function(){
-		var circle = $(this).parent().find('circle');
-		if(circle.length){
-			checkCircle(circle);   
-		}
-	});
-	
-	$(document).on('click','#chart_div circle',function(){
-		var circle = $(this).parent().find('circle');
-		if(circle.length){
-			checkCircle(circle);   
-		}
-	});
-
-	$(document).on('click','#chart_div text',function(){
-		var circle = $(this).parent().parent().find('circle');
-		if(circle.length){
-			checkCircle(circle);   
-		}
-	});
-	
-	$(document).on('click','#chart_div path',function(){
-		var circle = $(this).parent().find('circle');
-		if(circle.length){
-			checkCircle(circle);   
-		}
-	});
-
-	function checkCircle(circle){
-		switch (circle.attr('fill')) {
-			case '#ffa500':
-				var i = list_marker.list_marker_cd.indexOf(list_item_compare[0]);
-				var marker = list_marker.list_marker[i];
-				new google.maps.event.trigger( marker, 'click' );
-				
-				break;
-			
-			case '#ffd700':
-				var i = list_marker.list_marker_cd.indexOf(list_item_compare[1]);
-				var marker = list_marker.list_marker[i];
-				new google.maps.event.trigger( marker, 'click' );
-				
-				break;
-				
-			case '#00ffff':
-				var i = list_marker.list_marker_cd.indexOf(list_item_compare[2]);
-				var marker = list_marker.list_marker[i];
-				new google.maps.event.trigger( marker, 'click' );
-				
-				break;
-			
-			case '#7fff00':
-				var i = list_marker.list_marker_cd.indexOf(list_item_compare[3]);
-				var marker = list_marker.list_marker[i];
-				new google.maps.event.trigger( marker, 'click' );
-				
-				break;
-			
-			case '#ff1493':
-				var i = list_marker.list_marker_cd.indexOf(list_item_compare[4]);
-				var marker = list_marker.list_marker[i];
-				new google.maps.event.trigger( marker, 'click' );
-				
-				break;
-				
-			default:
-				break;
-		}
-	}
 	
 	$('.view-chart').on('click', '#close_item1', function (event) {
 		event.preventDefault();
-		list_item_compare = removeItem(list_item_compare[0]);
-		if (chart_result) {
+		$(".overlay").show();
+		window.list_item_compare = removeItem(window.list_item_compare[0]);
+		if (window.chart_result) {
 			$(".overlay").fadeOut().delay(1500);
 		}	
+		event.stopPropagation();
 	});
 	
 	$('.view-chart').on('click', '#close_item2', function (event) {
 		event.preventDefault();
-		list_item_compare = removeItem(list_item_compare[1]);
-		if (chart_result) {
+		$(".overlay").show();
+		window.list_item_compare = removeItem(window.list_item_compare[1]);
+		if (window.chart_result) {
 			$(".overlay").fadeOut().delay(1500);
-		}	
+		}
+		event.stopPropagation();
 	});
 	
 	$('.view-chart').on('click', '#close_item3', function (event) {
 		event.preventDefault();
-		list_item_compare = removeItem(list_item_compare[2]);
-		if (chart_result) {
+		$(".overlay").show();
+		window.list_item_compare = removeItem(window.list_item_compare[2]);
+		if (window.chart_result) {
 			$(".overlay").fadeOut().delay(1500);
-		}	
+		}
+		event.stopPropagation();
 	});
 	
 	$('.view-chart').on('click', '#close_item4', function (event) {
 		event.preventDefault();
-		list_item_compare = removeItem(list_item_compare[3]);
-		if (chart_result) {
+		$(".overlay").show();
+		window.list_item_compare = removeItem(window.list_item_compare[3]);
+		if (window.chart_result) {
 			$(".overlay").fadeOut().delay(1500);
-		}	
+		}
+		event.stopPropagation();
 	});
 	
 	$('.view-chart').on('click', '#close_item5', function (event) {
 		event.preventDefault();
-		list_item_compare = removeItem(list_item_compare[4]);
-		if (chart_result) {
+		$(".overlay").show();
+		window.list_item_compare = removeItem(window.list_item_compare[4]);
+		if (window.chart_result) {
 			$(".overlay").fadeOut().delay(1500);
-		}	
+		}
+		event.stopPropagation();
 	});
 	//---
 	
@@ -186,46 +106,24 @@ $(document).ready(function () {
 	//auto redraw when click button search
 	$('.tabl-analysis').on('click', '#btn_th', function (event) {
 		event.preventDefault();
-		chart_result = null;
-				
+		window.chart_result = null;
+		$("#pop_up").hide();
 		$(".overlay").show();
 		var similars = searchItemOnDemand();
-		list_marker = initialize(similars);
-		chart_result = drawChart(similars);
+		window.list_marker = initialize(similars);
+		window.chart_result = drawChart(similars);
 		
-		chart = chart_result.chart;
+		chart = window.chart_result.chart;
 		google.visualization.events.addListener(chart, 'select', function() {
 			var point = chart.getSelection();
-			if (point[0].column == 16) {
-				var i = list_marker.list_marker_cd.indexOf(list_item_compare[0]);
-				var marker = list_marker.list_marker[i];
-				new google.maps.event.trigger( marker, 'click' );
-			}
-			if (point[0].column == 19) {
-				var i = list_marker.list_marker_cd.indexOf(list_item_compare[1]);
-				var marker = list_marker.list_marker[i];
-				new google.maps.event.trigger( marker, 'click' );
-			}
-			if (point[0].column == 22) {
-				var i = list_marker.list_marker_cd.indexOf(list_item_compare[2]);
-				var marker = list_marker.list_marker[i];
-				new google.maps.event.trigger( marker, 'click' );
-			}
-			if (point[0].column == 25) {
-				var i = list_marker.list_marker_cd.indexOf(list_item_compare[3]);
-				var marker = list_marker.list_marker[i];
-				new google.maps.event.trigger( marker, 'click' );
-			}
-			if (point[0].column == 28) {
-				var i = list_marker.list_marker_cd.indexOf(list_item_compare[4]);
-				var marker = list_marker.list_marker[i];
-				new google.maps.event.trigger( marker, 'click' );
+			if (point.length > 0) {
+				setChartEvent(point);
 			}
 		});
 		
-		list_item_compare = chart_result.list_item_compare;
+		window.list_item_compare = window.chart_result.list_item_compare;
 		
-		if (chart_result) {
+		if (window.chart_result) {
 			$(".overlay").fadeOut().delay(1500);
 		}
 	});
@@ -233,10 +131,15 @@ $(document).ready(function () {
 	//close popup when click button close(X)
 	$('#pop_up').on('click', '.btn-close', function () {
 		$("#pop_up").hide();
+		
+		var j;
+		for (j = 0; j < window.list_marker.list_marker.length; j++) {
+			window.list_marker.list_marker[j].setIcon(window.list_marker.list_icon[j].url);
+		}
     });
 	
 	//remove item when click button close(X)
-	$('.form-analysis').on('click', '.btn-close-item', function () {
+	$('.form-compare-item').on('click', '.btn-close-item', function () {
 		$(".overlay").show();
 		
 		var item_cd = $(this).val();
@@ -270,176 +173,24 @@ $(document).ready(function () {
 			async: false,
 			success: function (data) {
 				result = data;
-				
-				if ( result[0].item_name != null ) {
-					$('#item1_img').html('<button class="btn-close btn-close-item" id="item1-btn-close" value="' + result[0].item_cd + '">X<button>'
-										 + '<img src="' + result[0].item_img + '" />');
-					$('#item1_name').html(result[0].item_name);
-					$('#item1_price').html(result[0].item_price + '万円（税込）');
-					$('#item1_size_land').html(result[0].item_size_land);
-					$('#item1_size_build').html(result[0].item_size_build);
-					$('#item1_layout').html(result[0].item_layout);
-					$('#item1_pubtrans').html(result[0].item_pubtrans);
-					$('#item1_road').html(result[0].item_road);
-					$('#item1_school').html(result[0].item_school);
-					$('#item1_equip').html(result[0].item_equip);
-				} else {
-					$('#item1_img').html('');
-					$('#item1_name').html('');
-					$('#item1_price').html('');
-					$('#item1_size_land').html('');
-					$('#item1_size_build').html('');
-					$('#item1_layout').html('');
-					$('#item1_pubtrans').html('');
-					$('#item1_road').html('');
-					$('#item1_school').html('');
-					$('#item1_equip').html('');
-					$('#close_item1').html('');
-				}
-				
-				if ( result[1].item_name != null ) {
-					$('#item2_img').html('<button class="btn-close btn-close-item" id="item2-btn-close" value="' + result[1].item_cd + '">X<button>'
-										 + '<img src="' + result[1].item_img + '" />');
-					$('#item2_name').html(result[1].item_name);
-					$('#item2_price').html(result[1].item_price + '万円（税込）');
-					$('#item2_size_land').html(result[1].item_size_land);
-					$('#item2_size_build').html(result[1].item_size_build);
-					$('#item2_layout').html(result[1].item_layout);
-					$('#item2_pubtrans').html(result[1].item_pubtrans);
-					$('#item2_road').html(result[1].item_road);
-					$('#item2_school').html(result[1].item_school);
-					$('#item2_equip').html(result[1].item_equip);
-				} else {
-					$('#item2_img').html('');
-					$('#item2_name').html('');
-					$('#item2_price').html('');
-					$('#item2_size_land').html('');
-					$('#item2_size_build').html('');
-					$('#item2_layout').html('');
-					$('#item2_pubtrans').html('');
-					$('#item2_road').html('');
-					$('#item2_school').html('');
-					$('#item2_equip').html('');
-					$('#close_item2').html('');
-				}
-				
-				if ( result[2].item_name != null ) {
-					$('#item3_img').html('<button class="btn-close btn-close-item" id="item3-btn-close" value="' + result[2].item_cd + '">X<button>'
-										 + '<img src="' + result[2].item_img + '" />');
-					$('#item3_name').html(result[2].item_name);
-					$('#item3_price').html(result[2].item_price + '万円（税込）');
-					$('#item3_size_land').html(result[2].item_size_land);
-					$('#item3_size_build').html(result[2].item_size_build);
-					$('#item3_layout').html(result[2].item_layout);
-					$('#item3_pubtrans').html(result[2].item_pubtrans);
-					$('#item3_road').html(result[2].item_road);
-					$('#item3_school').html(result[2].item_school);
-					$('#item3_equip').html(result[2].item_equip);
-				} else {
-					$('#item3_img').html('');
-					$('#item3_name').html('');
-					$('#item3_price').html('');
-					$('#item3_size_land').html('');
-					$('#item3_size_build').html('');
-					$('#item3_layout').html('');
-					$('#item3_pubtrans').html('');
-					$('#item3_road').html('');
-					$('#item3_school').html('');
-					$('#item3_equip').html('');
-					$('#close_item3').html('');
-				}
-				
-				if ( result[3].item_name != null ) {
-					$('#item4_img').html('<button class="btn-close btn-close-item" id="item4-btn-close" value="' + result[3].item_cd + '">X<button>'
-										 + '<img src="' + result[3].item_img + '" />');
-					$('#item4_name').html(result[3].item_name);
-					$('#item4_price').html(result[3].item_price + '万円（税込）');
-					$('#item4_size_land').html(result[3].item_size_land);
-					$('#item4_size_build').html(result[3].item_size_build);
-					$('#item4_layout').html(result[3].item_layout);
-					$('#item4_pubtrans').html(result[3].item_pubtrans);
-					$('#item4_road').html(result[3].item_road);
-					$('#item4_school').html(result[3].item_school);
-					$('#item4_equip').html(result[3].item_equip);
-				} else {
-					$('#item4_img').html('');
-					$('#item4_name').html('');
-					$('#item4_price').html('');
-					$('#item4_size_land').html('');
-					$('#item4_size_build').html('');
-
-					$('#item4_layout').html('');
-					$('#item4_pubtrans').html('');
-					$('#item4_road').html('');
-					$('#item4_school').html('');
-					$('#item4_equip').html('');
-					$('#close_item4').html('');
-				}
-				
-				if ( result[4].item_name != null ) {
-					$('#item5_img').html('<button class="btn-close btn-close-item" id="item5-btn-close" value="' + result[4].item_cd + '">X<button>'
-										 + '<img src="' + result[4].item_img + '" />');
-					$('#item5_name').html(result[4].item_name);
-					$('#item5_price').html(result[4].item_price + '万円（税込）');
-					$('#item5_size_land').html(result[4].item_size_land);
-					$('#item5_size_build').html(result[4].item_size_build);
-					$('#item5_layout').html(result[4].item_layout);
-					$('#item5_pubtrans').html(result[4].item_pubtrans);
-					$('#item5_road').html(result[4].item_road);
-					$('#item5_school').html(result[4].item_school);
-					$('#item5_equip').html(result[4].item_equip);
-				} else {
-					$('#item5_img').html('');
-					$('#item5_name').html('');
-					$('#item5_price').html('');
-					$('#item5_size_land').html('');
-					$('#item5_size_build').html('');
-					$('#item5_layout').html('');
-					$('#item5_pubtrans').html('');
-					$('#item5_road').html('');
-					$('#item5_school').html('');
-					$('#item5_equip').html('');
-					$('#close_item5').html('');
-				}
+				insertItem(result)
 			}
 		});
 		//redraw chart
 		var similars = searchItemOnDemand();
-		chart_result = drawChart(similars);
+		window.chart_result = drawChart(similars);
 		
-		chart = chart_result.chart;
+		chart = window.chart_result.chart;
 		google.visualization.events.addListener(chart, 'select', function() {
 			var point = chart.getSelection();
-			if (point[0].column == 16) {
-				var i = list_marker.list_marker_cd.indexOf(list_item_compare[0]);
-				var marker = list_marker.list_marker[i];
-				new google.maps.event.trigger( marker, 'click' );
-			}
-			if (point[0].column == 19) {
-				var i = list_marker.list_marker_cd.indexOf(list_item_compare[1]);
-				var marker = list_marker.list_marker[i];
-				new google.maps.event.trigger( marker, 'click' );
-			}
-			if (point[0].column == 22) {
-				var i = list_marker.list_marker_cd.indexOf(list_item_compare[2]);
-				var marker = list_marker.list_marker[i];
-				new google.maps.event.trigger( marker, 'click' );
-			}
-			if (point[0].column == 25) {
-				var i = list_marker.list_marker_cd.indexOf(list_item_compare[3]);
-				var marker = list_marker.list_marker[i];
-				new google.maps.event.trigger( marker, 'click' );
-			}
-			if (point[0].column == 28) {
-				var i = list_marker.list_marker_cd.indexOf(list_item_compare[4]);
-				var marker = list_marker.list_marker[i];
-				new google.maps.event.trigger( marker, 'click' );
+			if (point.length > 0) {
+				setChartEvent(point);
 			}
 		});
 
-		list_item_compare = chart_result.list_item_compare;
+		window.list_item_compare = window.chart_result.list_item_compare;
 		
-		if (chart_result) {
+		if (window.chart_result) {
 			$(".overlay").fadeOut().delay(1500);
 		}
     });
@@ -470,115 +221,24 @@ $(document).ready(function () {
 			async: false,
 			success: function (data) {
 				result = data;
-				
-				if ( result[0].item_name != null ) {
-					$('#item1_img').html('<button class="btn-close btn-close-item" id="item1-btn-close" value="' + result[0].item_cd + '">X<button>'
-										 + '<img src="' + result[0].item_img + '" />');
-					$('#item1_name').html(result[0].item_name);
-					$('#item1_price').html(result[0].item_price + '万円（税込）');
-					$('#item1_size_land').html(result[0].item_size_land);
-					$('#item1_size_build').html(result[0].item_size_build);
-					$('#item1_layout').html(result[0].item_layout);
-					$('#item1_pubtrans').html(result[0].item_pubtrans);
-					$('#item1_road').html(result[0].item_road);
-					$('#item1_school').html(result[0].item_school);
-					$('#item1_equip').html(result[0].item_equip);
-				}
-				
-				if ( result[1].item_name != null ) {
-					$('#item2_img').html('<button class="btn-close btn-close-item" id="item2-btn-close" value="' + result[1].item_cd + '">X<button>'
-										 + '<img src="' + result[1].item_img + '" />');
-					$('#item2_name').html(result[1].item_name);
-					$('#item2_price').html(result[1].item_price + '万円（税込）');
-					$('#item2_size_land').html(result[1].item_size_land);
-					$('#item2_size_build').html(result[1].item_size_build);
-					$('#item2_layout').html(result[1].item_layout);
-					$('#item2_pubtrans').html(result[1].item_pubtrans);
-					$('#item2_road').html(result[1].item_road);
-					$('#item2_school').html(result[1].item_school);
-					$('#item2_equip').html(result[1].item_equip);
-				}
-				
-				if ( result[2].item_name != null ) {
-					$('#item3_img').html('<button class="btn-close btn-close-item" id="item3-btn-close" value="' + result[2].item_cd + '">X<button>'
-										 + '<img src="' + result[2].item_img + '" />');
-					$('#item3_name').html(result[2].item_name);
-					$('#item3_price').html(result[2].item_price + '万円（税込）');
-					$('#item3_size_land').html(result[2].item_size_land);
-					$('#item3_size_build').html(result[2].item_size_build);
-					$('#item3_layout').html(result[2].item_layout);
-					$('#item3_pubtrans').html(result[2].item_pubtrans);
-					$('#item3_road').html(result[2].item_road);
-					$('#item3_school').html(result[2].item_school);
-					$('#item3_equip').html(result[2].item_equip);
-				}
-				
-				if ( result[3].item_name != null ) {
-					$('#item4_img').html('<button class="btn-close btn-close-item" id="item4-btn-close" value="' + result[3].item_cd + '">X<button>'
-										 + '<img src="' + result[3].item_img + '" />');
-					$('#item4_name').html(result[3].item_name);
-					$('#item4_price').html(result[3].item_price + '万円（税込）');
-					$('#item4_size_land').html(result[3].item_size_land);
-					$('#item4_size_build').html(result[3].item_size_build);
-					$('#item4_layout').html(result[3].item_layout);
-					$('#item4_pubtrans').html(result[3].item_pubtrans);
-					$('#item4_road').html(result[3].item_road);
-					$('#item4_school').html(result[3].item_school);
-					$('#item4_equip').html(result[3].item_equip);
-				}
-				
-				if ( result[4].item_name != null ) {
-					$('#item5_img').html('<button class="btn-close btn-close-item" id="item5-btn-close" value="' + result[4].item_cd + '">X<button>'
-										 + '<img src="' + result[4].item_img + '" />');
-					$('#item5_name').html(result[4].item_name);
-					$('#item5_price').html(result[4].item_price + '万円（税込）');
-					$('#item5_size_land').html(result[4].item_size_land);
-					$('#item5_size_build').html(result[4].item_size_build);
-					$('#item5_layout').html(result[4].item_layout);
-					$('#item5_pubtrans').html(result[4].item_pubtrans);
-					$('#item5_road').html(result[4].item_road);
-					$('#item5_school').html(result[4].item_school);
-					$('#item5_equip').html(result[4].item_equip);
-				}
+				insertItem(result)
 			}
 		});
 
 		var similars = searchItemOnDemand();
-		chart_result = drawChart(similars);
+		window.chart_result = drawChart(similars);
 		
-		chart = chart_result.chart;
+		chart = window.chart_result.chart;
 		google.visualization.events.addListener(chart, 'select', function() {
 			var point = chart.getSelection();
-			if (point[0].column == 16) {
-				var i = list_marker.list_marker_cd.indexOf(list_item_compare[0]);
-				var marker = list_marker.list_marker[i];
-				new google.maps.event.trigger( marker, 'click' );
-			}
-			if (point[0].column == 19) {
-				var i = list_marker.list_marker_cd.indexOf(list_item_compare[1]);
-				var marker = list_marker.list_marker[i];
-				new google.maps.event.trigger( marker, 'click' );
-			}
-			if (point[0].column == 22) {
-				var i = list_marker.list_marker_cd.indexOf(list_item_compare[2]);
-				var marker = list_marker.list_marker[i];
-				new google.maps.event.trigger( marker, 'click' );
-			}
-			if (point[0].column == 25) {
-				var i = list_marker.list_marker_cd.indexOf(list_item_compare[3]);
-				var marker = list_marker.list_marker[i];
-				new google.maps.event.trigger( marker, 'click' );
-			}
-			if (point[0].column == 28) {
-				var i = list_marker.list_marker_cd.indexOf(list_item_compare[4]);
-				var marker = list_marker.list_marker[i];
-				new google.maps.event.trigger( marker, 'click' );
+			if (point.length > 0) {
+				setChartEvent(point);
 			}
 		});
 
-		list_item_compare = chart_result.list_item_compare;
+		window.list_item_compare = window.chart_result.list_item_compare;
 		
-		if (chart_result) {
+		if (window.chart_result) {
 			$(".overlay").fadeOut().delay(1500);
 		}
     });
@@ -641,6 +301,145 @@ function searchItemOnDemand() {
 	return result
 }
 
+function insertItem(result) {
+	if ( result[0].item_name != null ) {
+		$('#item1_img').html('<button class="btn-close btn-close-item" id="item1-btn-close" value="'
+							 + result[0].item_cd + '"><p style="font-size: large">x</p></button>'
+							 + '<img width="100%" src="' + result[0].item_img + '" />');
+		$('#item1_name').html(result[0].item_name);
+		$('#item1_price').html(result[0].item_price + '万円（税込）');
+
+		$('#item1_size_land').html(result[0].item_size_land);
+		$('#item1_size_build').html(result[0].item_size_build);
+		$('#item1_layout').html(result[0].item_layout);
+		$('#item1_pubtrans').html(result[0].item_pubtrans);
+		$('#item1_road').html(result[0].item_road);
+		$('#item1_school').html(result[0].item_school);
+		$('#item1_equip').html(result[0].item_equip);
+	} else {
+		$('#item1_img').html('');
+		$('#item1_name').html('');
+		$('#item1_price').html('');
+		$('#item1_size_land').html('');
+		$('#item1_size_build').html('');
+		$('#item1_layout').html('');
+		$('#item1_pubtrans').html('');
+		$('#item1_road').html('');
+		$('#item1_school').html('');
+		$('#item1_equip').html('');
+		$('#close_item1').html('');
+	}
+	
+	if ( result[1].item_name != null ) {
+		$('#item2_img').html('<button class="btn-close btn-close-item" id="item2-btn-close" value="'
+							 + result[1].item_cd + '"><p style="font-size: large">x</p></button>'
+							 + '<img width="100%" src="' + result[1].item_img + '" />');
+		$('#item2_name').html(result[1].item_name);
+		$('#item2_price').html(result[1].item_price + '万円（税込）');
+		$('#item2_size_land').html(result[1].item_size_land);
+		$('#item2_size_build').html(result[1].item_size_build);
+		$('#item2_layout').html(result[1].item_layout);
+		$('#item2_pubtrans').html(result[1].item_pubtrans);
+		$('#item2_road').html(result[1].item_road);
+		$('#item2_school').html(result[1].item_school);
+		$('#item2_equip').html(result[1].item_equip);
+	} else {
+		$('#item2_img').html('');
+		$('#item2_name').html('');
+		$('#item2_price').html('');
+		$('#item2_size_land').html('');
+		$('#item2_size_build').html('');
+		$('#item2_layout').html('');
+		$('#item2_pubtrans').html('');
+		$('#item2_road').html('');
+		$('#item2_school').html('');
+		$('#item2_equip').html('');
+		$('#close_item2').html('');
+	}
+	
+	if ( result[2].item_name != null ) {
+		$('#item3_img').html('<button class="btn-close btn-close-item" id="item3-btn-close" value="'
+							 + result[2].item_cd + '"><p style="font-size: large">x</p></button>'
+							 + '<img width="100%" src="' + result[2].item_img + '" />');
+		$('#item3_name').html(result[2].item_name);
+		$('#item3_price').html(result[2].item_price + '万円（税込）');
+		$('#item3_size_land').html(result[2].item_size_land);
+		$('#item3_size_build').html(result[2].item_size_build);
+		$('#item3_layout').html(result[2].item_layout);
+		$('#item3_pubtrans').html(result[2].item_pubtrans);
+		$('#item3_road').html(result[2].item_road);
+		$('#item3_school').html(result[2].item_school);
+		$('#item3_equip').html(result[2].item_equip);
+	} else {
+		$('#item3_img').html('');
+		$('#item3_name').html('');
+		$('#item3_price').html('');
+		$('#item3_size_land').html('');
+		$('#item3_size_build').html('');
+		$('#item3_layout').html('');
+		$('#item3_pubtrans').html('');
+		$('#item3_road').html('');
+		$('#item3_school').html('');
+		$('#item3_equip').html('');
+		$('#close_item3').html('');
+	}
+	
+	if ( result[3].item_name != null ) {
+		$('#item4_img').html('<button class="btn-close btn-close-item" id="item4-btn-close" value="'
+							 + result[3].item_cd + '"><p style="font-size: large">x</p></button>'
+							 + '<img width="100%" src="' + result[3].item_img + '" />');
+		$('#item4_name').html(result[3].item_name);
+		$('#item4_price').html(result[3].item_price + '万円（税込）');
+		$('#item4_size_land').html(result[3].item_size_land);
+		$('#item4_size_build').html(result[3].item_size_build);
+		$('#item4_layout').html(result[3].item_layout);
+		$('#item4_pubtrans').html(result[3].item_pubtrans);
+		$('#item4_road').html(result[3].item_road);
+		$('#item4_school').html(result[3].item_school);
+		$('#item4_equip').html(result[3].item_equip);
+	} else {
+		$('#item4_img').html('');
+		$('#item4_name').html('');
+		$('#item4_price').html('');
+		$('#item4_size_land').html('');
+		$('#item4_size_build').html('');
+		$('#item4_layout').html('');
+		$('#item4_pubtrans').html('');
+		$('#item4_road').html('');
+		$('#item4_school').html('');
+		$('#item4_equip').html('');
+		$('#close_item4').html('');
+	}
+	
+	if ( result[4].item_name != null ) {
+		$('#item5_img').html('<button class="btn-close btn-close-item" id="item5-btn-close" value="'
+							 + result[4].item_cd + '"><p style="font-size: large">x</p></button>'
+							 + '<img width="100%" src="' + result[4].item_img + '" />');
+		$('#item5_name').html(result[4].item_name);
+		$('#item5_price').html(result[4].item_price + '万円（税込）');
+		$('#item5_size_land').html(result[4].item_size_land);
+		$('#item5_size_build').html(result[4].item_size_build);
+		$('#item5_layout').html(result[4].item_layout);
+		$('#item5_pubtrans').html(result[4].item_pubtrans);
+		$('#item5_road').html(result[4].item_road);
+		$('#item5_school').html(result[4].item_school);
+		$('#item5_equip').html(result[4].item_equip);
+	} else {
+		$('#item5_img').html('');
+		$('#item5_name').html('');
+		$('#item5_price').html('');
+		$('#item5_size_land').html('');
+		$('#item5_size_build').html('');
+		$('#item5_layout').html('');
+		$('#item5_pubtrans').html('');
+		$('#item5_road').html('');
+		$('#item5_school').html('');
+		$('#item5_equip').html('');
+		$('#close_item5').html('');
+	}
+}
+
+
 function removeItem(item_cd) {
 		//delete from queue
 		var item_cd = item_cd;
@@ -672,181 +471,71 @@ function removeItem(item_cd) {
 			async: false,
 			success: function (data) {
 				result = data;
-				
-				if ( result[0].item_name != null ) {
-					$('#item1_img').html('<button class="btn-close btn-close-item" id="item1-btn-close" value="' + result[0].item_cd + '">X<button>'
-										 + '<img src="' + result[0].item_img + '" />');
-					$('#item1_name').html(result[0].item_name);
-					$('#item1_price').html(result[0].item_price + '万円（税込）');
-					$('#item1_size_land').html(result[0].item_size_land);
-					$('#item1_size_build').html(result[0].item_size_build);
-					$('#item1_layout').html(result[0].item_layout);
-					$('#item1_pubtrans').html(result[0].item_pubtrans);
-					$('#item1_road').html(result[0].item_road);
-					$('#item1_school').html(result[0].item_school);
-					$('#item1_equip').html(result[0].item_equip);
-				} else {
-					$('#item1_img').html('');
-					$('#item1_name').html('');
-					$('#item1_price').html('');
-					$('#item1_size_land').html('');
-					$('#item1_size_build').html('');
-					$('#item1_layout').html('');
-					$('#item1_pubtrans').html('');
-					$('#item1_road').html('');
-					$('#item1_school').html('');
-					$('#item1_equip').html('');
-					$('#close_item1').html('');
-				}
-				
-				if ( result[1].item_name != null ) {
-					$('#item2_img').html('<button class="btn-close btn-close-item" id="item2-btn-close" value="' + result[1].item_cd + '">X<button>'
-										 + '<img src="' + result[1].item_img + '" />');
-					$('#item2_name').html(result[1].item_name);
-					$('#item2_price').html(result[1].item_price + '万円（税込）');
-					$('#item2_size_land').html(result[1].item_size_land);
-					$('#item2_size_build').html(result[1].item_size_build);
-					$('#item2_layout').html(result[1].item_layout);
-					$('#item2_pubtrans').html(result[1].item_pubtrans);
-					$('#item2_road').html(result[1].item_road);
-					$('#item2_school').html(result[1].item_school);
-					$('#item2_equip').html(result[1].item_equip);
-				} else {
-					$('#item2_img').html('');
-					$('#item2_name').html('');
-					$('#item2_price').html('');
-					$('#item2_size_land').html('');
-					$('#item2_size_build').html('');
-					$('#item2_layout').html('');
-					$('#item2_pubtrans').html('');
-					$('#item2_road').html('');
-					$('#item2_school').html('');
-					$('#item2_equip').html('');
-					$('#close_item2').html('');
-				}
-				
-				if ( result[2].item_name != null ) {
-					$('#item3_img').html('<button class="btn-close btn-close-item" id="item3-btn-close" value="' + result[2].item_cd + '">X<button>'
-										 + '<img src="' + result[2].item_img + '" />');
-					$('#item3_name').html(result[2].item_name);
-					$('#item3_price').html(result[2].item_price + '万円（税込）');
-					$('#item3_size_land').html(result[2].item_size_land);
-					$('#item3_size_build').html(result[2].item_size_build);
-					$('#item3_layout').html(result[2].item_layout);
-					$('#item3_pubtrans').html(result[2].item_pubtrans);
-					$('#item3_road').html(result[2].item_road);
-					$('#item3_school').html(result[2].item_school);
-					$('#item3_equip').html(result[2].item_equip);
-				} else {
-					$('#item3_img').html('');
-					$('#item3_name').html('');
-					$('#item3_price').html('');
-					$('#item3_size_land').html('');
-					$('#item3_size_build').html('');
-					$('#item3_layout').html('');
-					$('#item3_pubtrans').html('');
-					$('#item3_road').html('');
-					$('#item3_school').html('');
-					$('#item3_equip').html('');
-					$('#close_item3').html('');
-				}
-				
-				if ( result[3].item_name != null ) {
-					$('#item4_img').html('<button class="btn-close btn-close-item" id="item4-btn-close" value="' + result[3].item_cd + '">X<button>'
-										 + '<img src="' + result[3].item_img + '" />');
-					$('#item4_name').html(result[3].item_name);
-					$('#item4_price').html(result[3].item_price + '万円（税込）');
-					$('#item4_size_land').html(result[3].item_size_land);
-					$('#item4_size_build').html(result[3].item_size_build);
-					$('#item4_layout').html(result[3].item_layout);
-					$('#item4_pubtrans').html(result[3].item_pubtrans);
-					$('#item4_road').html(result[3].item_road);
-					$('#item4_school').html(result[3].item_school);
-					$('#item4_equip').html(result[3].item_equip);
-				} else {
-					$('#item4_img').html('');
-					$('#item4_name').html('');
-					$('#item4_price').html('');
-					$('#item4_size_land').html('');
-					$('#item4_size_build').html('');
-					$('#item4_layout').html('');
-					$('#item4_pubtrans').html('');
-					$('#item4_road').html('');
-					$('#item4_school').html('');
-					$('#item4_equip').html('');
-					$('#close_item4').html('');
-				}
-				
-				if ( result[4].item_name != null ) {
-					$('#item5_img').html('<button class="btn-close btn-close-item" id="item5-btn-close" value="' + result[4].item_cd + '">X<button>'
-										 + '<img src="' + result[4].item_img + '" />');
-					$('#item5_name').html(result[4].item_name);
-					$('#item5_price').html(result[4].item_price + '万円（税込）');
-					$('#item5_size_land').html(result[4].item_size_land);
-					$('#item5_size_build').html(result[4].item_size_build);
-					$('#item5_layout').html(result[4].item_layout);
-					$('#item5_pubtrans').html(result[4].item_pubtrans);
-					$('#item5_road').html(result[4].item_road);
-					$('#item5_school').html(result[4].item_school);
-					$('#item5_equip').html(result[4].item_equip);
-				} else {
-					$('#item5_img').html('');
-					$('#item5_name').html('');
-					$('#item5_price').html('');
-					$('#item5_size_land').html('');
-					$('#item5_size_build').html('');
-					$('#item5_layout').html('');
-					$('#item5_pubtrans').html('');
-					$('#item5_road').html('');
-					$('#item5_school').html('');
-
-					$('#item5_equip').html('');
-					$('#close_item5').html('');
-				}
+				insertItem(result)
 			}
 		});
 		//redraw chart
 		var similars = searchItemOnDemand();
-		chart_result = drawChart(similars);
+		window.chart_result = drawChart(similars);
 		
-		chart = chart_result.chart;
+		chart = window.chart_result.chart;
 		google.visualization.events.addListener(chart, 'select', function() {
 			var point = chart.getSelection();
-			if (point != null) {
-				if (point[0].column == 16) {
-					var i = list_marker.list_marker_cd.indexOf(list_item_compare[0]);
-					var marker = list_marker.list_marker[i];
-					new google.maps.event.trigger( marker, 'click' );
-				}
-				if (point[0].column == 19) {
-					var i = list_marker.list_marker_cd.indexOf(list_item_compare[1]);
-					var marker = list_marker.list_marker[i];
-					new google.maps.event.trigger( marker, 'click' );
-				}
-				if (point[0].column == 22) {
-					var i = list_marker.list_marker_cd.indexOf(list_item_compare[2]);
-					var marker = list_marker.list_marker[i];
-					new google.maps.event.trigger( marker, 'click' );
-				}
-				if (point[0].column == 25) {
-					var i = list_marker.list_marker_cd.indexOf(list_item_compare[3]);
-					var marker = list_marker.list_marker[i];
-					new google.maps.event.trigger( marker, 'click' );
-				}
-				if (point[0].column == 28) {
-					var i = list_marker.list_marker_cd.indexOf(list_item_compare[4]);
-					var marker = list_marker.list_marker[i];
-					new google.maps.event.trigger( marker, 'click' );
-				}
+			if (point.length > 0) {
+				setChartEvent(point);
 			}
 		});
 
-		return chart_result.list_item_compare;
+		return window.chart_result.list_item_compare;
 }
 
 
+function endChange() {
+	if (new Date() - window.rtime < 20) {
+		setTimeout(endChange, 20);
+	} else {
+		eventChangeChartLegends();
+		window.timeout = false;
+	}               
+}
+
+
+
+
+function setChartEvent(point) {
+	if (point.length > 0) {
+		if (point[0].column == 16) {
+			var i = window.list_marker.list_marker_cd.indexOf(window.list_item_compare[0]);
+			var marker = window.list_marker.list_marker[i];
+			new google.maps.event.trigger( marker, 'click' );
+		}
+		if (point[0].column == 19) {
+			var i = window.list_marker.list_marker_cd.indexOf(window.list_item_compare[1]);
+			var marker = window.list_marker.list_marker[i];
+			new google.maps.event.trigger( marker, 'click' );
+		}
+		if (point[0].column == 22) {
+			var i = window.list_marker.list_marker_cd.indexOf(window.list_item_compare[2]);
+			var marker = window.list_marker.list_marker[i];
+			new google.maps.event.trigger( marker, 'click' );
+		}
+		if (point[0].column == 25) {
+			var i = window.list_marker.list_marker_cd.indexOf(window.list_item_compare[3]);
+			var marker = window.list_marker.list_marker[i];
+			new google.maps.event.trigger( marker, 'click' );
+		}
+		if (point[0].column == 28) {
+			var i = window.list_marker.list_marker_cd.indexOf(window.list_item_compare[4]);
+			var marker = window.list_marker.list_marker[i];
+			new google.maps.event.trigger( marker, 'click' );
+		}
+	}
+}
+
+
+
 function eventChangeChartLegends() {
-	$('g g text').each(function () {
+	$('g g text').each(function () { 
 		var path = $(this).parent().parent().find('path');
 		if(path.length){
 			switch (path.attr('stroke')) {
@@ -874,45 +563,65 @@ function eventChangeChartLegends() {
 				$(this).attr('fill', '#ffa500');
 				var pos = $(this).position();
 				var offset = $(this).outerWidth();
-				var left = pos.left + offset - 30;
-				$('#close_item1').attr('style', 'top: 171px; left: ' + left + 'px');
-				$('#close_item1').html('X');
+				var left = pos.left + offset - 20;
+
+				var distance = $(".view-chart").offset().top - $(this).offset().top;;
+				var top = -distance - 6;
+				
+				$('#close_item1').attr('style', 'top: ' + top + 'px; left: ' + left + 'px');
+				$('#close_item1').html('<button class="btn-close-chart"><p style="font-size: large">x</p></button>');
 				break;
 			
 			case '#ffd700':
 				$(this).attr('fill', '#ffd700');
 				var pos = $(this).position();
 				var offset = $(this).outerWidth();
-				var left = pos.left + offset - 30;
-				$('#close_item2').attr('style', 'top: 195px; left: ' + left + 'px');
-				$('#close_item2').html('X');
+				var left = pos.left + offset - 20;
+				
+				var distance = $(".view-chart").offset().top - $(this).offset().top;;
+				var top = -distance - 6;
+				
+				$('#close_item2').attr('style', 'top: ' + top + 'px; left: ' + left + 'px');
+				$('#close_item2').html('<button class="btn-close-chart"><p style="font-size: large">x</p></button>');
 				break;
 				
 			case '#00ffff':
 				$(this).attr('fill', '#00ffff');
 				var pos = $(this).position();
 				var offset = $(this).outerWidth();
-				var left = pos.left + offset - 30;
-				$('#close_item3').attr('style', 'top: 219px; left: ' + left + 'px');
-				$('#close_item3').html('X');
+				var left = pos.left + offset - 20;
+
+				var distance = $(".view-chart").offset().top - $(this).offset().top;;
+				var top = -distance - 6;
+				
+				$('#close_item3').attr('style', 'top: ' + top + 'px; left: ' + left + 'px');
+				$('#close_item3').html('<button class="btn-close-chart"><p style="font-size: large">x</p></button>');
 				break;
 			
 			case '#7fff00':
 				$(this).attr('fill', '#7fff00');
 				var pos = $(this).position();
 				var offset = $(this).outerWidth();
-				var left = pos.left + offset - 30;
-				$('#close_item4').attr('style', 'top: 243px; left: ' + left + 'px');
-				$('#close_item4').html('X');
+				var left = pos.left + offset - 20;
+
+				var distance = $(".view-chart").offset().top - $(this).offset().top;;
+				var top = -distance - 6;
+				
+				$('#close_item4').attr('style', 'top: ' + top + 'px; left: ' + left + 'px');
+				$('#close_item4').html('<button class="btn-close-chart"><p style="font-size: large">x</p><button>');
 				break;
 			
 			case '#ff1493':
 				$(this).attr('fill', '#ff1493');
 				var pos = $(this).position();
 				var offset = $(this).outerWidth();
-				var left = pos.left + offset - 30;
-				$('#close_item5').attr('style', 'top: 267px; left: ' + left + 'px');
-				$('#close_item5').html('X');
+				var left = pos.left + offset - 20;
+
+				var distance = $(".view-chart").offset().top - $(this).offset().top;;
+				var top = -distance - 6;
+				
+				$('#close_item5').attr('style', 'top: ' + top + 'px; left: ' + left + 'px');
+				$('#close_item5').html('<button class="btn-close-chart"><p style="font-size: large">x</p><button>');
 				break;
 				
 			default:

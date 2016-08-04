@@ -214,6 +214,10 @@
     white-space: normal;
 }
 
+.box-analysis .line-chart .form-analysis th {
+	background-color:#e9e3d5;
+}
+
 .form-btn-time {
 	padding: 10px 4%;
 }
@@ -390,10 +394,29 @@
 .btn_remove_item {
 	position: absolute;
 	z-index: 1000;
-	padding: 1px 1px;
+	padding: 3px 3px;
 	cursor:pointer;
 }
 
-circle {
+.right .form-compare-item {
+	border-collapse: collapse;
+	border-spacing: 0;
+	width:100%;
+	font-size: 16px;
+}
+
+.right .form-compare-item td{
+	vertical-align:top;
+	padding: 5px 10px;
+}
+
+.box-analysis .line-chart .form-compare-item th {
+	background-color:#e9e3d5;
+}
+
+.btn-close-chart {
 	cursor:pointer;
+	background-color: transparent;
+	border:none;
+	padding: 1px 1px;
 }

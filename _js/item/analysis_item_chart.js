@@ -1,4 +1,4 @@
-    function drawChart(similars) {
+﻿    function drawChart(similars) {
         // Get data.
         var item_cd = $('#item_cd').val();
         var hist;
@@ -59,6 +59,16 @@
 		avg_price = parseInt(avg_price);
 		max_price = parseInt(max_price);
 		min_price = parseInt(min_price);
+
+		if (sum == 0) {
+			avg_price = 0;
+		}
+		if (max_price == -9999999) {
+			max_price = 0;	
+		}
+		if (min_price == 9999999) {
+			min_price = 0;	
+		}
 		
         // create chart
         var data = new google.visualization.DataTable();
@@ -801,6 +811,7 @@
 				var month_diff = '---';
 				var year_diff = '---';
 				var change_price_diffDays = '----';
+
 				
 				if (change_price_day) {	
 					lastday = new Date(item_compare[4][change_price_day].date_regist);
@@ -929,9 +940,9 @@
 		var tooltip3 = '<div style = "width: auto; height: auto; padding: 10px 10px; font-size: 14px;">'
 					  +'<span style="color: blue">最安成約価格:</span> <b>' + min_price + '万円</b></div>';
 					  
-		var annotation1 = avg_price + '万円';
-		var annotation2 = max_price + '万円';
-		var annotation3 = min_price + '万円';
+		var annotation1 = '';
+		var annotation2 = '';
+		var annotation3 = '';
 	
 		data.addRows([[sixMonthsAgo, null, null, null, avg_price, null, tooltip1, style1, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null]]);
 		data.addRows([[now, null, null, null, avg_price, annotation1, tooltip1, style1, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null]]);
@@ -1147,7 +1158,7 @@
 					width: 100,
 				},
 				textStyle: {
-					fontSize: 16,
+					fontSize: 13,
 					bold: true,
 				},
 				style: 'point',
@@ -1171,7 +1182,7 @@
 				maxZoomOut: 1,
 			},
 			height:400,
-			chartArea: {width: '64%', left: '0%'},
+			chartArea: {width: '60%', left: '5%'},
 			colors: ['blue', '#DFBADD', '#BE1D2C', '#283890', 'Orange', 'Gold', 'Cyan', 'Chartreuse', 'DeepPink'],
 			interpolateNulls: true,
             tooltip: {

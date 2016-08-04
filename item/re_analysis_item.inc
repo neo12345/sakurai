@@ -554,7 +554,7 @@
 									<input type="hidden" id="lat" value="<?php echo $lat_lng[0]; ?>"/>
 									<input type="hidden" id="lng" value="<?php echo $lat_lng[1]; ?>"/>
 									<input type="hidden" id="zoom" value="<?php echo $RS_item[0]['item_zoom']; ?>"/>
-									<div class="map-company" id="googleMap" style="width: 95% ;height: 700px; padding: 20px;"></div>
+									<div class="map-company" id="googleMap" style="width: 95% ;height: 600px; padding: 20px;"></div>
 									<div class="pop_up" id="pop_up"></div>
 									<input type="hidden" id="list_item" value="-5,-4,-3,-2,-1"/>
 								</div>
@@ -578,7 +578,7 @@
 				
                 <div class="view-chart" id="dashboard" style="position: relative">
 					<input type="hidden" id="item_cd" value="<?php echo $RS_item[0]['item_cd']; ?>">
-					<div id="chart_div" style="position: relative"></div>
+					<div id="chart_div"></div>
 					
 					<div class="btn_remove_item" id = "close_item1"></div>
 					<div class="btn_remove_item" id = "close_item2"></div>
@@ -592,9 +592,9 @@
 				</div>
 				<br>
 
-				<table class="form-analysis" border="1" width="100%">
+				<table class="form-compare-item" border="1" width="100%">
 					<tr>
-						<th></th>
+						<th style="width:10%;"></th>
 						<td id="item1_img" style="width:18%;"></td>
 						<td id="item2_img" style="width:18%;"></td>
 						<td id="item3_img" style="width:18%;"></td>

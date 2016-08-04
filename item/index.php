@@ -837,13 +837,17 @@ case "get_info_item":
 		
 		Omi_get_rs($select, $table, 'item', $where, $orderBy);
 		
-		$item_size_land = $RS_item[0]['item_size_land'] . '㎡（';
-		$item_size_land = $item_size_land . round($RS_item[0]['item_size_land'] * 0.302, 2) . '坪）';
+		if ($RS_item[0]['item_size_land'] != null) {
+			$item_size_land = $RS_item[0]['item_size_land'] . '㎡（';
+			$item_size_land = $item_size_land . round($RS_item[0]['item_size_land'] * 0.302, 2) . '坪）';
+		} else {
+			$item_size_land = '';
+		}
 		
 		//get cat_item
-		$select = 'cat_item_cd, cat_item_name';
-		$table = 'm_cat_item';
-		$where = '';
+		$select = 'cat_item_cd';
+		$table = 'r_item1';
+		$where = 'item_cd = \'' . $item_cd . '\'';
 		$orderBy = '';
 	
 		Omi_get_rs($select, $table, 'cat_item', $where, $orderBy);
