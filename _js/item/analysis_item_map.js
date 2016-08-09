@@ -272,18 +272,50 @@ function initialize(result) {
 					list_marker[j].setIcon(list_icon[j].url);
 				}
 				
+				//map.setCenter(marker.position);
+				
 				if (result[i].cat_item == 1 && result[i].status == 1) {
-					marker.setIcon("/_img/common/map-markers/map-marker-11-click.png");
+					marker.setIcon({
+					  url: '/_img/common/map-markers/map-marker-11-click.png',
+					  size: new google.maps.Size(71, 71),
+					  anchor: new google.maps.Point(23, 45),
+					  scaledSize: new google.maps.Size(45, 45)
+					});
 				} else if (result[i].cat_item == 1 && result[i].status == 2) {
-					marker.setIcon("/_img/common/map-markers/map-marker-12-click.png");
+					marker.setIcon({
+					  url: '/_img/common/map-markers/map-marker-12-click.png',
+					  size: new google.maps.Size(71, 71),
+					  anchor: new google.maps.Point(23, 45),
+					  scaledSize: new google.maps.Size(45, 45)
+					});
 				} else if (result[i].cat_item == 1 && result[i].status == 3) {
-					marker.setIcon("/_img/common/map-markers/map-marker-13-click.png");
+					marker.setIcon({
+					  url: '/_img/common/map-markers/map-marker-13-click.png',
+					  size: new google.maps.Size(71, 71),
+					  anchor: new google.maps.Point(23, 45),
+					  scaledSize: new google.maps.Size(45, 45)
+					});
 				} else if (result[i].cat_item == 2 && result[i].status == 1) {
-					marker.setIcon("/_img/common/map-markers/map-marker-21-click.png");
+					marker.setIcon({
+					  url: '/_img/common/map-markers/map-marker-21-click.png',
+					  size: new google.maps.Size(71, 71),
+					  anchor: new google.maps.Point(23, 45),
+					  scaledSize: new google.maps.Size(45, 45)
+					});
 				} else if (result[i].cat_item == 2 && result[i].status == 2) {
-					marker.setIcon("/_img/common/map-markers/map-marker-22-click.png");
+					marker.setIcon({
+					  url: '/_img/common/map-markers/map-marker-22-click.png',
+					  size: new google.maps.Size(71, 71),
+					  anchor: new google.maps.Point(23, 45),
+					  scaledSize: new google.maps.Size(45, 45)
+					});
 				} else {
-					marker.setIcon("/_img/common/map-markers/map-marker-23-click.png");
+					marker.setIcon({
+					  url: '/_img/common/map-markers/map-marker-23-click.png',
+					  size: new google.maps.Size(71, 71),
+					  anchor: new google.maps.Point(23, 45),
+					  scaledSize: new google.maps.Size(45, 45)
+					});
 				}
         	}
         })(marker, pop_up, result, i));
@@ -295,6 +327,7 @@ function initialize(result) {
 	window.oms = oms;
 	
 	var output = {
+		map: map,
 		list_marker: list_marker,
 		list_icon: list_icon,
 		list_marker_cd: list_marker_cd,

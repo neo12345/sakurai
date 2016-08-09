@@ -192,7 +192,7 @@ switch($F_md){
 		$select = 'seller_cd, seller_name';
 		$table = 'm_seller';
 		$where = '';
-		$orderBy = '';
+		$orderBy = 'seller_sort ASC';
 	
 		Omi_get_rs($select, $table, 'seller', $where, $orderBy);
 		
@@ -305,6 +305,15 @@ switch($F_md){
 			$commission = cal_commission($RS_item[0]['item_price'], "");
 			$commission = (float)$commission * 10000;
 			$discount = $commission * $RS_item[0]['item_discount'] / 100;
+			
+			//get seller
+			$select = 'seller_name';
+			$table = 'm_seller, r_item1';
+			$where = 'r_item1.item_cd = \'' . $item_cd . '\' AND '
+				. 'r_item1.seller_cd = m_seller.seller_cd';
+			$orderBy = '';
+	
+			Omi_get_rs($select, $table, 'seller', $where, $orderBy);
 	
 			//get size detail
 			//old database (before 27/06)
@@ -559,11 +568,13 @@ switch($F_md){
 			}
 		}
 		
-		$select_compare = 't_item.item_cd, t_item.item_name, m_status.stat_name, t_history.date_regist as date_regist, t_history.*';
-		$table_compare = 't_item, r_history, t_history, m_status';
+		$select_compare = 't_item.item_cd, t_item.item_name, m_status.stat_name, t_history.date_regist as date_regist, t_history.*, m_seller.seller_name';
+		$table_compare = 't_item, r_history, t_history, m_status, r_item1, m_seller';
 		$where_compare = 't_item.item_cd = r_history.item_cd AND '
 			. 'r_history.hist_cd = t_history.hist_cd AND '
 			. 'm_status.stat_cd = r_history.stat_cd AND '
+			. 'm_seller.seller_cd = r_item1.seller_cd AND '
+			. 't_item.item_cd = r_item1.item_cd AND '
 			. ' t_item.item_cd IN (';
 		for ($i = count($list) - 1; $i >= count($list) - 5 ; $i--) {
 			$where_compare = $where_compare . '\'' . $list[$i] . '\', ';
@@ -582,6 +593,7 @@ switch($F_md){
 					$compare[$j][] = [
 							'item_cd' => $RS_compare[$i]['item_cd'], 
 							'item_name' => $RS_compare[$i]['item_name'],
+							'seller' => $RS_compare[$i]['seller_name'],
 							'date_regist' => $RS_compare[$i]['date_regist'],
 							'stat_name' => $RS_compare[$i]['stat_name'],
 							'hist_price' => $RS_compare[$i]['hist_price']
@@ -595,6 +607,7 @@ switch($F_md){
 				$compare[][] = [
 							'item_cd' => $RS_compare[$i]['item_cd'], 
 							'item_name' => $RS_compare[$i]['item_name'],
+							'seller' => $RS_compare[$i]['seller_name'],
 							'date_regist' => $RS_compare[$i]['date_regist'],
 							'stat_name' => $RS_compare[$i]['stat_name'],
 							'hist_price' => $RS_compare[$i]['hist_price']
@@ -612,7 +625,7 @@ switch($F_md){
 	
 	case "get_item_in_area":
 		/* --Ominext-- */
-		/* --get item in radius 10km AJAX-- */
+		/* --get item in radius AJAX-- */
 		/* get item_cd */
 		//$item_cd = $_POST['item_cd'];
 		$item_cd = $_POST['item_cd'];
@@ -651,12 +664,15 @@ switch($F_md){
 		$now = date('Y-m-d');
 		$oneYearAgo = date('Y-m-d H:i:s', strtotime($now.'-1 year'));
 		
-		$select_item_point = 't_item.item_cd, t_item.item_name, t_item.date_regist as regist, t_item.item_build, t_item.date_soldout, r_item1.cat_item_cd, t_item.item_point, t_history.date_regist, t_history.hist_price';
-		$table_item_point = 't_item, r_item1, r_history, t_history';
+		$select_item_point = 't_item.item_cd, t_item.item_name, t_item.date_regist as regist,'
+							.' t_item.item_build, t_item.date_soldout, r_item1.cat_item_cd,'
+							.' t_item.item_point, t_history.date_regist, t_history.hist_price, m_seller.seller_name';
+		$table_item_point = 't_item, r_item1, r_history, t_history, m_seller';
 		$where_item_point = 't_item.item_cd != \'' . $item_cd . '\''
-							.' AND t_item.date_regist > \'' . $oneYearAgo . '\''
+							//.' AND t_item.date_regist > \'' . $oneYearAgo . '\''
 							.' AND r_history.item_cd = t_item.item_cd'
 							.' AND r_item1.item_cd = t_item.item_cd'
+							.' AND r_item1.seller_cd = m_seller.seller_cd'
 							.' AND r_history.hist_cd = t_history.hist_cd';
 		$orderBy_item_point= 'r_history.item_cd ASC, t_history.date_regist ASC';
 		
@@ -747,7 +763,7 @@ switch($F_md){
 						Omi_get_rs($select_hist, $table_hist, 'hist', $where_hist, $orderBy_hist);
 						$hist_change = $RS_hist[0]['date_regist'];
 					}
-				if ($RS_item_point[$i]['cat_item_cd'] == '1') {
+				if ($RS_item_point[$i]['date_soldout'] <= $RS_item_point[$i]['item_build']) {
 					$diff = strtotime($RS_item_point[$i]['date_soldout']) - strtotime($RS_item_point[$i]['item_build']);
 					$time = ceil((($diff > 0) ? $diff : 0) /86400);
 				} else {
@@ -755,7 +771,7 @@ switch($F_md){
 					$time = ceil((($diff > 0) ? $diff : 0) /86400);
 				}
 				
-				if ($sold_before_complete != 0 || $status != 3) {
+				if ($sold_before_complete == 0) {
 					$j = search_in_column($RS_item_point[$i]['item_cd'], $result, 'item_cd');
 					if ( $j >= 0 ) {
 						$result[$j] = array(
@@ -764,6 +780,7 @@ switch($F_md){
 										'cat_item' => $RS_item_point[$i]['cat_item_cd'],
 										'date_regist' => date('Y-m-d', strtotime($RS_item_point[$i]['date_regist'])),
 										'hist_price' => $RS_item_point[$i]['hist_price'],
+										'seller' => $RS_item_point[$i]['seller_name'],
 										'status' => $status,
 										'hist_change' =>$hist_change,
 										'time' => $time,
@@ -777,6 +794,7 @@ switch($F_md){
 							'cat_item' => $RS_item_point[$i]['cat_item_cd'],
 							'date_regist' => date('Y-m-d', strtotime($RS_item_point[$i]['date_regist'])),
 							'hist_price' => $RS_item_point[$i]['hist_price'],
+							'seller' => $RS_item_point[$i]['seller_name'],
 							'status' => $status,
 							'hist_change' =>$hist_change,
 							'time' => $time,
@@ -784,10 +802,302 @@ switch($F_md){
 							'lng' => $lat_lng_item[1],
 						);
 					}
+					} else {
+						if ($status == 3) {
+							$j = search_in_column($RS_item_point[$i]['item_cd'], $result, 'item_cd');
+							if ( $j >= 0 ) {
+								$result[$j] = array(
+												'item_cd' => $RS_item_point[$i]['item_cd'],
+												'item_name' => $RS_item_point[$i]['item_name'],
+												'cat_item' => $RS_item_point[$i]['cat_item_cd'],
+												'date_regist' => date('Y-m-d', strtotime($RS_item_point[$i]['date_regist'])),
+												'hist_price' => $RS_item_point[$i]['hist_price'],
+												'seller' => $RS_item_point[$i]['seller_name'],
+												'status' => $status,
+												'hist_change' =>$hist_change,
+												'time' => $time,
+												'lat' => $lat_lng_item[0],
+												'lng' => $lat_lng_item[1],
+											);
+							} else {
+								$result[] = array(	
+									'item_cd' => $RS_item_point[$i]['item_cd'],
+									'item_name' => $RS_item_point[$i]['item_name'],
+									'cat_item' => $RS_item_point[$i]['cat_item_cd'],
+									'date_regist' => date('Y-m-d', strtotime($RS_item_point[$i]['date_regist'])),
+									'hist_price' => $RS_item_point[$i]['hist_price'],
+									'seller' => $RS_item_point[$i]['seller_name'],
+									'status' => $status,
+									'hist_change' =>$hist_change,
+									'time' => $time,
+									'lat' => $lat_lng_item[0],
+									'lng' => $lat_lng_item[1],
+								);
+							}
+						}
 					}
 				}
 			}
 		}
+		
+		//convert to json
+		$result_json = json_encode($result);
+		header('Content-type:application/json;charset=utf-8');
+		echo $result_json;
+		return 1;
+		/*--Ominext end--*/
+	break;
+	
+	case "get_info_group_item_in_area":
+		/* --Ominext-- */
+		/* --get item in radius AJAX-- */
+		/* get item_cd */
+		//$item_cd = $_POST['item_cd'];
+		$item_cd = $_POST['item_cd'];
+		$radius = $_POST['radius'];
+		$sold_before_complete = $_POST['sold_before_complete'];
+		
+		//get lat-lng
+		$select_item = 'item_point';
+		$table_item = 't_item';
+		$where_item = 'item_cd = \'' . $item_cd . '\'';
+		$orderBy_item = '';
+		
+		Omi_get_rs($select_item, $table_item, 'item', $where_item, $orderBy_item);
+		
+		$item_point = $RS_item[0]['item_point'];
+		$item_point = substr($item_point, 1, -1);
+		$lat_lng = explode(',', $item_point);
+		
+		//caculate max min lat-lng
+		$R = 6317; //Earth's radius
+		$d = $radius; //distance
+		$lat_src = deg2rad($lat_lng[0]);
+		$lng_src = deg2rad($lat_lng[1]);
+		
+		$lat_diff = $d/$R;
+		
+		$lat_max = $lat_diff + $lat_src;
+		$lat_min =  -$lat_diff + $lat_src;
+		
+		$lng_diff = acos(1 - ( 2 * pow(sin($d/ ($R * 2)), 2)) / pow(cos($lat_src), 2));
+		
+		$lng_max = $lng_diff + $lng_src;
+		$lng_min = -$lng_diff + $lng_src;
+		
+		//get all item
+		
+		$select_item_point = 't_item.item_cd, t_item.date_regist as regist, t_item.item_build,'
+							.' t_item.date_soldout, t_item.item_point, r_item1.cat_item_cd,'
+							.' r_item1.seller_cd, m_seller.seller_name, r_history.stat_cd, t_history.date_regist, t_history.*';
+		$table_item_point = 't_item, r_item1, r_history, t_history, m_seller';
+		$where_item_point = 'r_history.item_cd = t_item.item_cd'
+							.' AND r_item1.item_cd = t_item.item_cd'
+							.' AND r_item1.seller_cd = m_seller.seller_cd'
+							.' AND r_history.hist_cd = t_history.hist_cd'
+							.' AND t_item.flg_soldout = \'1\'';
+		$orderBy_item_point = 'r_item1.seller_cd ASC, r_history.item_cd ASC, t_history.date_regist ASC';
+		
+		if (isset($_POST['cat_item'])) {
+			$cat_item = $_POST['cat_item'];
+			$where_item_point = $where_item_point . ' AND r_item1.cat_item_cd IN (';
+			for ($i = 0; $i < count($cat_item); $i++) {
+				$where_item_point = $where_item_point . '\'' . $cat_item[$i] . '\', ';
+			}
+	
+			$where_item_point = substr($where_item_point, 0, -2);
+			$where_item_point = $where_item_point . ')';
+		}
+	
+		if (isset($_POST['condition'])) {
+			$condition = $_POST['condition'];
+			$where_item_point = $where_item_point . ' AND r_item1.condition_cd IN (';
+			for ($i = 0; $i < count($condition); $i++) {
+				$where_item_point = $where_item_point . '\'' . $condition[$i] . '\', ';
+			}
+			$where_item_point = substr($where_item_point, 0, -2);
+			$where_item_point = $where_item_point . ')';
+		}
+		
+		if (isset($_POST['layout'])) {
+			$layout = $_POST['layout'];
+			$where_item_point = $where_item_point . ' AND r_item1.layout_cd IN (';
+			for ($i = 0; $i < count($layout); $i++) {
+				$where_item_point = $where_item_point . '\'' . $layout[$i] . '\', ';
+			}
+			$where_item_point = substr($where_item_point, 0, -2);
+			$where_item_point = $where_item_point . ')';
+		}
+		
+		if (isset($_POST['seller'])) {
+			$seller = $_POST['seller'];
+			
+			$where_item_point = $where_item_point . ' AND ( r_item1.seller_cd IN (';
+			for ($i = 0; $i < count($seller); $i++) {
+				$where_item_point = $where_item_point . '\'' . $seller[$i] . '\', ';
+			}
+			$where_item_point = substr($where_item_point, 0, -2);
+			$where_item_point = $where_item_point . ')';
+			
+			if (in_array(0, $seller)) {
+				$where_item_point = substr($where_item_point, 0, -1);
+				$where_item_point = $where_item_point . ') OR r_item1.seller_cd >= 7';
+			}
+			$where_item_point = $where_item_point . ')';
+		}	
+		
+		Omi_get_rs($select_item_point, $table_item_point, 'item_point', $where_item_point, $orderBy_item_point);
+		
+		$list_item = array();
+		
+		for($i = 0; $i < count($RS_item_point); $i++) {
+			$item_point = $RS_item_point[$i]['item_point'];
+			$item_point = substr($item_point, 1, -1);
+			$lat_lng_item = explode(',', $item_point);
+			
+			$lat_des = deg2rad($lat_lng_item[0]);
+			$lng_des = deg2rad($lat_lng_item[1]);
+			
+			//if lat, lng in range caculate distance
+			if( $lat_des >= $lat_min && $lat_des <= $lat_max && $lng_des >= $lng_min && $lng_des <= $lng_max ) {
+				//caculate distance
+				$distance = 2 * $R * sqrt( pow(sin(($lat_des - $lat_src) / 2), 2) + 
+						cos($lat_des) * cos($lat_src) * pow( sin(($lng_des - $lng_src) / 2), 2 ));
+				
+				if($distance <= $radius) {
+					$price_regist = null;
+					$price_soldout = null;
+					if ($RS_item_point[$i]['stat_cd'] == '1') {
+						$price_regist = $RS_item_point[$i]['hist_price'];
+					}
+					if ($RS_item_point[$i]['stat_cd'] == '6') {
+						$price_soldout = $RS_item_point[$i]['hist_price'];
+					}
+					
+					if ($RS_item_point[$i]['date_soldout'] <= $RS_item_point[$i]['item_build']) {
+						$diff = strtotime($RS_item_point[$i]['date_soldout']) - strtotime($RS_item_point[$i]['item_build']);
+						$time = ceil((($diff > 0) ? $diff : 0) /86400);
+					} else {
+						$diff = strtotime($RS_item_point[$i]['date_soldout']) - strtotime($RS_item_point[$i]['regist']);
+						$time = ceil((($diff > 0) ? $diff : 0) /86400);
+					}
+					
+					$list_item[] = array(	
+						'item_cd' => $RS_item_point[$i]['item_cd'],
+						'stat_cd' => $RS_item_point[$i]['stat_cd'],
+						'regist' => $RS_item_point[$i]['regist'],
+						'date_soldout' => $RS_item_point[$i]['date_soldout'],
+						'price_regist' => $price_regist,
+						'price_soldout' => $price_soldout,
+						'hist_regist' => $RS_item_point[$i]['date_regist'],
+						'seller_cd' => ($RS_item_point[$i]['seller_cd'] >= "7" || $RS_item_point[$i]['seller_cd'] == '')
+										? "7" : $RS_item_point[$i]['seller_cd'],
+						'seller_name' => $RS_item_point[$i]['seller_name'], 
+						'time' => $time,
+					);
+				}
+			}
+		}
+		
+		$items = array();
+		$history = array();
+		$price_regist = null;
+		$price_soldout = null;
+		for ($i = 0; $i < count($list_item); $i++) {
+			if ($list_item[$i]['item_cd'] == $list_item[$i - 1]['item_cd'] || $i == 0 ) {
+				$history[] = array(
+							'stat_cd' => $list_item[$i]['stat_cd'],
+							'hist_regist' => $list_item[$i]['hist_regist']
+								);
+				if ($list_item[$i]['stat_cd'] == 1) {
+					$price_regist = $list_item[$i]['price_regist'];
+				}
+				if ($list_item[$i]['stat_cd'] == 6) {
+					$price_soldout = $list_item[$i]['price_soldout'];
+				}
+			} else {
+				$items[] = array(
+						'item_cd' => $list_item[$i - 1]['item_cd'],
+						'regist' => $list_item[$i - 1]['regist'],
+						'date_soldout' => $list_item[$i - 1]['date_soldout'],
+						'price_regist' => $price_regist,
+						'price_soldout' => $price_soldout,
+						'time' => $list_item[$i - 1]['time'],
+						'seller_cd' => $list_item[$i - 1]['seller_cd'],
+						'seller_name' => $list_item[$i - 1]['seller_name'],
+						'history' => $history
+					);
+				
+				$price_regist = null;
+				$price_soldout = null;	
+				$history = null;
+				
+				if ($list_item[$i]['stat_cd'] == 1) {
+					$price_regist = $list_item[$i]['price_regist'];
+				}
+				if ($list_item[$i]['stat_cd'] == 6) {
+					$price_soldout = $list_item[$i]['price_soldout'];
+				}
+				$history[] = array(
+						'stat_cd' => $list_item[$i]['stat_cd'],
+						'hist_regist' => $list_item[$i]['hist_regist']
+							);
+			}
+		}
+		
+		$items[] = array(
+						'item_cd' => $list_item[$i - 1]['item_cd'],
+						'regist' => $list_item[$i - 1]['regist'],
+						'date_soldout' => $list_item[$i - 1]['date_soldout'],
+						'price_regist' => $price_regist,
+						'price_soldout' => $price_soldout,
+						'time' => $list_item[$i - 1]['time'],
+						'seller_cd' => $list_item[$i - 1]['seller_cd'],
+						'seller_name' => $list_item[$i - 1]['seller_name'],
+						'history' => $history
+					);		
+					
+		$result = array();
+		$array_item = array();
+		for ($i = 0; $i < count($items); $i++) {
+			if ($items[$i]['seller_cd'] == $items[$i - 1]['seller_cd'] || $i == 0 ) {
+				$array_item[] = array(
+									'item_cd' => $items[$i]['item_cd'],
+									'regist' => $items[$i]['regist'],
+									'date_soldout' => $items[$i]['date_soldout'],
+									'price_regist' => $items[$i]['price_regist'],
+									'price_soldout' => $items[$i]['price_soldout'],
+									'time' => $items[$i]['time'],
+									'history' => $items[$i]['history']
+								);
+			} else {
+				$result[] = array(
+						'seller_cd' => $items[$i - 1]['seller_cd'],
+						'seller_name' => $items[$i - 1]['seller_name'],
+						'items' => $array_item
+					);
+				
+				$array_item = null;
+				$array_item[] = array(
+									'item_cd' => $items[$i]['item_cd'],
+									'regist' => $items[$i]['regist'],
+									'date_soldout' => $items[$i]['date_soldout'],
+									'price_regist' => $items[$i]['price_regist'],
+									'price_soldout' => $items[$i]['price_soldout'],
+									'time' => $items[$i]['time'],
+									'history' => $items[$i]['history']
+								);				
+			}
+		}
+		$result[] = array(
+						'seller_cd' => $items[$i - 1]['seller_cd'],
+						'seller_name' => $items[$i - 1]['seller_name'],
+						'items' => $array_item
+					);
+					
+		if ($result[count($result) - 1]['seller_cd'] == "7") {
+			$result[count($result) - 1]['seller_name'] = 'その他';
+		}			
 		
 		//convert to json
 		$result_json = json_encode($result);
@@ -829,7 +1139,7 @@ case "get_info_item":
 		
 		$link_img_main_s = '/_up/item/' . $folder . '/main_s.jpg';
 		
-		//get name, price, size land, size build
+		//get name, price, size land, size build, date_soldout
 		$select = "*";
 		$table = "t_item";
 		$where = "item_cd = '" . $item_cd . "'";
@@ -844,6 +1154,16 @@ case "get_info_item":
 			$item_size_land = '';
 		}
 		
+		if ($RS_item[0]['date_soldout'] != '') {
+			$date_soldout = date('Y年m月d日', strtotime($RS_item[0]['date_soldout']));
+			$date1 = strtotime($RS_item[0]['date_soldout']);
+			$date2 = strtotime($RS_item[0]['date_regist']);
+			$date_soldout = $date_soldout . '<br>(' . floor(($date1 - $date2) / 86400) . '日)';
+		} else {
+			$date_soldout = '----';
+		}
+		
+		
 		//get cat_item
 		$select = 'cat_item_cd';
 		$table = 'r_item1';
@@ -851,6 +1171,15 @@ case "get_info_item":
 		$orderBy = '';
 	
 		Omi_get_rs($select, $table, 'cat_item', $where, $orderBy);
+		
+		//get seller
+		$select = 'seller_name';
+		$table = 'r_item1, m_seller';
+		$where = 'r_item1.item_cd = \'' . $item_cd . '\''
+				.' AND r_item1.seller_cd = m_seller.seller_cd';
+		$orderBy = '';
+	
+		Omi_get_rs($select, $table, 'seller', $where, $orderBy);
 		
 		//get size detail
 		//old database (before 27/06)
@@ -1064,6 +1393,8 @@ case "get_info_item":
 			'item_img' => $link_img_main_s,
 			'item_name' => $RS_item[0]['item_name'],
 			'item_price' => $RS_item[0]['item_price'],
+			'date_soldout' => $date_soldout,
+			'seller' => $RS_seller[0]['seller_name'],
 			'item_size_land' => $item_size_land,
 			'item_size_build' => $item_size_build,
 			'item_layout' => $layout,
@@ -1171,11 +1502,18 @@ case "get_info_item":
 	
 		if (isset($_POST['seller'])) {
 			$seller = $_POST['seller'];
-			$where = $where . ' AND r_item1.seller_cd IN (';
+			
+			$where = $where . ' AND ( r_item1.seller_cd IN (';
 			for ($i = 0; $i < count($seller); $i++) {
 				$where = $where . '\'' . $seller[$i] . '\', ';
 			}
 			$where = substr($where, 0, -2);
+			$where = $where . ')';
+			
+			if (in_array(0, $seller)) {
+				$where = substr($where, 0, -1);
+				$where = $where . ') OR r_item1.seller_cd >= 7';
+			}
 			$where = $where . ')';
 		}
 	
@@ -1360,6 +1698,7 @@ case "get_info_item":
 					$date = str_replace('-', '/', $date);
 					$date = date('Y-m-d',strtotime($date . $diff));
 					
+
 				} else if ($diff_days > 180) { //6-12 month get data per week
 					$date = date('Y-m-d', strtotime($countNumberItemChange[$i]['date']));
 					
@@ -1487,6 +1826,223 @@ case "get_info_item":
 		echo $result_json;
 		return 1;
 		/* --Ominext end-- */
+	break;
+	
+	case "get_info_group_item_on_demand":
+		/* --Ominext-- */
+		/* --get item in radius AJAX-- */
+		/* validate */
+		if (isset($_POST['from']) && isset($_POST['to'])) {
+			$from = $_POST['from'];
+			$to = $_POST['to'];
+			if ($from > $to) {
+				return 1;
+			}
+		}
+		//get all item	
+		$select_item_point = 't_item.item_cd, t_item.date_regist as regist, t_item.item_build,'
+							.' t_item.date_soldout, r_item1.cat_item_cd,'
+							.' r_item1.seller_cd, m_seller.seller_name, r_history.stat_cd, t_history.date_regist, t_history.*';
+		$table_item_point = 't_item, r_item1, r_history, t_history, m_seller';
+		$where_item_point = 'r_history.item_cd = t_item.item_cd'
+							.' AND r_item1.item_cd = t_item.item_cd'
+							.' AND r_item1.seller_cd = m_seller.seller_cd'
+							.' AND r_history.hist_cd = t_history.hist_cd'
+							.' AND t_item.flg_soldout = \'1\''
+							.' AND t_item.date_regist BETWEEN \'' . $from . '\' AND \'' . $to . '\'';
+		$orderBy_item_point = 'r_item1.seller_cd ASC, r_history.item_cd ASC, t_history.date_regist ASC';
+		
+		if (isset($_POST['cat_item'])) {
+			$cat_item = $_POST['cat_item'];
+			$where_item_point = $where_item_point . ' AND r_item1.cat_item_cd IN (';
+			for ($i = 0; $i < count($cat_item); $i++) {
+				$where_item_point = $where_item_point . '\'' . $cat_item[$i] . '\', ';
+			}
+	
+			$where_item_point = substr($where_item_point, 0, -2);
+			$where_item_point = $where_item_point . ')';
+		}
+	
+		if (isset($_POST['condition'])) {
+			$condition = $_POST['condition'];
+			$where_item_point = $where_item_point . ' AND r_item1.condition_cd IN (';
+			for ($i = 0; $i < count($condition); $i++) {
+				$where_item_point = $where_item_point . '\'' . $condition[$i] . '\', ';
+			}
+			$where_item_point = substr($where_item_point, 0, -2);
+			$where_item_point = $where_item_point . ')';
+		}
+		
+		if (isset($_POST['layout'])) {
+			$layout = $_POST['layout'];
+			$where_item_point = $where_item_point . ' AND r_item1.layout_cd IN (';
+			for ($i = 0; $i < count($layout); $i++) {
+				$where_item_point = $where_item_point . '\'' . $layout[$i] . '\', ';
+			}
+			$where_item_point = substr($where_item_point, 0, -2);
+			$where_item_point = $where_item_point . ')';
+		}
+		
+		if (isset($_POST['seller'])) {
+			$seller = $_POST['seller'];
+			
+			$where_item_point = $where_item_point . ' AND ( r_item1.seller_cd IN (';
+			for ($i = 0; $i < count($seller); $i++) {
+				$where_item_point = $where_item_point . '\'' . $seller[$i] . '\', ';
+			}
+			$where_item_point = substr($where_item_point, 0, -2);
+			$where_item_point = $where_item_point . ')';
+			
+			if (in_array(0, $seller)) {
+				$where_item_point = substr($where_item_point, 0, -1);
+				$where_item_point = $where_item_point . ') OR r_item1.seller_cd >= 7';
+			}
+			$where_item_point = $where_item_point . ')';
+		}	
+		
+		Omi_get_rs($select_item_point, $table_item_point, 'item_point', $where_item_point, $orderBy_item_point);
+		
+		$list_item = array();
+		
+		for($i = 0; $i < count($RS_item_point); $i++) {
+			$price_regist = null;
+			$price_soldout = null;
+			if ($RS_item_point[$i]['stat_cd'] == '1') {
+				$price_regist = $RS_item_point[$i]['hist_price'];
+			}
+			if ($RS_item_point[$i]['stat_cd'] == '6') {
+				$price_soldout = $RS_item_point[$i]['hist_price'];
+			}
+			
+			if ($RS_item_point[$i]['date_soldout'] <= $RS_item_point[$i]['item_build']) {
+				$diff = strtotime($RS_item_point[$i]['date_soldout']) - strtotime($RS_item_point[$i]['item_build']);
+				$time = ceil((($diff > 0) ? $diff : 0) /86400);
+			} else {
+				$diff = strtotime($RS_item_point[$i]['date_soldout']) - strtotime($RS_item_point[$i]['regist']);
+				$time = ceil((($diff > 0) ? $diff : 0) /86400);
+			}
+			
+			$list_item[] = array(	
+				'item_cd' => $RS_item_point[$i]['item_cd'],
+				'stat_cd' => $RS_item_point[$i]['stat_cd'],
+				'regist' => $RS_item_point[$i]['regist'],
+				'date_soldout' => $RS_item_point[$i]['date_soldout'],
+				'price_regist' => $price_regist,
+				'price_soldout' => $price_soldout,
+				'hist_regist' => $RS_item_point[$i]['date_regist'],
+				'seller_cd' => ($RS_item_point[$i]['seller_cd'] >= "7" || $RS_item_point[$i]['seller_cd'] == '')
+								? "7" : $RS_item_point[$i]['seller_cd'],
+				'seller_name' => $RS_item_point[$i]['seller_name'], 
+				'time' => $time,
+			);
+		}
+			
+		$items = array();
+		$history = array();
+		$price_regist = null;
+		$price_soldout = null;
+		for ($i = 0; $i < count($list_item); $i++) {
+			if ($list_item[$i]['item_cd'] == $list_item[$i - 1]['item_cd'] || $i == 0 ) {
+				$history[] = array(
+							'stat_cd' => $list_item[$i]['stat_cd'],
+							'hist_regist' => $list_item[$i]['hist_regist']
+								);
+				if ($list_item[$i]['stat_cd'] == 1) {
+					$price_regist = $list_item[$i]['price_regist'];
+				}
+				if ($list_item[$i]['stat_cd'] == 6) {
+					$price_soldout = $list_item[$i]['price_soldout'];
+				}
+			} else {
+				$items[] = array(
+						'item_cd' => $list_item[$i - 1]['item_cd'],
+						'regist' => $list_item[$i - 1]['regist'],
+						'date_soldout' => $list_item[$i - 1]['date_soldout'],
+						'price_regist' => $price_regist,
+						'price_soldout' => $price_soldout,
+						'time' => $list_item[$i - 1]['time'],
+						'seller_cd' => $list_item[$i - 1]['seller_cd'],
+						'seller_name' => $list_item[$i - 1]['seller_name'],
+						'history' => $history
+					);
+				
+				$price_regist = null;
+				$price_soldout = null;	
+				$history = null;
+				
+				if ($list_item[$i]['stat_cd'] == 1) {
+					$price_regist = $list_item[$i]['price_regist'];
+				}
+				if ($list_item[$i]['stat_cd'] == 6) {
+					$price_soldout = $list_item[$i]['price_soldout'];
+				}
+				$history[] = array(
+						'stat_cd' => $list_item[$i]['stat_cd'],
+						'hist_regist' => $list_item[$i]['hist_regist']
+							);
+			}
+		}
+		
+		$items[] = array(
+						'item_cd' => $list_item[$i - 1]['item_cd'],
+						'regist' => $list_item[$i - 1]['regist'],
+						'date_soldout' => $list_item[$i - 1]['date_soldout'],
+						'price_regist' => $price_regist,
+						'price_soldout' => $price_soldout,
+						'time' => $list_item[$i - 1]['time'],
+						'seller_cd' => $list_item[$i - 1]['seller_cd'],
+						'seller_name' => $list_item[$i - 1]['seller_name'],
+						'history' => $history
+					);		
+					
+		$result = array();
+		$array_item = array();
+		for ($i = 0; $i < count($items); $i++) {
+			if ($items[$i]['seller_cd'] == $items[$i - 1]['seller_cd'] || $i == 0 ) {
+				$array_item[] = array(
+									'item_cd' => $items[$i]['item_cd'],
+									'regist' => $items[$i]['regist'],
+									'date_soldout' => $items[$i]['date_soldout'],
+									'price_regist' => $items[$i]['price_regist'],
+									'price_soldout' => $items[$i]['price_soldout'],
+									'time' => $items[$i]['time'],
+									'history' => $items[$i]['history']
+								);
+			} else {
+				$result[] = array(
+						'seller_cd' => $items[$i - 1]['seller_cd'],
+						'seller_name' => $items[$i - 1]['seller_name'],
+						'items' => $array_item
+					);
+				
+				$array_item = null;
+				$array_item[] = array(
+									'item_cd' => $items[$i]['item_cd'],
+									'regist' => $items[$i]['regist'],
+									'date_soldout' => $items[$i]['date_soldout'],
+									'price_regist' => $items[$i]['price_regist'],
+									'price_soldout' => $items[$i]['price_soldout'],
+									'time' => $items[$i]['time'],
+									'history' => $items[$i]['history']
+								);				
+			}
+		}
+		$result[] = array(
+						'seller_cd' => $items[$i - 1]['seller_cd'],
+						'seller_name' => $items[$i - 1]['seller_name'],
+						'items' => $array_item
+					);
+					
+		if ($result[count($result) - 1]['seller_cd'] == "7") {
+			$result[count($result) - 1]['seller_name'] = 'その他';
+		}			
+		
+		//convert to json
+		$result_json = json_encode($result);
+		header('Content-type:application/json;charset=utf-8');
+		echo $result_json;
+		return 1;
+		/*--Ominext end--*/
 	break;
 
 	default :

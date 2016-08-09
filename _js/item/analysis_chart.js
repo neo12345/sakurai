@@ -1,11 +1,34 @@
 ﻿$(document).ready(function () {
+	window.market_rate = Array();
+	$('#analysis_tbl').hide();
+	$(".overlay").hide();
+	
+	
     $(".btn-aggregate").click(function (e) {
         e.preventDefault();
-        
+        $(".overlay").show();
         $('#error').html('');
         $('#chart_div').html('');
         
         google.charts.setOnLoadCallback(drawChart);
+		
+		window.market_rate = Array();
+		$('#analysis_tbl').show();
+		$('#name').html('<th width="12%"></th>');
+		$('#sale_number').html('<th>売出件数</th>');
+		$('#avg_price_regist').html('<th>平均売出価格</th>');
+		$('#avg_price_sold').html('<th>平均成約価格</th>');
+		$('#avg_time_sold').html('<th>平均売出期間</th>');
+		$('#avg_time_change_circle').html('<th>平均価格改定周期</th>');
+		$('#avg_down_price_rate').html('<th>平均値下率</th>');
+		$('#market_rate').html('<th>販売シェア率</th>');
+		
+		var analysis = analysisGroupItem();
+		insertAnalysisTable(analysis);
+		
+		drawPieChart()
+		
+		$(".overlay").fadeOut().delay(1500);
     });
 	
 	$(".btn-time").click(function (e) {
@@ -35,11 +58,31 @@
     });
 	
     $(window).resize(function(){
+		$(".overlay").show();					  
 		if ($('#chart_div').html() != '') {
   			drawChart();
+		
+			window.market_rate = Array();
+			$('#analysis_tbl').show();
+			$('#name').html('<th width="12%"></th>');
+			$('#sale_number').html('<th>売出件数</th>');
+			$('#avg_price_regist').html('<th>平均売出価格</th>');
+			$('#avg_price_sold').html('<th>平均成約価格</th>');
+			$('#avg_time_sold').html('<th>平均売出期間</th>');
+			$('#avg_time_change_circle').html('<th>平均価格改定周期</th>');
+			$('#avg_down_price_rate').html('<th>平均値下率</th>');
+			$('#market_rate').html('<th>販売シェア率</th>');
+			
+			var analysis = analysisGroupItem();
+			insertAnalysisTable(analysis);
+			
+			drawPieChart()
 		}
+		
+		$(".overlay").fadeOut().delay(1500);
 	});
-    
+	
+	
     function drawChart() {
         // Get data.
         var result;
@@ -77,17 +120,17 @@
             }
         })    
             
-        $.ajax({
-            url: "/item/?md=get_analysis",
-            type: 'POST',
-            data: formData,
-            dataType: "json",
-            async: false,
-            success: function (data) {
-                result = data;
-            },
-        });
-        console.log(result);
+	$.ajax({
+		url: "/item/?md=get_analysis",
+		type: 'POST',
+		data: formData,
+		dataType: "json",
+		async: false,
+		success: function (data) {
+			result = data;
+		}
+	});
+	
         if (!result) {
             var error = '<div class="alert alert-danger">見付かっていません。</div>';
             $('#error').html(error);
@@ -359,3 +402,375 @@
 	}
     }
     });
+
+function analysisGroupItem() {
+	//------------------------------------		
+	//search in radius
+	
+	var cat_item = new Array();
+	$.each($("input[name='cat_item[]']:checked"), function() {
+		cat_item.push($(this).val());
+	});
+	var condition = new Array();
+	$.each($("input[name='condition[]']:checked"), function() {
+		condition.push($(this).val());
+	});
+	var layout = new Array();
+	$.each($("input[name='layout[]']:checked"), function() {
+		layout.push($(this).val());
+	});
+	var seller = new Array();
+	$.each($("input[name='seller[]']:checked"), function() {
+		seller.push($(this).val());
+	});
+
+	
+	var formData = {
+		cat_item: cat_item,
+		condition: condition,
+		layout: layout,
+		seller: seller,
+		from: $("#from").val(),
+        to: $("#to").val(),
+	};		
+	
+	$.ajaxSetup({
+			headers: {
+				'X-CSRF-TOKEN': $('meta[name="_token"]').attr('content')
+			}
+		})
+	var result
+	$.ajax({
+		url: "/item/?md=get_info_group_item_on_demand",
+		type: 'POST',
+		data: formData,
+		dataType: "json",
+		async: false,
+		success: function (data) {
+			result = data;
+		}
+	});
+	return result
+}
+
+
+
+
+function insertAnalysisTable(analysis) {
+	for (var i = 0; i < analysis.length; i++) {	
+		var td_sale_number = '';
+		var count_item = 0;
+		for (var k = 0; k < analysis[i].items.length; k++){
+			var hist_regist = new Date(analysis[i].items[k].regist)
+				count_item++;
+		}
+		td_sale_number = td_sale_number + '<td>' + count_item 
+						+ '<input type="hidden" id="sale_number_'
+						+ analysis[i].seller_cd 
+						+ '" value="' + count_item + '" /></td>';
+		window.market_rate.push([analysis[i].seller_name, parseInt(count_item)]);
+	
+	
+		var td_avg_price_regist = '';
+		var sum = 0;
+		var count_item = 0;
+		for (var k = 0; k < analysis[i].items.length; k++){
+			if (analysis[i].items[k].price_regist != null) {
+				count_item++
+				sum = sum + parseFloat(analysis[i].items[k].price_regist);
+			}
+		}
+		var avg_price = Math.ceil(sum / count_item);
+		if (count_item == 0) {
+			avg_price = '----';	
+		}
+		td_avg_price_regist = td_avg_price_regist + '<td>' + avg_price 
+							+ '万円<input type="hidden" id="avg_price_regist_'
+							+ analysis[i].seller_cd
+							+ '" value="' + avg_price + '" /></td>';
+		
+		
+		var td_avg_price_soldout = '';
+		var sum = 0;
+		var count_item = 0;
+		for (var k = 0; k < analysis[i].items.length; k++){
+			if (analysis[i].items[k].price_soldout != null) {
+				count_item++;
+				sum = sum + parseInt(analysis[i].items[k].price_soldout);
+			}
+		}
+		var avg_price = Math.ceil(sum / count_item);
+		if (count_item == 0) {
+			avg_price = '----';	
+		}
+		td_avg_price_soldout = td_avg_price_soldout + '<td>' + avg_price 
+							+ '万円<input type="hidden" id="avg_price_soldout_'
+							+ analysis[i].seller_cd 
+							+ '" value="' + avg_price + '" /></td>';
+		
+		
+		
+		var time = '';
+		var sum = 0;
+		var count_item = 0;
+		for (var k = 0; k < analysis[i].items.length; k++){console.log(analysis[i].items[k].time);
+			count_item++;
+			sum = sum + parseInt(analysis[i].items[k].time);
+		}
+		var avg_time = Math.ceil(sum / count_item);
+		if (count_item == 0) {
+			avg_time = '----';	
+		}
+		time = time + '<td>' + avg_time 
+			 + '日間<input type="hidden" id="time_'
+			 + analysis[i].seller_cd 
+			 + '" value="' + avg_time + '" /></td>';
+		
+		
+		
+		var avg_time_change_price = '';
+		var sum = 0;
+		var count_item = 0;
+		for (var k = 0; k < analysis[i].items.length; k++){
+			for (var m = 0; m < analysis[i].items[k].history.length; m++) {
+				if (analysis[i].items[k].history[m].stat_cd == 2) {
+					for (var n = m - 1; n >= 0; n--) { 
+						if(analysis[i].items[k].history[m].stat_cd == "2" || analysis[i].items[k].history[m].stat_cd == "1") {
+							if (analysis[i].items[k].history[m].hist_regist != null && analysis[i].items[k].history[n].hist_regist != null) {
+								console.log(analysis[i].items[k].history[m].hist_regist);
+
+								var oneDay = 24*60*60*1000;
+								var firstDate = new Date(analysis[i].items[k].history[m].hist_regist);
+								var secondDate = new Date(analysis[i].items[k].history[n].hist_regist);
+								var diffDays = Math.round(Math.abs((firstDate.getTime() - secondDate.getTime())/(oneDay)));
+								
+								count_item++;
+								sum = sum + parseInt(diffDays);
+								break;
+							}
+						}
+					}
+				}
+			}
+		}
+		
+		var avg_time = Math.ceil(sum / count_item);
+		if (count_item == 0) {
+			avg_time = '----';	
+		}
+		avg_time_change_price = avg_time_change_price + '<td>' + avg_time 
+							  + '日間<input type="hidden" id="time_change_price_'
+							  + analysis[i].seller_cd 
+							  + '" value="' + avg_time + '" /></td>';
+
+		
+		
+		var avg_down_price_rate = '';
+		var sum = 0;
+		var count_item = 0;
+		for (var k = 0; k < analysis[i].items.length; k++){
+			if (analysis[i].items[k].price_regist != null && analysis[i].items[k].price_soldout != null)
+			sum = sum + parseFloat((analysis[i].items[k].price_regist - analysis[i].items[k].price_soldout) / analysis[i].items[k].price_regist);
+			count_item++;
+		}
+		
+		var rate = (sum / count_item * 100).toFixed(2);
+		if (count_item == 0) {
+			rate = '----';	
+		}
+		avg_down_price_rate = avg_down_price_rate + '<td>' + rate + '%' 
+							  + '<input type="hidden" id="down_price_rate_'
+							  + analysis[i].seller_cd 
+							  + '" value="' + rate + '" /></td>';
+		
+		
+		var market_rate = '';
+		// count item seller sold
+		var sum = 0;
+		var count_item = 0;
+		for (var k = 0; k < analysis[i].items.length; k++){
+			count_item++;
+		}
+		// count item all seller sold
+		var count_total_item = 0;	
+		for ( var n = 0; n < analysis.length; n++ ) {
+			var count_item_per_seller = 0;
+			for (var k = 0; k < analysis[n].items.length; k++){
+				var hist_regist = new Date(analysis[n].items[k].regist);
+				count_item_per_seller++;
+			}
+			count_total_item = count_total_item + count_item_per_seller;
+		}
+		
+		var rate = (count_item / count_total_item * 100).toFixed(2);
+		if (count_total_item == 0) {
+			rate = 0;	
+		}
+		market_rate = market_rate + '<td>' + rate + '%' 
+					+ '<input type="hidden" id="market_rate_'
+					+ analysis[i].seller_cd 
+					+ '" value="' + rate + '" /></td>';
+		
+		
+		$('#name').append('<th>' + analysis[i].seller_name + '</th>');
+		$('#sale_number').append(td_sale_number);
+		$('#avg_price_regist').append(td_avg_price_regist);
+		$('#avg_price_sold').append(td_avg_price_soldout);
+		$('#avg_time_sold').append(time);
+		$('#avg_time_change_circle').append(avg_time_change_price);
+		$('#avg_down_price_rate').append(avg_down_price_rate);
+		$('#market_rate').append(market_rate);
+	}
+	
+	//total
+	$('#name th:first-child').after('<th>地域の総合</th>');
+
+	var sale_number	= 0;
+	for (var i = 0; i < analysis.length ; i++) {
+		var per_seller = parseInt($('#sale_number_' + analysis[i].seller_cd).val());
+		if (per_seller) {
+			sale_number = sale_number + per_seller;
+		}
+	}
+	$('#sale_number th:first-child').after('<td>' + sale_number 
+							 + '<input id="sale_number_all" type="hidden" value="' + sale_number + '" /></td>');
+
+	
+	var avg_price_regist = 0;
+	for (var i = 0; i < analysis.length ; i++) {
+		var per_seller = 0;
+		per_seller = parseInt($('#avg_price_regist_' + analysis[i].seller_cd).val())
+					   * parseInt($('#sale_number_' + analysis[i].seller_cd).val())
+					   ;
+		
+		if (per_seller) {
+			avg_price_regist = avg_price_regist + per_seller;
+		}
+	}
+	
+	avg_price_regist = Math.ceil(avg_price_regist / $('#sale_number_all').val());
+	if ($('#sale_number_all').val() == 0) {
+		avg_price_regist = '----';
+	}
+	$('#avg_price_regist th:first-child').after('<td>' + avg_price_regist + '万円</td>');
+		
+	
+
+	var avg_price_sold = 0;
+	for (var i = 0; i < analysis.length ; i++) {
+		var per_seller = 0;
+		per_seller = parseInt($('#avg_price_soldout_' + analysis[i].seller_cd).val())
+					   * parseInt($('#sale_number_' + analysis[i].seller_cd).val())
+					   ;
+		
+		if (per_seller) {
+			avg_price_sold = avg_price_sold + per_seller;
+		}
+	}
+	
+	avg_price_sold = Math.ceil(avg_price_sold / $('#sale_number_all').val());
+	if ($('#sale_number_all').val() == 0) {
+		avg_price_sold = '----';
+	}
+	
+	$('#avg_price_sold th:first-child').after('<td>' + avg_price_sold + '万円</td>');
+
+
+	
+	var time = 0;
+	for (var i = 0; i < analysis.length ; i++) {
+		var per_seller = 0;
+		per_seller = parseInt($('#time_' + analysis[i].seller_cd).val())
+					   * parseInt($('#sale_number_' + analysis[i].seller_cd).val())
+					   ;
+		
+		if (per_seller) {
+			time = time + per_seller;
+		}
+	}
+	
+	time = Math.ceil(time / $('#sale_number_all').val());
+	if ($('#sale_number_all').val() == 0) {
+		time = '----';
+	}
+	
+	$('#avg_time_sold th:first-child').after('<td>' + time + '日間</td>');
+
+
+	
+	var avg_time_change_circle = 0;
+	var sum = 0;
+	var count_item = 0;
+	for (var i = 0; i < analysis.length ; i++) {
+		for (var k = 0; k < analysis[i].items.length; k++){
+			var hist_regist = new Date(analysis[i].items[k].date_soldout);		
+			for (var m = 0; m < analysis[i].items[k].history.length; m++) {
+				if (analysis[i].items[k].history[m].stat_cd == 2) {
+					for (var n = m - 1; n >= 0; n--) { 
+						if(analysis[i].items[k].history[m].stat_cd == "2" ||
+							analysis[i].items[k].history[m].stat_cd == "1") {
+							if (analysis[i].items[k].history[m].hist_regist != null && analysis[i].items[k].history[n].hist_regist != null) {
+								var oneDay = 24*60*60*1000;
+								var firstDate = new Date(analysis[i].items[k].history[m].hist_regist);
+								var secondDate = new Date(analysis[i].items[k].history[n].hist_regist);
+								var diffDays = Math.round(Math.abs((firstDate.getTime() - secondDate.getTime())/(oneDay)));
+								
+								count_item++;
+								sum = sum + parseInt(diffDays);
+								break;
+							}
+						}
+					}
+				}
+			}
+		}
+	}
+	
+	avg_time_change_circle = Math.ceil(sum / count_item);
+	if (count_item == 0) {
+		avg_time_change_circle = '----';
+	}
+	
+	$('#avg_time_change_circle th:first-child').after('<td>' + avg_time_change_circle + '日間</td>');
+	
+	
+	var down_price_rate = 0;
+	for (var i = 0; i < analysis.length ; i++) {
+		var per_seller = 0;
+		per_seller = parseFloat($('#down_price_rate_' + analysis[i].seller_cd).val())
+					   * parseInt($('#sale_number_' + analysis[i].seller_cd).val())
+					   ;
+		
+		if (per_seller) {
+			down_price_rate = down_price_rate + per_seller;
+		}
+	}
+	
+	down_price_rate = (down_price_rate / $('#sale_number_all').val()).toFixed(2);
+	if ($('#sale_number_all').val() == 0) {
+		down_price_rate = '----';
+	}
+	$('#avg_down_price_rate th:first-child').after('<td>' + down_price_rate + '%</td>');
+	
+	$('#market_rate th:first-child').after('<td>100%</td>');
+}
+
+
+
+
+function drawPieChart() {
+	var data = new google.visualization.DataTable();
+	data.addColumn('string', 'Seller');
+    data.addColumn('number', '販売シェア率');	
+    
+	for (var i = 0; i < window.market_rate.length; i++) {
+		 data.addRows([[window.market_rate[i][0], window.market_rate[i][1]]]);	
+	}
+        var options = {
+          title: '販売シェア率',
+          is3D: true,
+        };
+
+        var chart = new google.visualization.PieChart(document.getElementById('piechart_3d'));
+        chart.draw(data, options);
+      }

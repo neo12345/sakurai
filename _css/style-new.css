@@ -265,7 +265,7 @@
 	position: absolute;
 	width: 300px;
 	top: 5px;
-	right: 20px;
+	right: 3%;
 	z-index: 1000;
 	padding: 20px 20px
 }
@@ -419,4 +419,20 @@
 	background-color: transparent;
 	border:none;
 	padding: 1px 1px;
+}
+
+.right .form-compare-item {
+	border-collapse: collapse;
+	border-spacing: 0;
+	width:100%;
+	font-size: 16px;
+}
+
+.right .form-compare-item td{
+	vertical-align:top;
+	padding: 5px 10px;
+}
+
+.right .form-compare-item th {
+	background-color:#e9e3d5;
 }

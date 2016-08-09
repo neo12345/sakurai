@@ -62,7 +62,15 @@
 						   		for ($i = 0; $i < $count_history; $i++) { 
 							?>
 								<tr>
-                                    <td><?php echo date('Y/m/d', strtotime($RS_history[$i]['date_regist'])); ?></td>
+                                    <td>
+										<?php 
+											if ($RS_history[$i]['date_regist']) {
+												echo date('Y/m/d', strtotime($RS_history[$i]['date_regist'])); 
+											} else {
+												echo '----';
+											}
+										?>
+									</td>
                                     <td>
 									<?php
 										if ($RS_history[$i]['stat_name'] == '販売開始') {
@@ -595,14 +603,20 @@
 				<table class="form-compare-item" border="1" width="100%">
 					<tr>
 						<th style="width:10%;"></th>
-						<td id="item1_img" style="width:18%;"></td>
-						<td id="item2_img" style="width:18%;"></td>
-						<td id="item3_img" style="width:18%;"></td>
-						<td id="item4_img" style="width:18%;"></td>
-						<td id="item5_img" style="width:18%;"></td>
+						<td id="item0_img" style="width:15%;background-color:#FBEFEF; vertical-align:bottom;">
+							<img src="<?php echo $link_img_main_s; ?>" width="100%">
+						</td>
+						<td id="item1_img" style="width:15%;"></td>
+						<td id="item2_img" style="width:15%;"></td>
+						<td id="item3_img" style="width:15%;"></td>
+						<td id="item4_img" style="width:15%;"></td>
+						<td id="item5_img" style="width:15%;"></td>
 					</tr>
 					<tr>
 						<th>物件名</th>
+						<td id="item0_name" style="background-color:#FBEFEF">
+							<?php echo $RS_item[0]['item_name'];?>
+						</td>
 						<td id="item1_name"></td>
 						<td id="item2_name"></td>
 						<td id="item3_name"></td>
@@ -611,6 +625,9 @@
 					</tr>
 					<tr>
 						<th>価格</th>
+						<td id="item0_price" style="background-color:#FBEFEF">
+							<?php echo $RS_item[0]['item_price'];?>万円（税込）
+						</td>
 						<td id="item1_price"></td>
 						<td id="item2_price"></td>
 						<td id="item3_price"></td>
@@ -618,7 +635,53 @@
 						<td id="item5_price"></td>
 					</tr>
 					<tr>
+						<th style="width:10%;">成約日<br>（売出期間）</th>
+						<td id="item0_date_soldout" style="background-color:#FBEFEF">
+							<?php
+								if($RS_item[0]['flg_soldout'] == 1) {
+									echo date('Y年m月d日', strtotime($RS_item[0]['date_soldout']));
+									$date1 = strtotime($RS_item[0]['date_soldout']);
+									$date2 = strtotime($RS_item[0]['date_regist']);
+									echo "<br>(";
+									echo floor(($date1 - $date2) / 86400);
+									echo "日)";
+								} else {
+									echo '----';
+								}
+							?>
+						</td>
+						<td id="item1_date_soldout" style="width:15%;"></td>
+						<td id="item2_date_soldout" style="width:15%;"></td>
+						<td id="item3_date_soldout" style="width:15%;"></td>
+						<td id="item4_date_soldout" style="width:15%;"></td>
+						<td id="item5_date_soldout" style="width:15%;"></td>
+					</tr>
+					<tr>
+						<th style="width:10%;">売主</th>
+						<td id="item0_seller" style="background-color:#FBEFEF">
+							<?php 
+								for($i = 0; $i < count($RS_seller); $i++) {
+									echo $RS_seller[$i]['seller_name'];
+									echo '<br>';
+								}
+							?>
+						</td>
+						<td id="item1_seller" style="width:15%;"></td>
+						<td id="item2_seller" style="width:15%;"></td>
+						<td id="item3_seller" style="width:15%;"></td>
+						<td id="item4_seller" style="width:15%;"></td>
+						<td id="item5_seller" style="width:15%;"></td>
+					</tr>
+					<tr>
 						<th>土地面積</th>
+						<td id="item0_size_land" style="background-color:#FBEFEF">
+							<?php
+								if($RS_item[0]['item_size_land']) {
+									echo $RS_item[0]['item_size_land'] . '㎡（';
+									echo round($RS_item[0]['item_size_land'] * 0.302, 2) . '坪）';
+								}
+							?>	
+						</td>
 						<td id="item1_size_land"></td>
 						<td id="item2_size_land"></td>
 						<td id="item3_size_land"></td>
@@ -627,6 +690,24 @@
 					</tr>
 					<tr>
 						<th>建築面積</th>
+						<td id="item0_size_build" style="background-color:#FBEFEF">
+							<?php 
+								if($RS_cat_item[0]['cat_item_cd'] == 1) {
+									echo $RS_item[0]['item_size_build'] . '㎡（';								
+								    echo round($RS_item[0]['item_size_build'] * 0.302, 2) . '坪）';
+								} else {
+									echo $RS_item[0]['item_size_floor'] . '㎡（';								
+								    echo round($RS_item[0]['item_size_floor'] * 0.302, 2) . '坪）';
+								}	
+															
+								if($RS_size_detail[0]) {
+									for ($i = 0; $i < count($RS_size_detail) ; $i++) {
+										echo '<br>' . $RS_size_detail[$i]['size_detail_name'];
+										echo '	: '. $RS_size_detail[$i]['size_detail_size'] . '㎡';
+									}
+								}
+							?>
+						</td>
 						<td id="item1_size_build"></td>
 						<td id="item2_size_build"></td>
 						<td id="item3_size_build"></td>
@@ -635,6 +716,13 @@
 					</tr>
 					<tr>
 						<th>間取り</th>
+						<td id="item0_layout" style="background-color:#FBEFEF">
+							<?php
+								for($i = 0; $i < count($RS_layout); $i++) {
+									echo $RS_layout[$i]['layout_name'];
+								}
+							?>
+						</td>
 						<td id="item1_layout"></td>
 						<td id="item2_layout"></td>
 						<td id="item3_layout"></td>
@@ -643,6 +731,19 @@
 					</tr>
 					<tr>
 						<th>交通</th>
+						<td id="item0_pubtrans" style="background-color:#FBEFEF">
+							<?php
+								for ($i = 0; $i < count($RS_pubtrans); $i++) {
+									echo $RS_pubtrans[$i]['pubtrans_name'];
+									echo ' 「';
+									echo $RS_pubtrans[$i]['stop_name'];
+									echo '」 駅まで';
+									echo $RS_pubtrans[$i]['transway_name'];
+									echo $RS_pubtrans[$i]['transtime'];
+									echo '分<br>';
+								} 
+							?>
+						</td>
 						<td id="item1_pubtrans"></td>
 						<td id="item2_pubtrans"></td>
 						<td id="item3_pubtrans"></td>
@@ -651,6 +752,15 @@
 					</tr>
 					<tr>
 						<th>接道</th>
+						<td id="item0_road" style="background-color:#FBEFEF">
+							<?php
+								for ($i = 0; $i < count($RS_road); $i++) { 
+									echo $RS_road[$i]['dire_name'] . '側';
+									echo $RS_road[$i]['along_size'] . 'm';
+									echo $RS_road[$i]['road_name'] . '<br>';
+								}
+							?>
+						</td>
 						<td id="item1_road"></td>
 						<td id="item2_road"></td>
 						<td id="item3_road"></td>
@@ -659,6 +769,34 @@
 					</tr>
 					<tr>
 						<th>学校</th>
+						<td id="item0_school" style="background-color:#FBEFEF">
+							<?php 
+								if($RS_school_pri[0]) {
+									for($i = 0; $i < count($RS_school_pri); $i++) {
+										echo $RS_school_pri[0]['school_pri_name'];
+										echo '	: ';
+										echo $RS_item[0]['item_dist_pri'] . 'm';
+										echo '(' . $RS_item[0]['item_min_pri'] . '分）';
+										echo '<br>';
+									}
+								}
+								if($RS_school_jun[0]) {
+									for($i = 0; $i < count($RS_school_jun); $i++) {
+										echo $RS_school_jun[0]['school_jun_name'];
+										echo '	: ';
+										echo $RS_item[0]['item_dist_jun'] . 'm';
+										echo '(' . $RS_item[0]['item_min_jun'] . '分）';
+										echo '<br>';
+									}
+								}
+								if($RS_cat_schigh[0]) {
+									for($i = 0; $i < count($RS_cat_schigh); $i++) {
+										echo '高校学区	: ';
+										echo $RS_cat_schigh[0]['cat_schigh_name'];
+									}
+								}
+							?>
+						</td>
 						<td id="item1_school"></td>
 						<td id="item2_school"></td>
 						<td id="item3_school"></td>
@@ -667,13 +805,66 @@
 					</tr>
 					<tr>
 						<th>設備</th>
+						<td id="item0_equip" style="background-color:#FBEFEF">
+							<?php 
+								for($i = 0; $i < count($RS_fuel); $i++) {
+									echo 'ガス	:';
+									echo $RS_fuel[$i]['fuel_name'];
+									echo '<br/>';
+								}
+								
+								for($i = 0; $i < count($RS_water); $i++) {
+									echo '上水道	：';
+									echo $RS_water[$i]['water_name'];
+									echo '<br/>';
+								}
+								
+								for($i = 0; $i < count($RS_sewer); $i++) {
+									echo '下水道	：';
+									echo $RS_sewer[$i]['sewer_name'];
+									echo '<br/>';
+								}
+							?>		
+						</td>
 						<td id="item1_equip"></td>
 						<td id="item2_equip"></td>
 						<td id="item3_equip"></td>
 						<td id="item4_equip"></td>
 						<td id="item5_equip"></td>
 					</tr>
+				</table>				
+				<br>
+				<br>
+				<div class="strike">
+					<span>選択された地域におけるデータ</span>
+				</div>
+				<br>
+				
+				<table class="form-compare-item" border="1" width="100%" id="allSeller">
+					<tr id="name">
+						<th style="width:12%;">地域の総合</th>
+					</tr>
+					<tr id="sale_number">
+						<th>売出件数</th>
+					</tr>
+					<tr id="avg_price_regist">
+						<th>平均売出価格</th>
+					</tr>
+					<tr id="avg_price_sold">
+						<th>平均成約価格</th>
+					</tr>
+					<tr id="avg_time_sold">
+						<th>平均売出期間</th>
+					</tr>
+					<tr id="avg_time_change_circle">
+						<th>平均価格改定周期</th>
+					</tr>
+					<tr id="avg_down_price_rate">
+						<th>平均値下率</th>
+					</tr>
 				</table>
+				<br>
+				<div id="tbl-analysis"></div>
             <!--/line-chart--></div>
         <!--/tabl-box-analysis--></div>
     </div>

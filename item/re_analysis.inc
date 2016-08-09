@@ -1,25 +1,6 @@
-﻿<!--STYLE CSS NEW-->
-<link href="/_css/style-new.css" rel="stylesheet" type="text/css">
-<!--Load jquery, bootstrap-->
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.10.1/jquery.min.js"></script>
-<script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
-
-<!--jqueryUI datepicker-->
-<script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.11.4/jquery-ui.min.js"></script>
-<script src="http://ajax.googleapis.com/ajax/libs/jqueryui/1/i18n/jquery.ui.datepicker-ja.min.js" type="text/javascript" charset="utf-8"></script>
-<link href="http://ajax.googleapis.com/ajax/libs/jqueryui/1/themes/redmond/jquery-ui.css" rel="stylesheet" type="text/css" />
-
-<!--Load google chart-->
-<script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
-<script type="text/javascript">google.charts.load('current', {'packages': ['corechart']});</script>
-<script src="/_js/item/analysis_chart.js" type="text/javascript"></script>
-
-<script>
-   $(function() {
-     $("#from").datepicker({ dateFormat: 'yy/mm/dd', changeMonth: true, changeYear: true });
-     $("#to").datepicker({ dateFormat: 'yy/mm/dd', changeMonth: true, changeYear: true });
-   });
- </script>
+﻿<div class="overlay">
+	<img id="img_loading" src="/_img/common/loading.gif"/>
+</div>
 
 
 <div class="right">
@@ -149,7 +130,7 @@
 				<tr>
 				<?php 
 					$count = 0;
-					for($i = 0; $i < count($RS_seller) ; $i++) {				
+					for($i = 0; $i < 6 ; $i++) {				
 						if($count % 8 == 0 && $count != 0) {
 							echo '</tr><tr>';
 						}
@@ -160,6 +141,7 @@
 						echo '</td>';
 					}
 				?>
+					<td class="checkbox"><input type="checkbox" value="0" name="seller[]"></td><td class="analysis-name">その他</td>
 				</tr>
 			</table>
             <div class="line-chart">
@@ -208,12 +190,73 @@
 				
 				<div id="error"></div>
 				
-                <div class="view-chart">
+                <div class="view-chart" id="dashboard">
 					<input type="hidden" id="item_cd" value="<?php echo $RS_analysis[0]['item_cd'];?>">
                     <div id="chart_div"></div>
+					
+					<br>
+					<div id="analysis_tbl">
+						<div class="strike">
+							<span>売主別集計</span>
+						</div>
+						<br>
+						
+						<table class="form-compare-item" border="1" width="100%">
+							<tr id="name">
+								<th width="12%"></th>
+							</tr>
+							<tr id="sale_number">
+							<th>売出件数</th>
+							</tr>
+							<tr id="avg_price_regist">
+								<th>平均売出価格</th>
+							</tr>
+							<tr id="avg_price_sold">
+								<th>平均成約価格</th>
+							</tr>
+							<tr id="avg_time_sold">
+								<th>平均売出期間</th>
+							</tr>
+							<tr id="avg_time_change_circle">
+								<th>平均価格改定周期</th>
+							</tr>
+							<tr id="avg_down_price_rate">
+								<th>平均値下率</th>
+							</tr>
+							<tr id="market_rate">
+								<th>販売シェア率</th>
+							</tr>
+						</table>
+						
+						<div id="piechart_3d" style="width: 100%; height: 500px;"></div>
+					</div>
 				</div>
             <!--/line-chart--></div>
         </div>
     </div>
   </div>
   <meta name="_token" content="{!! csrf_token() !!}" />
+  
+  
+<!--STYLE CSS NEW-->
+<link href="/_css/style-new.css" rel="stylesheet" type="text/css">
+<!--Load jquery, bootstrap-->
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.10.1/jquery.min.js"></script>
+<script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
+
+<!--jqueryUI datepicker-->
+<script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.11.4/jquery-ui.min.js"></script>
+<script src="http://ajax.googleapis.com/ajax/libs/jqueryui/1/i18n/jquery.ui.datepicker-ja.min.js" type="text/javascript" charset="utf-8"></script>
+<link href="http://ajax.googleapis.com/ajax/libs/jqueryui/1/themes/redmond/jquery-ui.css" rel="stylesheet" type="text/css" />
+
+<!--Load google chart-->
+<script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+<script type="text/javascript">google.charts.load('current', {'packages': ['corechart', 'controls']});</script>
+<script src="/_js/item/analysis_chart.js" type="text/javascript"></script>
+
+<script>
+   $(function() {
+     $("#from").datepicker({ dateFormat: 'yy/mm/dd', changeMonth: true, changeYear: true });
+     $("#to").datepicker({ dateFormat: 'yy/mm/dd', changeMonth: true, changeYear: true });
+   });
+</script>
