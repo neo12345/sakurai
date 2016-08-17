@@ -283,6 +283,47 @@
 						
 						<table border='0' width="100%"></table>
 						</div>
+						
+						<br><br>
+						
+						<div id="piechart" style="background-color: #D5D5D5; width: 100%">
+							<div style="padding: 10px; font-size: 16px; color: black;"><b>成約件数シェア率</b></div>
+							<div id="soldout_piechart_3d" style="width: 450px; height: 300px; float: left;"></div>
+							<div id="soldout_piechart_3d_1" style="width: 450px; height: 300px; float: left;"></div>
+							<div id="soldout_piechart_3d_2" style="width: 450px; height: 300px; float: left;"></div>
+							<div id="soldout_piechart_3d_3" style="width: 450px; height: 300px; float: left;"></div>
+							<div id="soldout_piechart_3d_4" style="width: 450px; height: 300px; float: left;"></div>
+							<div id="soldout_piechart_3d_5" style="width: 450px; height: 300px; float: left;"></div>
+							<div id="soldout_piechart_3d_6" style="width: 450px; height: 300px; float: left;"></div>
+							<div id="soldout_piechart_3d_7" style="width: 450px; height: 300px; float: left;"></div>
+							<div id="soldout_piechart_3d_8" style="width: 450px; height: 300px; float: left;"></div>
+							<div id="soldout_piechart_3d_9" style="width: 450px; height: 300px; float: left;"></div>
+							<div id="soldout_piechart_3d_10" style="width: 450px; height: 300px; float: left;"></div>
+							<div id="soldout_piechart_3d_11" style="width: 450px; height: 300px; float: left;"></div>
+							<div id="soldout_piechart_3d_12" style="width: 450px; height: 300px; float: left;"></div>
+							<div id="soldout_piechart_3d_13" style="width: 450px; height: 300px; float: left;"></div>
+							<div id="soldout_piechart_3d_14" style="width: 450px; height: 300px; float: left;"></div>
+							<div id="soldout_piechart_3d_15" style="width: 450px; height: 300px; float: left;"></div>
+							<div id="soldout_piechart_3d_16" style="width: 450px; height: 300px; float: left;"></div>
+							<div id="soldout_piechart_3d_17" style="width: 450px; height: 300px; float: left;"></div>
+							<div id="soldout_piechart_3d_18" style="width: 450px; height: 300px; float: left;"></div>
+							<div id="soldout_piechart_3d_19" style="width: 450px; height: 300px; float: left;"></div>
+							<div id="soldout_piechart_3d_20" style="width: 450px; height: 300px; float: left;"></div>
+							<div id="soldout_piechart_3d_21" style="width: 450px; height: 300px; float: left;"></div>
+							<div id="soldout_piechart_3d_22" style="width: 450px; height: 300px; float: left;"></div>
+							<div id="soldout_piechart_3d_23" style="width: 450px; height: 300px; float: left;"></div>
+							<div id="soldout_piechart_3d_24" style="width: 450px; height: 300px; float: left;"></div>
+							<div id="soldout_piechart_3d_25" style="width: 450px; height: 300px; float: left;"></div>
+							<div id="soldout_piechart_3d_26" style="width: 450px; height: 300px; float: left;"></div>
+							<div id="soldout_piechart_3d_27" style="width: 450px; height: 300px; float: left;"></div>
+							<div id="soldout_piechart_3d_28" style="width: 450px; height: 300px; float: left;"></div>
+							<div id="soldout_piechart_3d_29" style="width: 450px; height: 300px; float: left;"></div>
+							<div id="soldout_piechart_3d_30" style="width: 450px; height: 300px; float: left;"></div>
+							<div id="soldout_piechart_3d_31" style="width: 450px; height: 300px; float: left;"></div>
+							<div id="soldout_piechart_3d_32" style="width: 450px; height: 300px; float: left;"></div>
+						
+						<table border='0' width="100%"></table>
+						</div>
 
 						
 					</div>
