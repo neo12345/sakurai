@@ -623,6 +623,41 @@ switch($F_md){
 		/* --Ominext end-- */
 	break;
 	
+	case "get_item_info_by_item_cd":
+		/*--Ominext--*/
+		//get item's info by item_cd AJAX
+		//get item cd
+		$item_cd = $_POST['item_cd'];
+		//query
+		$select_item = 't_item.item_cd, t_item.item_name, t_history.date_regist as date_regist, t_history.*, m_seller.seller_name';
+		$table_item = 't_item, r_history, t_history, r_item1, m_seller';
+		$where_item = 't_item.item_cd = r_history.item_cd AND '
+			. 'r_history.hist_cd = t_history.hist_cd AND '
+			. 'm_seller.seller_cd = r_item1.seller_cd AND '
+			. 't_item.item_cd = r_history.item_cd AND '
+			. 't_item.item_cd = r_item1.item_cd AND '
+			. ' t_item.item_cd = \'' . $item_cd . '\'';
+		$orderBy_item = 'item_cd ASC, date_regist ASC';
+		
+		Omi_get_rs($select_item, $table_item, 'item', $where_item, $orderBy_item);
+		
+		$item = [
+					'item_cd' => $RS_item[count($RS_item) -1]['item_cd'], 
+					'item_name' => $RS_item[count($RS_item) -1]['item_name'],
+					'seller' => $RS_item[count($RS_item) -1]['seller_name'],
+					'date_regist' => $RS_item[count($RS_item) -1]['date_regist'],
+					'hist_price' => $RS_item[count($RS_item) -1]['hist_price']
+					];
+							
+							
+		//convert to json
+		$item_json = json_encode($item);
+		header('Content-type:application/json;charset=utf-8');
+		echo $item_json;
+		return 1;
+		/* --Ominext end-- */
+	break;
+	
 	case "get_item_in_area":
 		/* --Ominext-- */
 		/* --get item in radius AJAX-- */
@@ -1147,6 +1182,8 @@ case "get_info_item":
 		
 		Omi_get_rs($select, $table, 'item', $where, $orderBy);
 		
+		$item_name = $RS_item[0]['item_name'] . '<br>' . $RS_item[0]['item_name_sub'];
+		
 		if ($RS_item[0]['item_size_land'] != null) {
 			$item_size_land = $RS_item[0]['item_size_land'] . '㎡（';
 			$item_size_land = $item_size_land . round($RS_item[0]['item_size_land'] * 0.302, 2) . '坪）';
@@ -1391,7 +1428,7 @@ case "get_info_item":
 		$details[] = array(
 			'item_cd' => $item_cd,
 			'item_img' => $link_img_main_s,
-			'item_name' => $RS_item[0]['item_name'],
+			'item_name' => $item_name,
 			'item_price' => $RS_item[0]['item_price'],
 			'date_soldout' => $date_soldout,
 			'seller' => $RS_seller[0]['seller_name'],
@@ -1455,7 +1492,7 @@ case "get_info_item":
 			$where = 't_item.item_cd = r_history.item_cd AND '
 				. 'r_history.hist_cd = t_history.hist_cd AND '
 				. 't_item.item_cd = r_item1.item_cd AND '
-				. 'r_history.stat_cd = \'4\'';
+				. 'r_history.stat_cd = \'6\'';
 		} else { //avg price - regist
 			$select = 't_history.date_regist AS date, SUM(t_history.hist_price) AS sum, COUNT(t_item.item_cd) as count';
 			$table = 't_item, r_history, t_history, r_item1';
@@ -1698,7 +1735,6 @@ case "get_info_item":
 					$date = str_replace('-', '/', $date);
 					$date = date('Y-m-d',strtotime($date . $diff));
 					
-
 				} else if ($diff_days > 180) { //6-12 month get data per week
 					$date = date('Y-m-d', strtotime($countNumberItemChange[$i]['date']));
 					
@@ -1841,16 +1877,26 @@ case "get_info_item":
 		}
 		//get all item	
 		$select_item_point = 't_item.item_cd, t_item.date_regist as regist, t_item.item_build,'
-							.' t_item.date_soldout, r_item1.cat_item_cd,'
+							.' t_item.date_soldout, r_item1.cat_item_cd, r_item1.city_cd,'
 							.' r_item1.seller_cd, m_seller.seller_name, r_history.stat_cd, t_history.date_regist, t_history.*';
 		$table_item_point = 't_item, r_item1, r_history, t_history, m_seller';
 		$where_item_point = 'r_history.item_cd = t_item.item_cd'
 							.' AND r_item1.item_cd = t_item.item_cd'
 							.' AND r_item1.seller_cd = m_seller.seller_cd'
 							.' AND r_history.hist_cd = t_history.hist_cd'
-							.' AND t_item.flg_soldout = \'1\''
+							//.' AND t_item.flg_soldout = \'1\''
 							.' AND t_item.date_regist BETWEEN \'' . $from . '\' AND \'' . $to . '\'';
 		$orderBy_item_point = 'r_item1.seller_cd ASC, r_history.item_cd ASC, t_history.date_regist ASC';
+		
+		if (isset($_POST['city'])) {
+			$city = $_POST['city'];
+			$where_item_point = $where_item_point . ' AND r_item1.city_cd IN (';
+			for ($i = 0; $i < count($city); $i++) {
+				$where_item_point = $where_item_point . '\'' . $city[$i] . '\', ';
+			}
+			$where_item_point = substr($where_item_point, 0, -2);
+			$where_item_point = $where_item_point . ')';
+		}
 		
 		if (isset($_POST['cat_item'])) {
 			$cat_item = $_POST['cat_item'];
@@ -1926,13 +1972,15 @@ case "get_info_item":
 				'item_cd' => $RS_item_point[$i]['item_cd'],
 				'stat_cd' => $RS_item_point[$i]['stat_cd'],
 				'regist' => $RS_item_point[$i]['regist'],
+				'date_build' => $RS_item_point[$i]['item_build'],
 				'date_soldout' => $RS_item_point[$i]['date_soldout'],
 				'price_regist' => $price_regist,
 				'price_soldout' => $price_soldout,
 				'hist_regist' => $RS_item_point[$i]['date_regist'],
 				'seller_cd' => ($RS_item_point[$i]['seller_cd'] >= "7" || $RS_item_point[$i]['seller_cd'] == '')
 								? "7" : $RS_item_point[$i]['seller_cd'],
-				'seller_name' => $RS_item_point[$i]['seller_name'], 
+				'seller_name' => $RS_item_point[$i]['seller_name'],
+				'city_cd' => $RS_item_point[$i]['city_cd'],
 				'time' => $time,
 			);
 		}
@@ -1957,12 +2005,14 @@ case "get_info_item":
 				$items[] = array(
 						'item_cd' => $list_item[$i - 1]['item_cd'],
 						'regist' => $list_item[$i - 1]['regist'],
+						'date_build' => $list_item[$i - 1]['date_build'],
 						'date_soldout' => $list_item[$i - 1]['date_soldout'],
 						'price_regist' => $price_regist,
 						'price_soldout' => $price_soldout,
 						'time' => $list_item[$i - 1]['time'],
 						'seller_cd' => $list_item[$i - 1]['seller_cd'],
 						'seller_name' => $list_item[$i - 1]['seller_name'],
+						'city_cd' => $list_item[$i - 1]['city_cd'],
 						'history' => $history
 					);
 				
@@ -1986,12 +2036,14 @@ case "get_info_item":
 		$items[] = array(
 						'item_cd' => $list_item[$i - 1]['item_cd'],
 						'regist' => $list_item[$i - 1]['regist'],
+						'date_build' => $list_item[$i - 1]['date_build'],
 						'date_soldout' => $list_item[$i - 1]['date_soldout'],
 						'price_regist' => $price_regist,
 						'price_soldout' => $price_soldout,
 						'time' => $list_item[$i - 1]['time'],
 						'seller_cd' => $list_item[$i - 1]['seller_cd'],
 						'seller_name' => $list_item[$i - 1]['seller_name'],
+						'city_cd' => $list_item[$i - 1]['city_cd'],
 						'history' => $history
 					);		
 					
@@ -2002,10 +2054,12 @@ case "get_info_item":
 				$array_item[] = array(
 									'item_cd' => $items[$i]['item_cd'],
 									'regist' => $items[$i]['regist'],
+									'date_build' => $items[$i]['date_build'],
 									'date_soldout' => $items[$i]['date_soldout'],
 									'price_regist' => $items[$i]['price_regist'],
 									'price_soldout' => $items[$i]['price_soldout'],
 									'time' => $items[$i]['time'],
+									'city_cd' => $items[$i]['city_cd'],
 									'history' => $items[$i]['history']
 								);
 			} else {
@@ -2019,10 +2073,12 @@ case "get_info_item":
 				$array_item[] = array(
 									'item_cd' => $items[$i]['item_cd'],
 									'regist' => $items[$i]['regist'],
+									'date_build' => $items[$i]['date_build'],
 									'date_soldout' => $items[$i]['date_soldout'],
 									'price_regist' => $items[$i]['price_regist'],
 									'price_soldout' => $items[$i]['price_soldout'],
 									'time' => $items[$i]['time'],
+									'city_cd' => $items[$i]['city_cd'],
 									'history' => $items[$i]['history']
 								);				
 			}

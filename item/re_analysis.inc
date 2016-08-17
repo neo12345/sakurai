@@ -206,7 +206,19 @@
 								<th width="12%"></th>
 							</tr>
 							<tr id="sale_number">
-							<th>売出件数</th>
+								<th>売出件数</th>
+							</tr>
+							<tr id="selling_number">
+								<th>売出中物件数</th>
+							</tr>
+							<tr id="soldout_number">
+								<th>成約済物件数</th>
+							</tr>
+							<tr id="soldout_before_complete_number">
+								<th>売出前成約件数</th>
+							</tr>
+							<tr id="rate_soldout_before_complete">
+								<th>売出前成約率 </th>
 							</tr>
 							<tr id="avg_price_regist">
 								<th>平均売出価格</th>
@@ -220,6 +232,9 @@
 							<tr id="avg_time_change_circle">
 								<th>平均価格改定周期</th>
 							</tr>
+							<tr id="avg_down_price">
+								<th>平均値下価格</th>
+							</tr>
 							<tr id="avg_down_price_rate">
 								<th>平均値下率</th>
 							</tr>
@@ -228,7 +243,48 @@
 							</tr>
 						</table>
 						
-						<div id="piechart_3d" style="width: 100%; height: 500px;"></div>
+						<br><br>
+						
+						<div id="piechart" style="background-color: #D5D5D5; width: 100%">
+							<div style="padding: 10px; font-size: 16px; color: black;"><b>販売シェア率</b></div>
+							<div id="piechart_3d" style="width: 450px; height: 300px; float: left;"></div>
+							<div id="piechart_3d_1" style="width: 450px; height: 300px; float: left;"></div>
+							<div id="piechart_3d_2" style="width: 450px; height: 300px; float: left;"></div>
+							<div id="piechart_3d_3" style="width: 450px; height: 300px; float: left;"></div>
+							<div id="piechart_3d_4" style="width: 450px; height: 300px; float: left;"></div>
+							<div id="piechart_3d_5" style="width: 450px; height: 300px; float: left;"></div>
+							<div id="piechart_3d_6" style="width: 450px; height: 300px; float: left;"></div>
+							<div id="piechart_3d_7" style="width: 450px; height: 300px; float: left;"></div>
+							<div id="piechart_3d_8" style="width: 450px; height: 300px; float: left;"></div>
+							<div id="piechart_3d_9" style="width: 450px; height: 300px; float: left;"></div>
+							<div id="piechart_3d_10" style="width: 450px; height: 300px; float: left;"></div>
+							<div id="piechart_3d_11" style="width: 450px; height: 300px; float: left;"></div>
+							<div id="piechart_3d_12" style="width: 450px; height: 300px; float: left;"></div>
+							<div id="piechart_3d_13" style="width: 450px; height: 300px; float: left;"></div>
+							<div id="piechart_3d_14" style="width: 450px; height: 300px; float: left;"></div>
+							<div id="piechart_3d_15" style="width: 450px; height: 300px; float: left;"></div>
+							<div id="piechart_3d_16" style="width: 450px; height: 300px; float: left;"></div>
+							<div id="piechart_3d_17" style="width: 450px; height: 300px; float: left;"></div>
+							<div id="piechart_3d_18" style="width: 450px; height: 300px; float: left;"></div>
+							<div id="piechart_3d_19" style="width: 450px; height: 300px; float: left;"></div>
+							<div id="piechart_3d_20" style="width: 450px; height: 300px; float: left;"></div>
+							<div id="piechart_3d_21" style="width: 450px; height: 300px; float: left;"></div>
+							<div id="piechart_3d_22" style="width: 450px; height: 300px; float: left;"></div>
+							<div id="piechart_3d_23" style="width: 450px; height: 300px; float: left;"></div>
+							<div id="piechart_3d_24" style="width: 450px; height: 300px; float: left;"></div>
+							<div id="piechart_3d_25" style="width: 450px; height: 300px; float: left;"></div>
+							<div id="piechart_3d_26" style="width: 450px; height: 300px; float: left;"></div>
+							<div id="piechart_3d_27" style="width: 450px; height: 300px; float: left;"></div>
+							<div id="piechart_3d_28" style="width: 450px; height: 300px; float: left;"></div>
+							<div id="piechart_3d_29" style="width: 450px; height: 300px; float: left;"></div>
+							<div id="piechart_3d_30" style="width: 450px; height: 300px; float: left;"></div>
+							<div id="piechart_3d_31" style="width: 450px; height: 300px; float: left;"></div>
+							<div id="piechart_3d_32" style="width: 450px; height: 300px; float: left;"></div>
+						
+						<table border='0' width="100%"></table>
+						</div>
+
+						
 					</div>
 				</div>
             <!--/line-chart--></div>

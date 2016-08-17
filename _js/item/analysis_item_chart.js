@@ -3,7 +3,30 @@
 	var item_cd = $('#item_cd').val();
 	var hist;
 	var similars;
+	var item_info;
 	
+	//-------------
+	$.ajaxSetup({
+			headers: {
+				'X-CSRF-TOKEN': $('meta[name="_token"]').attr('content')
+			}
+		})
+	
+	var formData = {
+		item_cd: item_cd
+	};
+	
+	$.ajax({
+		url: "/item/?md=get_item_info_by_item_cd",
+		type: 'POST',
+		data: formData,
+		dataType: "json",
+		async: false,
+		success: function (data) {
+			item_info = data;
+		}
+	});
+	//-------
 	$.ajax({
 		url: "/item/?md=get_history_price&item_cd=" + item_cd,
 		type: 'GET',
@@ -13,7 +36,7 @@
 			hist = data;
 		}
 	});
-	
+	//--------------------
 	var item_compare;
 	var list_item = $("#list_item").val();
 	var formData = {
@@ -81,7 +104,7 @@
 	// create chart
 	var data = new google.visualization.DataTable();
 	data.addColumn('date', 'Date');
-	data.addColumn('number', '価格');		
+	data.addColumn('number', item_info.hist_price + '万円 (' + item_info.item_name + ') ' + item_info.seller);		
 	data.addColumn({type: 'string', role: 'tooltip', p: {html: true}}, 'Status');
 	data.addColumn({'type': 'string', 'role': 'style'});
 	
@@ -143,7 +166,7 @@
 		var year_diff = '---';
 		var change_price_diffDays = '----';
 		
-		if (change_price_day) {	
+		if (change_price_day != null) {	
 			lastday = new Date(hist[change_price_day].date_regist);
 			
 			date_diff = lastday.getDate();
@@ -208,8 +231,8 @@
 	var month_diff = '---';
 	var year_diff = '---';
 	var change_price_diffDays = '----';
-	
-	if (change_price_day) {	
+
+	if (change_price_day != null) {	
 		lastday = new Date(hist[change_price_day].date_regist);
 		
 		date_diff = lastday.getDate();
@@ -281,7 +304,7 @@
 			var year_diff = '---';
 			var change_price_diffDays = '----';
 			
-			if (change_price_day) {	
+			if (change_price_day != null) {	
 				lastday = new Date(item_compare[0][change_price_day].date_regist);
 				
 				date_diff = lastday.getDate();
@@ -347,7 +370,7 @@
 		var year_diff = '---';
 		var change_price_diffDays = '----';
 		
-		if (change_price_day) {	
+		if (change_price_day != null) {	
 			lastday = new Date(item_compare[0][change_price_day].date_regist);
 			
 			date_diff = lastday.getDate();
@@ -415,7 +438,7 @@
 			var year_diff = '---';
 			var change_price_diffDays = '----';
 			
-			if (change_price_day) {	
+			if (change_price_day != null) {	
 				lastday = new Date(item_compare[1][change_price_day].date_regist);
 				
 				date_diff = lastday.getDate();
@@ -481,7 +504,7 @@
 		var year_diff = '---';
 		var change_price_diffDays = '----';
 		
-		if (change_price_day) {	
+		if (change_price_day != null) {	
 			lastday = new Date(item_compare[1][change_price_day].date_regist);
 			
 			date_diff = lastday.getDate();
@@ -549,7 +572,7 @@
 			var year_diff = '---';
 			var change_price_diffDays = '----';
 			
-			if (change_price_day) {	
+			if (change_price_day != null) {	
 				lastday = new Date(item_compare[2][change_price_day].date_regist);
 				
 				date_diff = lastday.getDate();
@@ -615,7 +638,7 @@
 		var year_diff = '---';
 		var change_price_diffDays = '----';
 		
-		if (change_price_day) {	
+		if (change_price_day != null) {	
 			lastday = new Date(item_compare[2][change_price_day].date_regist);
 			
 			date_diff = lastday.getDate();
@@ -683,7 +706,7 @@
 			var year_diff = '---';
 			var change_price_diffDays = '----';
 			
-			if (change_price_day) {	
+			if (change_price_day != null) {	
 				lastday = new Date(item_compare[3][change_price_day].date_regist);
 				
 				date_diff = lastday.getDate();
@@ -749,7 +772,7 @@
 		var year_diff = '---';
 		var change_price_diffDays = '----';
 		
-		if (change_price_day) {	
+		if (change_price_day != null) {	
 			lastday = new Date(item_compare[3][change_price_day].date_regist);
 			
 			date_diff = lastday.getDate();
@@ -817,7 +840,7 @@
 			var year_diff = '---';
 			var change_price_diffDays = '----';
 			
-			if (change_price_day) {	
+			if (change_price_day != null) {	
 				lastday = new Date(item_compare[4][change_price_day].date_regist);
 				
 				date_diff = lastday.getDate();
@@ -883,7 +906,7 @@
 		var year_diff = '---';
 		var change_price_diffDays = '----';
 		
-		if (change_price_day) {	
+		if (change_price_day != null) {	
 			lastday = new Date(item_compare[4][change_price_day].date_regist);
 			
 			date_diff = lastday.getDate();
@@ -1277,8 +1300,8 @@
 		yAxis_min = (yAxis_min < yAxis_min_2) ? yAxis_min : yAxis_min_2;
 	}
 	
-	$offset = (xAxis_max - xAxis_min) / 86400 / 1000 / 18;
-	$offset = ($offset < 5) ? 5 : $offset;
+	$offset = (xAxis_max - xAxis_min) / 86400 / 1000 / 20;
+	$offset = ($offset < 2) ? 2 : $offset;
 	xAxis_max.setDate(xAxis_max.getDate() + $offset);
 	
 	var options = {

@@ -599,14 +599,27 @@
 					<span>比　較</span>
 				</div>
 				<br>
-
+				
+				<table width=100% border: 0px>
+					<tr>
+						<td style="width:10%;background-color:white; border: 0px;"></td>
+						<td id="item0_title" style="width:15%;background-color:white; border: 0px; font-size:20px; text-align:center; padding: 5px 5px;">選択中の物件</td>
+						<td id="item1_title" style="width:15%;background-color:white; border: 0px; font-size:20px; text-align:center; padding: 5px 5px;"> 比較 1</td>
+						<td id="item2_title" style="width:15%;background-color:white; border: 0px; font-size:20px; text-align:center; padding: 5px 5px;"> 比較 2</td>
+						<td id="item3_title" style="width:15%;background-color:white; border: 0px; font-size:20px; text-align:center; padding: 5px 5px;"> 比較 3</td>
+						<td id="item4_title" style="width:15%;background-color:white; border: 0px; font-size:20px; text-align:center; padding: 5px 5px;"> 比較 4</td>
+						<td id="item5_title" style="width:15%;background-color:white; border: 0px; font-size:20px; text-align:center; padding: 5px 5px;"> 比較 5</td>
+					</tr>
+				</table>
+				
 				<table class="form-compare-item" border="1" width="100%">
+
 					<tr>
 						<th style="width:10%;"></th>
-						<td id="item0_img" style="width:15%;background-color:#FBEFEF; vertical-align:bottom;">
+						<td id="item0_img" style="width:15%;background-color:#FBEFEF; vertical-align:bottom">
 							<img src="<?php echo $link_img_main_s; ?>" width="100%">
 						</td>
-						<td id="item1_img" style="width:15%;"></td>
+						<td id="item1_img" style="width:15%;;"></td>
 						<td id="item2_img" style="width:15%;"></td>
 						<td id="item3_img" style="width:15%;"></td>
 						<td id="item4_img" style="width:15%;"></td>
@@ -616,6 +629,8 @@
 						<th>物件名</th>
 						<td id="item0_name" style="background-color:#FBEFEF">
 							<?php echo $RS_item[0]['item_name'];?>
+							<br>
+							<?php echo $RS_item[0]['item_name_sub'];?>
 						</td>
 						<td id="item1_name"></td>
 						<td id="item2_name"></td>
@@ -831,6 +846,15 @@
 						<td id="item3_equip"></td>
 						<td id="item4_equip"></td>
 						<td id="item5_equip"></td>
+					</tr>
+					<tr>
+						<th style="text-align:center; padding: 20px 5px;">詳細</th>
+						<td id="item0_btn_details" style="font-size:20px; text-align:center; padding: 20px 5px; background-color:#FBEFEF"></td>
+						<td id="item1_btn_details" style="font-size:20px; text-align:center; padding: 20px 5px;"></td>
+						<td id="item2_btn_details" style="font-size:20px; text-align:center; padding: 20px 5px;"></td>
+						<td id="item3_btn_details" style="font-size:20px; text-align:center; padding: 20px 5px;"></td>
+						<td id="item4_btn_details" style="font-size:20px; text-align:center; padding: 20px 5px;"></td>
+						<td id="item5_btn_details" style="font-size:20px; text-align:center; padding: 20px 5px;"></td>
 					</tr>
 				</table>				
 				<br>
